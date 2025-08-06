@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import Header from './components/Header';
 
 type Category = 'hacker-news' | 'reddit';
 

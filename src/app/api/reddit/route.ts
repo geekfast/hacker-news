@@ -14,6 +14,22 @@ export interface RedditPost {
   is_self: boolean;
 }
 
+interface RedditApiPost {
+  id: string;
+  title: string;
+  url: string;
+  score: number;
+  author: string;
+  created_utc: number;
+  num_comments: number;
+  subreddit: string;
+  thumbnail?: string;
+  selftext?: string;
+  is_self: boolean;
+  stickied: boolean;
+  pinned: boolean;
+}
+
 // Enhanced environment detection
 const isProduction = () => {
   return process.env.VERCEL === '1' || process.env.NODE_ENV === 'production';
@@ -70,10 +86,10 @@ async function fetchSubredditPosts(subreddit: string, limit: number = 3): Promis
     }
 
     const posts = data.data.children
-      .map((child: any) => child.data)
-      .filter((post: any) => !post.stickied && !post.pinned)
+      .map((child: { data: RedditApiPost }) => child.data)
+      .filter((post: RedditApiPost) => !post.stickied && !post.pinned)
       .slice(0, limit)
-      .map((post: any): RedditPost => ({
+      .map((post: RedditApiPost): RedditPost => ({
         id: post.id,
         title: post.title,
         url: post.url,
@@ -90,7 +106,7 @@ async function fetchSubredditPosts(subreddit: string, limit: number = 3): Promis
     console.log(`✅ Successfully fetched ${posts.length} posts from r/${subreddit}`);
     return posts;
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(`❌ Failed to fetch r/${subreddit}:`, error);
     return [];
   }
