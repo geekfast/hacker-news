@@ -10,17 +10,22 @@ export async function GET(request: Request) {
   }
 
   try {
-    // First, check if we have a cached image
-    const cachedImageUrl = await getCachedImage(query);
-    if (cachedImageUrl) {
-      console.log(`Serving cached image for query: ${query}`);
-      return NextResponse.json({ 
-        imageUrl: cachedImageUrl,
-        cached: true 
-      });
+    // In production (Vercel), skip local cache and fetch directly from Unsplash
+    const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL === '1';
+    
+    if (!isProduction) {
+      // Development: Use local cache
+      const cachedImageUrl = await getCachedImage(query);
+      if (cachedImageUrl) {
+        console.log(`Serving cached image for query: ${query}`);
+        return NextResponse.json({ 
+          imageUrl: cachedImageUrl,
+          cached: true 
+        });
+      }
     }
 
-    // If not cached, fetch from Unsplash
+    // Fetch from Unsplash
     const accessKey = process.env.UNSPLASH_ACCESS_KEY;
     if (!accessKey) {
       return NextResponse.json({ error: 'Unsplash API key is not configured' }, { status: 500 });
@@ -45,14 +50,24 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'No image found for the query' }, { status: 404 });
     }
 
-    // Cache the image locally
-    const localImageUrl = await cacheImage(query, originalImageUrl);
-    console.log(`Cached new image for query: ${query}`);
-
-    return NextResponse.json({ 
-      imageUrl: localImageUrl,
-      cached: false 
-    });
+    if (isProduction) {
+      // Production: Return direct Unsplash URL
+      console.log(`Serving direct Unsplash image for query: ${query}`);
+      return NextResponse.json({ 
+        imageUrl: originalImageUrl,
+        cached: false,
+        source: 'unsplash-direct'
+      });
+    } else {
+      // Development: Cache the image locally
+      const localImageUrl = await cacheImage(query, originalImageUrl);
+      console.log(`Cached new image for query: ${query}`);
+      
+      return NextResponse.json({ 
+        imageUrl: localImageUrl,
+        cached: false 
+      });
+    }
 
   } catch (error) {
     console.error('Error in image search:', error);
