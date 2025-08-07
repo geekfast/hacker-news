@@ -54,23 +54,25 @@ const SUBREDDITS = [
 
 // Enhanced timeout settings based on environment
 const getTimeoutSettings = () => {
-  const isProd = isProduction();
+  const timeoutMs = parseInt(process.env.REDDIT_TIMEOUT_MS || '30000'); // Increased timeout for VPN
   return {
-    timeout: isProd ? 15000 : 10000, // 15s for production, 10s for dev
-    signal: AbortSignal.timeout(isProd ? 15000 : 10000)
+    timeout: timeoutMs,
+    signal: AbortSignal.timeout(timeoutMs)
   };
 };
 
 async function fetchSubredditPosts(subreddit: string, limit: number = 3): Promise<RedditPost[]> {
   try {
-    const url = `https://www.reddit.com/r/${subreddit}/hot.json?limit=${limit}`;
+    const url = `https://www.reddit.com/r/${subreddit}/hot.json?limit=${limit}&raw_json=1`;
     const { signal } = getTimeoutSettings();
     
     const response = await fetch(url, {
       headers: {
-        'User-Agent': 'HackerNewsClone/1.0 (Web App for aggregating tech news)',
+        'User-Agent': process.env.REDDIT_USER_AGENT || 'HackerNewsClone/1.0 (Web App)',
+        'Accept': 'application/json'
       },
-      signal
+      signal,
+      cache: 'no-store' // Disable caching for VPN requests
     });
 
     if (!response.ok) {
@@ -87,7 +89,12 @@ async function fetchSubredditPosts(subreddit: string, limit: number = 3): Promis
 
     const posts = data.data.children
       .map((child: { data: RedditApiPost }) => child.data)
-      .filter((post: RedditApiPost) => !post.stickied && !post.pinned)
+      .filter((post: RedditApiPost) => 
+        !post.stickied && 
+        !post.pinned && 
+        !post.is_self && // Filter out self posts
+        post.url // Ensure post has a URL
+      )
       .slice(0, limit)
       .map((post: RedditApiPost): RedditPost => ({
         id: post.id,
@@ -284,8 +291,9 @@ export async function GET(request: NextRequest) {
     console.error('❌ Error fetching from subreddits:', error);
   }
 
-  // Enhanced fallback logic - only use mock data if most subreddits fail
-  const shouldUseFallback = failedSubreddits >= SUBREDDITS.length * 0.75; // 75% failure rate
+  // Enhanced fallback logic - use environment variable to control fallback behavior
+  const fallbackEnabled = process.env.REDDIT_FALLBACK_ENABLED === 'true';
+  const shouldUseFallback = fallbackEnabled && (failedSubreddits >= SUBREDDITS.length * 0.75); // 75% failure rate
   
   if (shouldUseFallback) {
     console.warn(`⚠️ ${failedSubreddits}/${SUBREDDITS.length} subreddits failed, Reddit appears to be blocked. Using fallback data.`);

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 type Category = 'hacker-news' | 'reddit';
 
@@ -307,28 +308,39 @@ async function getStory(id: number): Promise<Story> {
 }
 
 export default function Home() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [storyIds, setStoryIds] = useState<number[]>([]);
   const [stories, setStories] = useState<Story[]>([]);
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
-  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid');
   const [isViewModeLoaded, setIsViewModeLoaded] = useState(false);
-  const [category, setCategory] = useState<Category>('hacker-news');
+  const [category, setCategory] = useState<Category>(
+    (searchParams.get('category') as Category) || 'hacker-news'
+  );
   const storiesPerPage = 10;
 
-  // Load view mode preference from localStorage
+  // Load view mode preference from URL or localStorage
   useEffect(() => {
+    const urlViewMode = searchParams.get('view') as 'list' | 'grid';
     const savedViewMode = localStorage.getItem('viewMode') as 'list' | 'grid';
-    if (savedViewMode) {
+    if (urlViewMode) {
+      setViewMode(urlViewMode);
+    } else if (savedViewMode) {
       setViewMode(savedViewMode);
     }
     setIsViewModeLoaded(true);
-  }, []);
+  }, [searchParams]);
 
-  // Save view mode preference to localStorage
+  // Save view mode preference and update URL
   const handleViewModeChange = (mode: 'list' | 'grid') => {
     setViewMode(mode);
     localStorage.setItem('viewMode', mode);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('view', mode);
+    params.set('category', category);
+    router.push(`/?${params.toString()}`);
   };
 
   // Fetch data based on category
@@ -459,7 +471,13 @@ export default function Home() {
             {/* Category Selector */}
             <div className="flex gap-2">
               <button
-                onClick={() => setCategory('hacker-news')}
+                onClick={() => {
+                  const params = new URLSearchParams(searchParams.toString());
+                  params.set('category', 'hacker-news');
+                  params.set('view', viewMode);
+                  router.push(`/?${params.toString()}`);
+                  setCategory('hacker-news');
+                }}
                 className={`px-4 py-2 rounded-md font-medium transition-colors ${
                   category === 'hacker-news'
                     ? 'bg-link-color text-white outline outline-2 outline-link-color'
@@ -469,7 +487,13 @@ export default function Home() {
                 🔥 Hacker News
               </button>
               <button
-                onClick={() => setCategory('reddit')}
+                onClick={() => {
+                  const params = new URLSearchParams(searchParams.toString());
+                  params.set('category', 'reddit');
+                  params.set('view', viewMode);
+                  router.push(`/?${params.toString()}`);
+                  setCategory('reddit');
+                }}
                 className={`px-4 py-2 rounded-md font-medium transition-colors ${
                   category === 'reddit'
                     ? 'bg-link-color text-white outline outline-2 outline-link-color'
