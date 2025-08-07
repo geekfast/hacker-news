@@ -54,7 +54,7 @@ const SUBREDDITS = [
 
 // Enhanced timeout settings based on environment
 const getTimeoutSettings = () => {
-  const timeoutMs = parseInt(process.env.REDDIT_TIMEOUT_MS || '30000'); // Increased timeout for VPN
+  const timeoutMs = parseInt(process.env.REDDIT_TIMEOUT_MS || '60000'); // Increased timeout for VPN to 60s
   return {
     timeout: timeoutMs,
     signal: AbortSignal.timeout(timeoutMs)
@@ -293,7 +293,7 @@ export async function GET(request: NextRequest) {
 
   // Enhanced fallback logic - use environment variable to control fallback behavior
   const fallbackEnabled = process.env.REDDIT_FALLBACK_ENABLED === 'true';
-  const shouldUseFallback = fallbackEnabled && (failedSubreddits >= SUBREDDITS.length * 0.75); // 75% failure rate
+  const shouldUseFallback = fallbackEnabled && (failedSubreddits >= SUBREDDITS.length * 0.5); // Lowered to 50% failure rate for better reliability
   
   if (shouldUseFallback) {
     console.warn(`⚠️ ${failedSubreddits}/${SUBREDDITS.length} subreddits failed, Reddit appears to be blocked. Using fallback data.`);

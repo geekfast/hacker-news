@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -307,7 +307,15 @@ async function getStory(id: number): Promise<Story> {
   return response.json();
 }
 
-export default function Home() {
+export default function PageSuspenseWrapper() {
+  return (
+    <Suspense>
+      <HomeInner />
+    </Suspense>
+  );
+}
+
+function HomeInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [storyIds, setStoryIds] = useState<number[]>([]);
