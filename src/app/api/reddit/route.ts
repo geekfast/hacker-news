@@ -1,5 +1,8 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
+// Ensure Node.js runtime (AbortSignal.timeout not available on Edge)
+export const runtime = 'nodejs';
+
 export interface RedditPost {
   id: string;
   title: string;
@@ -136,8 +139,8 @@ async function fetchSubredditPosts(subreddit: string, limit: number = 3): Promis
     
     const response = await fetchWithRetry(url, {
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'User-Agent': process.env.REDDIT_USER_AGENT || 'HackerNewsClone/1.0',
+        // Prefer env-configured UA; fallback to Reddit-friendly format
+        'User-Agent': process.env.REDDIT_USER_AGENT || 'web:hacker-news-clone:1.0 (by /u/example)',
         'Accept': 'application/json'
       },
       signal,
@@ -181,7 +184,7 @@ async function fetchSubredditPosts(subreddit: string, limit: number = 3): Promis
         created: post.created_utc,
         comments: post.num_comments,
         subreddit: post.subreddit,
-        thumbnail: post.thumbnail !== 'self' ? post.thumbnail : undefined,
+        thumbnail: post.thumbnail && post.thumbnail.startsWith('http') ? post.thumbnail : undefined,
         selftext: post.selftext,
         is_self: post.is_self
       }));
@@ -337,7 +340,8 @@ const getMockRedditPosts = (): RedditPost[] => {
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const limit = parseInt(searchParams.get('limit') || '12');
+  const rawLimit = parseInt(searchParams.get('limit') || '12', 10);
+  const limit = Math.min(Math.max(Number.isFinite(rawLimit) ? rawLimit : 12, 1), 50);
   const postsPerSubreddit = Math.max(1, Math.ceil(limit / SUBREDDITS.length));
   
   const isProd = isProduction();
@@ -373,7 +377,9 @@ export async function GET(request: NextRequest) {
   
   if (shouldUseFallback) {
     console.warn(`⚠️ ${failedSubreddits}/${SUBREDDITS.length} subreddits failed, Reddit appears to be blocked. Using fallback data.`);
-    const mockPosts = getMockRedditPosts().slice(0, limit);
+    const mockPosts = getMockRedditPosts()
+      .sort((a, b) => b.score - a.score)
+      .slice(0, limit);
     
     console.log(`✅ Successfully aggregated ${mockPosts.length} top posts from ${SUBREDDITS.length} subreddits`);
     if (mockPosts.length > 0) {
