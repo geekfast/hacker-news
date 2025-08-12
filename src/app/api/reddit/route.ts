@@ -30,6 +30,21 @@ interface RedditApiPost {
   pinned: boolean;
 }
 
+interface PushshiftPost {
+  id: string | number;
+  title: string;
+  url?: string;
+  score?: number;
+  author?: string;
+  created_utc?: number;
+  num_comments?: number;
+  subreddit?: string;
+  thumbnail?: string;
+  selftext?: string;
+  is_self?: boolean;
+  permalink?: string;
+}
+
 // Enhanced environment detection
 const isProduction = () => {
   return process.env.VERCEL === '1' || process.env.NODE_ENV === 'production';
@@ -62,59 +77,103 @@ const getTimeoutSettings = () => {
 };
 
 async function fetchSubredditPosts(subreddit: string, limit: number = 3): Promise<RedditPost[]> {
+  const { signal } = getTimeoutSettings();
+
+  // Primary fetch from Reddit
   try {
     const url = `https://www.reddit.com/r/${subreddit}/hot.json?limit=${limit}&raw_json=1`;
-    const { signal } = getTimeoutSettings();
-    
     const response = await fetch(url, {
       headers: {
         'User-Agent': process.env.REDDIT_USER_AGENT || 'HackerNewsClone/1.0 (Web App)',
         'Accept': 'application/json'
       },
       signal,
-      cache: 'no-store' // Disable caching for VPN requests
+      cache: 'no-store'
     });
 
-    if (!response.ok) {
-      console.warn(`⚠️ Failed to fetch r/${subreddit}: HTTP ${response.status}`);
-      return [];
-    }
+    if (response.ok) {
+      const data = await response.json();
 
-    const data = await response.json();
-    
-    if (!data?.data?.children) {
+      if (data?.data?.children) {
+        const posts = data.data.children
+          .map((child: { data: RedditApiPost }) => child.data)
+          .filter((post: RedditApiPost) =>
+            !post.stickied &&
+            !post.pinned &&
+            !post.is_self &&
+            post.url
+          )
+          .slice(0, limit)
+          .map((post: RedditApiPost): RedditPost => ({
+            id: post.id,
+            title: post.title,
+            url: post.url,
+            score: post.score,
+            author: post.author,
+            created: post.created_utc,
+            comments: post.num_comments,
+            subreddit: post.subreddit,
+            thumbnail: post.thumbnail !== 'self' ? post.thumbnail : undefined,
+            selftext: post.selftext,
+            is_self: post.is_self
+          }));
+
+        console.log(`✅ Successfully fetched ${posts.length} posts from r/${subreddit}`);
+        return posts;
+      }
+
       console.warn(`⚠️ Invalid response format from r/${subreddit}`);
-      return [];
+    } else {
+      console.warn(`⚠️ Failed to fetch r/${subreddit}: HTTP ${response.status}`);
     }
-
-    const posts = data.data.children
-      .map((child: { data: RedditApiPost }) => child.data)
-      .filter((post: RedditApiPost) => 
-        !post.stickied && 
-        !post.pinned && 
-        !post.is_self && // Filter out self posts
-        post.url // Ensure post has a URL
-      )
-      .slice(0, limit)
-      .map((post: RedditApiPost): RedditPost => ({
-        id: post.id,
-        title: post.title,
-        url: post.url,
-        score: post.score,
-        author: post.author,
-        created: post.created_utc,
-        comments: post.num_comments,
-        subreddit: post.subreddit,
-        thumbnail: post.thumbnail !== 'self' ? post.thumbnail : undefined,
-        selftext: post.selftext,
-        is_self: post.is_self
-      }));
-
-    console.log(`✅ Successfully fetched ${posts.length} posts from r/${subreddit}`);
-    return posts;
-
   } catch (error: unknown) {
     console.error(`❌ Failed to fetch r/${subreddit}:`, error);
+  }
+
+  // Fallback to Pushshift API when direct Reddit access fails
+  try {
+    const fallbackUrl = `https://api.pushshift.io/reddit/search/submission/?subreddit=${subreddit}&sort=desc&sort_type=score&size=${limit}`;
+    const fallbackResponse = await fetch(fallbackUrl, {
+      headers: {
+        'User-Agent': process.env.REDDIT_USER_AGENT || 'HackerNewsClone/1.0 (Web App)',
+        'Accept': 'application/json'
+      },
+      signal,
+      cache: 'no-store'
+    });
+
+    if (!fallbackResponse.ok) {
+      console.warn(`⚠️ Pushshift fallback failed for r/${subreddit}: HTTP ${fallbackResponse.status}`);
+      return [];
+    }
+
+    const fallbackData = await fallbackResponse.json();
+
+    if (!fallbackData?.data) {
+      console.warn(`⚠️ Invalid Pushshift response for r/${subreddit}`);
+      return [];
+    }
+
+    const posts = fallbackData.data
+      .slice(0, limit)
+      .map((post: PushshiftPost): RedditPost => ({
+        id: post.id?.toString() || '',
+        title: post.title,
+        url: post.url || (post.permalink ? `https://www.reddit.com${post.permalink}` : ''),
+        score: post.score ?? 0,
+        author: post.author ?? 'unknown',
+        created: post.created_utc ?? 0,
+        comments: post.num_comments ?? 0,
+        subreddit: post.subreddit ?? subreddit,
+        thumbnail: post.thumbnail && post.thumbnail !== 'self' ? post.thumbnail : undefined,
+        selftext: post.selftext,
+        is_self: post.is_self ?? false
+      }));
+
+    console.log(`✅ Fallback to Pushshift fetched ${posts.length} posts from r/${subreddit}`);
+    return posts;
+  } catch (error: unknown) {
+    console.error(`❌ Pushshift fallback failed for r/${subreddit}:`, error);
     return [];
   }
 }
