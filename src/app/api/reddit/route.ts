@@ -62,59 +62,106 @@ const getTimeoutSettings = () => {
 };
 
 async function fetchSubredditPosts(subreddit: string, limit: number = 3): Promise<RedditPost[]> {
+  const { signal } = getTimeoutSettings();
+
+  // Primary fetch from Reddit
   try {
     const url = `https://www.reddit.com/r/${subreddit}/hot.json?limit=${limit}&raw_json=1`;
-    const { signal } = getTimeoutSettings();
-    
     const response = await fetch(url, {
       headers: {
         'User-Agent': process.env.REDDIT_USER_AGENT || 'HackerNewsClone/1.0 (Web App)',
         'Accept': 'application/json'
       },
       signal,
-      cache: 'no-store' // Disable caching for VPN requests
+      cache: 'no-store'
     });
 
-    if (!response.ok) {
-      console.warn(`⚠️ Failed to fetch r/${subreddit}: HTTP ${response.status}`);
-      return [];
-    }
+    if (response.ok) {
+      const data = await response.json();
 
-    const data = await response.json();
-    
-    if (!data?.data?.children) {
+      if (data?.data?.children) {
+        const posts = data.data.children
+          .map((child: { data: RedditApiPost }) => child.data)
+          .filter((post: RedditApiPost) =>
+            !post.stickied &&
+            !post.pinned &&
+            !post.is_self &&
+            post.url
+          )
+          .slice(0, limit)
+          .map((post: RedditApiPost): RedditPost => ({
+            id: post.id,
+            title: post.title,
+            url: post.url,
+            score: post.score,
+            author: post.author,
+            created: post.created_utc,
+            comments: post.num_comments,
+            subreddit: post.subreddit,
+            thumbnail: post.thumbnail !== 'self' ? post.thumbnail : undefined,
+            selftext: post.selftext,
+            is_self: post.is_self
+          }));
+
+        console.log(`✅ Successfully fetched ${posts.length} posts from r/${subreddit}`);
+        return posts;
+      }
+
       console.warn(`⚠️ Invalid response format from r/${subreddit}`);
-      return [];
+    } else {
+      console.warn(`⚠️ Failed to fetch r/${subreddit}: HTTP ${response.status}`);
     }
-
-    const posts = data.data.children
-      .map((child: { data: RedditApiPost }) => child.data)
-      .filter((post: RedditApiPost) => 
-        !post.stickied && 
-        !post.pinned && 
-        !post.is_self && // Filter out self posts
-        post.url // Ensure post has a URL
-      )
-      .slice(0, limit)
-      .map((post: RedditApiPost): RedditPost => ({
-        id: post.id,
-        title: post.title,
-        url: post.url,
-        score: post.score,
-        author: post.author,
-        created: post.created_utc,
-        comments: post.num_comments,
-        subreddit: post.subreddit,
-        thumbnail: post.thumbnail !== 'self' ? post.thumbnail : undefined,
-        selftext: post.selftext,
-        is_self: post.is_self
-      }));
-
-    console.log(`✅ Successfully fetched ${posts.length} posts from r/${subreddit}`);
-    return posts;
-
   } catch (error: unknown) {
     console.error(`❌ Failed to fetch r/${subreddit}:`, error);
+  }
+
+  // Fallback to r.jina.ai mirror when direct Reddit access fails
+  try {
+    const mirrorUrl = `https://r.jina.ai/http://www.reddit.com/r/${subreddit}/hot.json?limit=${limit}&raw_json=1`;
+    const mirrorResponse = await fetch(mirrorUrl, {
+      headers: {
+        'User-Agent': process.env.REDDIT_USER_AGENT || 'HackerNewsClone/1.0 (Web App)',
+        'Accept': 'application/json'
+      },
+      signal,
+      cache: 'no-store'
+    });
+
+    if (!mirrorResponse.ok) {
+      console.warn(`⚠️ r.jina.ai mirror failed for r/${subreddit}: HTTP ${mirrorResponse.status}`);
+      return [];
+    }
+
+    const mirrorData = await mirrorResponse.json();
+
+    if (!mirrorData?.data?.children) {
+      console.warn(`⚠️ Invalid r.jina.ai response for r/${subreddit}`);
+      return [];
+    }
+
+    const posts = mirrorData.data.children
+      .slice(0, limit)
+      .map((child: { data: RedditApiPost }): RedditPost => {
+        const post = child.data;
+        return {
+          id: post.id,
+          title: post.title,
+          url: post.url,
+          score: post.score,
+          author: post.author,
+          created: post.created_utc,
+          comments: post.num_comments,
+          subreddit: post.subreddit,
+          thumbnail: post.thumbnail !== 'self' ? post.thumbnail : undefined,
+          selftext: post.selftext,
+          is_self: post.is_self
+        };
+      });
+
+    console.log(`✅ Fallback to r.jina.ai fetched ${posts.length} posts from r/${subreddit}`);
+    return posts;
+  } catch (error: unknown) {
+    console.error(`❌ r.jina.ai fallback failed for r/${subreddit}:`, error);
     return [];
   }
 }
