@@ -30,21 +30,6 @@ interface RedditApiPost {
   pinned: boolean;
 }
 
-interface PushshiftPost {
-  id: string | number;
-  title: string;
-  url?: string;
-  score?: number;
-  author?: string;
-  created_utc?: number;
-  num_comments?: number;
-  subreddit?: string;
-  thumbnail?: string;
-  selftext?: string;
-  is_self?: boolean;
-  permalink?: string;
-}
-
 // Enhanced environment detection
 const isProduction = () => {
   return process.env.VERCEL === '1' || process.env.NODE_ENV === 'production';
@@ -130,10 +115,10 @@ async function fetchSubredditPosts(subreddit: string, limit: number = 3): Promis
     console.error(`❌ Failed to fetch r/${subreddit}:`, error);
   }
 
-  // Fallback to Pushshift API when direct Reddit access fails
+  // Fallback to r.jina.ai mirror when direct Reddit access fails
   try {
-    const fallbackUrl = `https://api.pushshift.io/reddit/search/submission/?subreddit=${subreddit}&sort=desc&sort_type=score&size=${limit}`;
-    const fallbackResponse = await fetch(fallbackUrl, {
+    const mirrorUrl = `https://r.jina.ai/http://www.reddit.com/r/${subreddit}/hot.json?limit=${limit}&raw_json=1`;
+    const mirrorResponse = await fetch(mirrorUrl, {
       headers: {
         'User-Agent': process.env.REDDIT_USER_AGENT || 'HackerNewsClone/1.0 (Web App)',
         'Accept': 'application/json'
@@ -142,38 +127,41 @@ async function fetchSubredditPosts(subreddit: string, limit: number = 3): Promis
       cache: 'no-store'
     });
 
-    if (!fallbackResponse.ok) {
-      console.warn(`⚠️ Pushshift fallback failed for r/${subreddit}: HTTP ${fallbackResponse.status}`);
+    if (!mirrorResponse.ok) {
+      console.warn(`⚠️ r.jina.ai mirror failed for r/${subreddit}: HTTP ${mirrorResponse.status}`);
       return [];
     }
 
-    const fallbackData = await fallbackResponse.json();
+    const mirrorData = await mirrorResponse.json();
 
-    if (!fallbackData?.data) {
-      console.warn(`⚠️ Invalid Pushshift response for r/${subreddit}`);
+    if (!mirrorData?.data?.children) {
+      console.warn(`⚠️ Invalid r.jina.ai response for r/${subreddit}`);
       return [];
     }
 
-    const posts = fallbackData.data
+    const posts = mirrorData.data.children
       .slice(0, limit)
-      .map((post: PushshiftPost): RedditPost => ({
-        id: post.id?.toString() || '',
-        title: post.title,
-        url: post.url || (post.permalink ? `https://www.reddit.com${post.permalink}` : ''),
-        score: post.score ?? 0,
-        author: post.author ?? 'unknown',
-        created: post.created_utc ?? 0,
-        comments: post.num_comments ?? 0,
-        subreddit: post.subreddit ?? subreddit,
-        thumbnail: post.thumbnail && post.thumbnail !== 'self' ? post.thumbnail : undefined,
-        selftext: post.selftext,
-        is_self: post.is_self ?? false
-      }));
+      .map((child: { data: RedditApiPost }): RedditPost => {
+        const post = child.data;
+        return {
+          id: post.id,
+          title: post.title,
+          url: post.url,
+          score: post.score,
+          author: post.author,
+          created: post.created_utc,
+          comments: post.num_comments,
+          subreddit: post.subreddit,
+          thumbnail: post.thumbnail !== 'self' ? post.thumbnail : undefined,
+          selftext: post.selftext,
+          is_self: post.is_self
+        };
+      });
 
-    console.log(`✅ Fallback to Pushshift fetched ${posts.length} posts from r/${subreddit}`);
+    console.log(`✅ Fallback to r.jina.ai fetched ${posts.length} posts from r/${subreddit}`);
     return posts;
   } catch (error: unknown) {
-    console.error(`❌ Pushshift fallback failed for r/${subreddit}:`, error);
+    console.error(`❌ r.jina.ai fallback failed for r/${subreddit}:`, error);
     return [];
   }
 }

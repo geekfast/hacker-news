@@ -102,7 +102,7 @@ User Action → Category Selection → API Call → Data Processing → UI Rende
 ## 🔌 API Endpoints
 
 ### `/api/reddit`
-**Purpose**: Proxy for Reddit data with Pushshift and mock fallbacks for Indonesia
+**Purpose**: Proxy for Reddit data with r.jina.ai mirror and mock fallbacks for regions where reddit.com is blocked
 
 **Parameters**:
 - `limit` (optional): Number of posts to return (default: 12)
@@ -186,7 +186,7 @@ User Action → Category Selection → API Call → Data Processing → UI Rende
 ## 🚀 Reddit Integration
 
 ### Implementation Strategy
-Due to Reddit access restrictions in Indonesia, the system first attempts to fetch data directly from Reddit. When direct access fails, it falls back to the Pushshift API to retrieve real posts. Mock data is used only if both sources are unavailable, ensuring the interface remains functional in restricted regions.
+Due to Reddit access restrictions in some regions, the system first attempts to fetch data directly from Reddit. When direct access fails, it falls back to the r.jina.ai mirror to retrieve real posts. Mock data is used only if both sources are unavailable, ensuring the interface remains functional in restricted regions.
 
 ### Aggregated Subreddit System
 **Target Subreddits**:
