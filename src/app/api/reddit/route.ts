@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 
 export interface RedditPost {
   id: string;
@@ -54,25 +54,94 @@ const SUBREDDITS = [
 
 // Enhanced timeout settings based on environment
 const getTimeoutSettings = () => {
-  const timeoutMs = parseInt(process.env.REDDIT_TIMEOUT_MS || '60000'); // Increased timeout for VPN to 60s
+  const timeoutMs = parseInt(process.env.REDDIT_TIMEOUT_MS || '30000'); // Increased timeout for VPN
   return {
     timeout: timeoutMs,
     signal: AbortSignal.timeout(timeoutMs)
   };
 };
 
+// OAuth token cache
+let accessToken: string | null = null;
+let tokenExpiration: number = 0;
+
+async function getAccessToken(): Promise<string> {
+  if (accessToken && tokenExpiration > Date.now()) {
+    return accessToken;
+  }
+
+  const clientId = process.env.REDDIT_CLIENT_ID;
+  const clientSecret = process.env.REDDIT_CLIENT_SECRET;
+
+  if (!clientId || !clientSecret) {
+    console.error('Reddit API credentials not configured');
+    throw new Error('Reddit API credentials not configured');
+  }
+
+  const auth = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
+  const response = await fetch('https://www.reddit.com/api/v1/access_token', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Basic ${auth}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'User-Agent': process.env.REDDIT_USER_AGENT || 'HackerNewsClone/1.0'
+    },
+    body: 'grant_type=client_credentials'
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to get access token: ${response.status}`);
+  }
+
+  const data = await response.json();
+  if (!data.access_token) {
+    throw new Error('No access token received from Reddit');
+  }
+  accessToken = data.access_token;
+  tokenExpiration = Date.now() + (data.expires_in * 1000);
+  return data.access_token;
+}
+
+async function fetchWithRetry(url: string, options: RequestInit, retries = 3): Promise<Response> {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const response = await fetch(url, options);
+      if (response.ok) {
+        return response;
+      }
+      if (response.status === 429) { // Rate limit
+        const retryAfter = parseInt(response.headers.get('retry-after') || '60');
+        await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
+        continue;
+      }
+      if (response.status === 403 || response.status === 401) {
+        // Token might be expired, clear it and retry
+        accessToken = null;
+        continue;
+      }
+      throw new Error(`HTTP ${response.status}`);
+    } catch (error) {
+      if (i === retries - 1) throw error;
+      await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
+    }
+  }
+  throw new Error('Max retries reached');
+}
+
 async function fetchSubredditPosts(subreddit: string, limit: number = 3): Promise<RedditPost[]> {
   try {
-    const url = `https://www.reddit.com/r/${subreddit}/hot.json?limit=${limit}&raw_json=1`;
+    const token = await getAccessToken();
+    const url = `https://oauth.reddit.com/r/${subreddit}/hot?limit=${limit}&raw_json=1`;
     const { signal } = getTimeoutSettings();
     
-    const response = await fetch(url, {
+    const response = await fetchWithRetry(url, {
       headers: {
-        'User-Agent': process.env.REDDIT_USER_AGENT || 'HackerNewsClone/1.0 (Web App)',
+        'Authorization': `Bearer ${token}`,
+        'User-Agent': process.env.REDDIT_USER_AGENT || 'HackerNewsClone/1.0',
         'Accept': 'application/json'
       },
       signal,
-      cache: 'no-store' // Disable caching for VPN requests
+      cache: 'no-store'
     });
 
     if (!response.ok) {
@@ -80,7 +149,14 @@ async function fetchSubredditPosts(subreddit: string, limit: number = 3): Promis
       return [];
     }
 
-    const data = await response.json();
+    const text = await response.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (error) {
+      console.warn(`⚠️ Failed to parse response from r/${subreddit}: ${text.substring(0, 100)}...`);
+      return [];
+    }
     
     if (!data?.data?.children) {
       console.warn(`⚠️ Invalid response format from r/${subreddit}`);
@@ -293,7 +369,7 @@ export async function GET(request: NextRequest) {
 
   // Enhanced fallback logic - use environment variable to control fallback behavior
   const fallbackEnabled = process.env.REDDIT_FALLBACK_ENABLED === 'true';
-  const shouldUseFallback = fallbackEnabled && (failedSubreddits >= SUBREDDITS.length * 0.5); // Lowered to 50% failure rate for better reliability
+  const shouldUseFallback = fallbackEnabled && (failedSubreddits >= SUBREDDITS.length * 0.75); // 75% failure rate
   
   if (shouldUseFallback) {
     console.warn(`⚠️ ${failedSubreddits}/${SUBREDDITS.length} subreddits failed, Reddit appears to be blocked. Using fallback data.`);
