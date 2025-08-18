@@ -3,14 +3,58 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 ## Features
 
 - 📰 **Hacker News Integration**: Fetch and display top stories from Hacker News API
+- � **Reddit Content Aggregation**: Multi-subreddit tech content with intelligent fallback system
+- 🤖 **Cascade AI Summarization**: Triple-redundancy AI powered by Gemini → OpenAI → Template fallback
 - 🖼️ **Smart Image Caching**: Automatic image generation and local caching for each news story
-- 📝 **News Summarization**: AI-powered content extraction and summarization for quick overview
 - 📋 **Dual View Modes**: Switch between List view (detailed) and Grid view (visual) with preference persistence
 - 🎨 **Dark Theme**: Beautiful dark theme optimized for reading
 - ⚡ **Performance**: Optimized with caching and skeleton loading states
 - 🎨 **AI-Enhanced Images**: Gemini-powered contextual image generation with Unsplash fallback
 
+## AI Summarization System
+
+The app features a sophisticated cascade AI summarization system that ensures reliable content summarization:
+
+### Triple-Redundancy Strategy
+1. **🥇 Primary: Google Gemini** - Fast, cost-effective AI summarization using gemini-1.5-flash
+2. **🥈 Secondary: OpenAI GPT-3.5-turbo** - Reliable fallback for when Gemini is unavailable
+3. **🥉 Tertiary: Template-based** - Always-available dummy summarization as final fallback
+
+### Environment Variables Required
+```bash
+GEMINI_API_KEY=your_gemini_api_key_here
+OPENAI_API_KEY=your_openai_api_key_here
+```
+
+## Reddit Integration
+
+The app aggregates content from multiple tech-focused subreddits with intelligent fallback:
+
+### Subreddits Monitored
+- programming, javascript, webdev, technology
+- MachineLearning, artificial, coding, compsci
+
+### Environment Variables
+```bash
+REDDIT_FALLBACK_ENABLED=true  # Enable high-quality mock data when Reddit is inaccessible
+```
+
+### Smart Fallback System
+- Monitors SSL certificate health and connection timeouts
+- Automatically switches to curated mock data when 75%+ of subreddits fail
+- Provides seamless user experience even when Reddit is blocked or unavailable
+
 ## API Endpoints
+
+### `/api/reddit`
+- Aggregates content from 8 tech-focused subreddits
+- Intelligent fallback to high-quality mock data
+- SSL-aware connection handling with timeout management
+
+### `/api/summarize` 
+- **Cascade AI Strategy**: Gemini → OpenAI → Template fallback
+- Smart content extraction with intelligent retry logic
+- Comprehensive error handling and caching
 
 ### `/api/generate-image`
 - Generate contextual image descriptions using Gemini AI
@@ -20,10 +64,6 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 ### `/api/search-image`
 - Search and cache images based on news story titles
 - Automatic local storage to reduce external API calls
-
-### `/api/summarize` 
-- Extract and summarize content from news article URLs
-- Smart content detection with fallback to article titles
 
 ### `/api/clean-cache`
 - Clean old cached images and summaries
