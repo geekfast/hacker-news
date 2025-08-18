@@ -11,14 +11,6 @@ interface SummarizeRequest {
   content?: string;
 }
 
-interface SummarizeResponse {
-  summary: string;
-  source: 'gemini' | 'openai' | 'fallback';
-  model?: string;
-  tokens?: number;
-  cached?: boolean;
-}
-
 // Simple in-memory cache for summaries
 const summaryCache = new Map<string, { summary: string; timestamp: number; source: string }>();
 const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
@@ -34,7 +26,7 @@ function isCacheValid(timestamp: number): boolean {
 }
 
 // AI-powered summarization using Google Gemini
-async function generateGeminiSummary(title: string, url?: string, content?: string): Promise<{ summary: string; model: string; tokens?: number }> {
+async function generateGeminiSummary(title: string): Promise<{ summary: string; model: string; tokens?: number }> {
   const apiKey = process.env.GEMINI_API_KEY;
   
   if (!apiKey) {
@@ -79,7 +71,7 @@ Write as if you're familiar with the topic and provide valuable context that wou
 }
 
 // AI-powered summarization using OpenAI
-async function generateOpenAISummary(title: string, url?: string, content?: string): Promise<{ summary: string; model: string; tokens?: number }> {
+async function generateOpenAISummary(title: string): Promise<{ summary: string; model: string; tokens?: number }> {
   const apiKey = process.env.OPENAI_API_KEY;
   
   if (!apiKey) {
@@ -138,7 +130,7 @@ Write as if you're familiar with the topic and provide valuable context that wou
 }
 
 // Fallback summarization using keyword extraction and templates
-function generateFallbackSummary(title: string, url?: string): string {
+function generateFallbackSummary(title: string): string {
   const keywords = title
     .toLowerCase()
     .replace(/[^\w\s]/g, ' ')
@@ -162,7 +154,7 @@ function generateFallbackSummary(title: string, url?: string): string {
 export async function POST(request: NextRequest) {
   try {
     const body: SummarizeRequest = await request.json();
-    const { title, url, content } = body;
+    const { title, url } = body;
 
     // Validate input
     if (!title || title.trim().length === 0) {
@@ -191,7 +183,7 @@ export async function POST(request: NextRequest) {
     try {
       // First try: Gemini
       try {
-        const geminiResult = await generateGeminiSummary(title, url, content);
+        const geminiResult = await generateGeminiSummary(title);
         
         // Cache the Gemini result
         summaryCache.set(cacheKey, {
@@ -214,7 +206,7 @@ export async function POST(request: NextRequest) {
         
         // Second try: OpenAI
         try {
-          const openaiResult = await generateOpenAISummary(title, url, content);
+          const openaiResult = await generateOpenAISummary(title);
           
           // Cache the OpenAI result
           summaryCache.set(cacheKey, {
@@ -236,7 +228,7 @@ export async function POST(request: NextRequest) {
           console.warn(`⚠️ OpenAI summarization also failed:`, openaiError);
           
           // Final fallback: Template-based summary
-          const fallbackSummary = generateFallbackSummary(title, url);
+          const fallbackSummary = generateFallbackSummary(title);
           
           // Cache the fallback result
           summaryCache.set(cacheKey, {
@@ -258,7 +250,7 @@ export async function POST(request: NextRequest) {
       // This should never happen, but just in case
       console.error('Unexpected error in cascade strategy:', error);
       
-      const fallbackSummary = generateFallbackSummary(title, url);
+      const fallbackSummary = generateFallbackSummary(title);
       return NextResponse.json({
         summary: fallbackSummary,
         source: 'fallback',
@@ -347,7 +339,7 @@ export async function GET(request: NextRequest) {
         // First try: Gemini (unless force testing)
         if (forceTest !== 'openai' && forceTest !== 'fallback') {
           try {
-            const geminiResult = await generateGeminiSummary(title, url || undefined);
+            const geminiResult = await generateGeminiSummary(title);
             
             // Cache the Gemini result
             summaryCache.set(cacheKey, {
@@ -377,7 +369,7 @@ export async function GET(request: NextRequest) {
         // Second try: OpenAI (unless force testing fallback)
         if (forceTest !== 'fallback') {
           try {
-            const openaiResult = await generateOpenAISummary(title, url || undefined);
+            const openaiResult = await generateOpenAISummary(title);
             
             // Cache the OpenAI result
             summaryCache.set(cacheKey, {
@@ -401,7 +393,7 @@ export async function GET(request: NextRequest) {
         }
         
         // Final fallback: Template-based summary
-        const fallbackSummary = generateFallbackSummary(title, url || undefined);
+        const fallbackSummary = generateFallbackSummary(title);
         
         // Cache the fallback result
         summaryCache.set(cacheKey, {
@@ -421,7 +413,7 @@ export async function GET(request: NextRequest) {
         // This should never happen, but just in case
         console.error('Unexpected error in cascade strategy:', error);
         
-        const fallbackSummary = generateFallbackSummary(title, url || undefined);
+        const fallbackSummary = generateFallbackSummary(title);
         return NextResponse.json({
           summary: fallbackSummary,
           source: 'fallback',
