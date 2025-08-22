@@ -1,398 +1,56 @@
 {
-  "57c579f144d6ec33c2ebdb413a3a4395": {
-    "summary": "OpenAI offers open-source large language models, including gpt-oss-120b and gpt-oss-20b,  available for download on Hugging Face and GitHub.  These models are designed for various use cases and can run on different hardware, from data centers to high-end personal computers.",
-    "timestamp": 1754450223185,
-    "title": "Open models by OpenAI",
-    "urlHash": "57c579f144d6ec33c2ebdb413a3a4395"
-  },
-  "9dea6ed37175bde0b49d7947285b27bd": {
-    "summary": "The article describes identifying base64 encoded data within a JSON file, specifically highlighting a scenario where sensitive information like encryption keys was inadvertently stored in a base64 encoded format within a JSON structure meant for a public repository.  This reveals a security risk, as the base64 encoding doesn't offer encryption and the key is easily visible.  The author emphasizes the importance of secure handling of sensitive data, even within supposedly encrypted contexts.",
-    "timestamp": 1754450223369,
-    "title": "Spotting base64 encoded JSON, certificates, and private keys",
-    "urlHash": "9dea6ed37175bde0b49d7947285b27bd"
-  },
-  "cb4ff417fc9c3ac79bbe39795ccca96c": {
-    "summary": "Kitten TTS is a groundbreaking, open-source text-to-speech model weighing only 25MB, drastically smaller than existing models.  Its lightweight design allows it to run efficiently on CPUs, eliminating the need for expensive GPUs and cloud computing. This offers a significant advancement in accessibility and affordability for TTS technology.",
-    "timestamp": 1754450223443,
-    "title": "Kitten TTS: 25MB CPU-Only, Open-Source Voice Model",
-    "urlHash": "cb4ff417fc9c3ac79bbe39795ccca96c"
-  },
-  "6f0257836bf5d971e2f4b1943b06a13e": {
-    "summary": "Google's Gemini app now lets users create personalized, illustrated storybooks with AI-generated art and narration.  Users can describe any story, and Gemini will produce a 10-page book in various styles, even incorporating user-provided photos.  This feature offers a creative outlet and a unique way to explain complex topics to children.",
-    "timestamp": 1754450223741,
-    "title": "Create personal illustrated storybooks in the Gemini app",
-    "urlHash": "6f0257836bf5d971e2f4b1943b06a13e"
-  },
-  "359298354ab4df2cd8ec1ecaf1e1a263": {
-    "summary": "Google DeepMind's Genie 3 is a new, general-purpose world model capable of generating diverse, interactive environments in real-time at 720p resolution.  It responds to text prompts, creating dynamic worlds navigable at 24fps with consistent behavior for several minutes.  This advancement builds on DeepMind's prior research in simulated environments and represents a significant step towards achieving Artificial General Intelligence (AGI).",
-    "timestamp": 1754450223937,
-    "title": "Genie 3: A new frontier for world models",
-    "urlHash": "359298354ab4df2cd8ec1ecaf1e1a263"
-  },
-  "63d98996cb9a5d5c561d4b21e90dc56b": {
-    "summary": "Ollama Turbo is a $20/month subscription offering significantly faster model inference speeds and the ability to run larger AI models.  This is achieved through datacenter-grade hardware, relieving strain on users' personal devices while maintaining data privacy.  The service prioritizes speed, scalability, and user privacy.",
-    "timestamp": 1754450224073,
-    "title": "Ollama Turbo",
-    "urlHash": "63d98996cb9a5d5c561d4b21e90dc56b"
-  },
-  "ed37ffe3122888c589caa11d974e5c81": {
-    "summary": "The article alleges that Texas Governor Abbott is allowing Donald Trump to influence the state's redistricting process, leading to politically-motivated gerrymandering.  It urges readers to contact their state representatives to oppose this, emphasizing the need for citizen action to prioritize Texan interests.",
-    "timestamp": 1754450224295,
-    "title": "Resistance to Politically-Ordered Gerrymandering in Texas",
-    "urlHash": "ed37ffe3122888c589caa11d974e5c81"
-  },
-  "338093e0191ad3f2588c7f96dfe13a7a": {
-    "summary": "The GitHub issue suggests replacing the Deflate compression algorithm used in PNG images with Zstandard or LZ4.  These alternatives offer superior compression performance and are free from patent restrictions, potentially improving PNG file sizes and avoiding licensing issues.  The proposal is considered a backwards-incompatible enhancement requiring further discussion.",
-    "timestamp": 1754450225710,
-    "title": "Consider using Zstandard and/or LZ4 instead of Deflate",
-    "urlHash": "338093e0191ad3f2588c7f96dfe13a7a"
-  },
-  "4462b0c1351eac55c15a788bdffd0da8": {
-    "summary": "Scientific fraud has become an 'industry,' analysis finds",
-    "timestamp": 1754450226173,
-    "title": "Scientific fraud has become an 'industry,' analysis finds",
-    "urlHash": "4462b0c1351eac55c15a788bdffd0da8"
-  },
-  "b16d75d51aeac674fa573831ccb802a3": {
-    "summary": "Anthropic released Claude Opus 4.1, an upgrade focusing on improved performance in agentic tasks, real-world coding, and reasoning capabilities.  This update is available to paid Claude users and within Claude Code, with significantly larger model improvements anticipated in the near future.",
-    "timestamp": 1754450227192,
-    "title": "Claude Opus 4.1",
-    "urlHash": "b16d75d51aeac674fa573831ccb802a3"
-  },
-  "6e3edd63389432a08a8b40b164ca83ef": {
-    "summary": "The author experienced imposter syndrome, feeling inadequate compared to the perceived 10x productivity of AI-assisted engineers portrayed on social media.  This article aims to alleviate similar anxieties by sharing the author's experience and strategies for overcoming this feeling of inadequacy.  The core message challenges the unrealistic expectation of a 10x productivity boost from AI, suggesting the online portrayal is exaggerated.",
-    "timestamp": 1754450227322,
-    "title": "Things that helped me get out of the AI 10x engineer imposter syndrome",
-    "urlHash": "6e3edd63389432a08a8b40b164ca83ef"
-  },
-  "8cda1b315645b83cc352aaee98748af9": {
-    "summary": "The author, motivated by concerns about the JSON gem's API design, not performance, aims to improve it.  The current API contains flaws deemed \"not very good\" and even \"outright dangerous,\" leading to frequent deprecations and breaking changes that burden users.  The author acknowledges user frustration with this ongoing maintenance issue.",
-    "timestamp": 1754450234849,
-    "title": "What's wrong with the JSON gem API?",
-    "urlHash": "8cda1b315645b83cc352aaee98748af9"
-  },
-  "4e09cf7b2df4731873dbb4ba2ccdb418": {
-    "summary": "No point in fighting Drivers who appeal speed cameras almost guaranteed to lose",
-    "timestamp": 1754450235197,
-    "title": "No point in fighting Drivers who appeal speed cameras almost guaranteed to lose",
-    "urlHash": "4e09cf7b2df4731873dbb4ba2ccdb418"
-  },
-  "ae7a2de25bb0bc5ec5fb9cbc733dc20d": {
-    "summary": "A San Francisco jury ruled that Meta illegally accessed user data from the period-tracking app Flo, a decision Meta disputes.  This \"landmark\" victory for the plaintiffs, eight women who sued in 2021, highlights concerns about tech companies' data collection practices and potential privacy violations.  The ruling focuses on Meta's alleged eavesdropping on users' private health information.",
-    "timestamp": 1754450235797,
-    "title": "Meta eavesdropped on period-tracker app's users, SF jury rules",
-    "urlHash": "ae7a2de25bb0bc5ec5fb9cbc733dc20d"
-  },
-  "64144cad0c147383749b2c910bb8b7db": {
-    "summary": "The First Widespread Cure for HIV Could Be in Children",
-    "timestamp": 1754450236082,
-    "title": "The First Widespread Cure for HIV Could Be in Children",
-    "urlHash": "64144cad0c147383749b2c910bb8b7db"
-  },
-  "bd5cd4d8c10602c5982d03504dc1b419": {
-    "summary": "uBlock Origin Lite is now available for Safari, offering efficient content blocking with minimal resource consumption.  It uses the browser's built-in capabilities for filtering, resulting in low CPU and memory usage.  The extension includes popular filter lists by default and allows users to add more via an options page.",
-    "timestamp": 1754450236086,
-    "title": "uBlock Origin Lite now available for Safari",
-    "urlHash": "bd5cd4d8c10602c5982d03504dc1b419"
-  },
-  "ee8d5efb1e821d1a98d3f42bc262def8": {
-    "summary": "Water buffalo mozzarella (Mozzarella di Bufala) is traditionally considered superior to cow's milk mozzarella in taste and quality.  A personal taste test was conducted to determine if this reputation was justified, noting the limited seasonal availability of buffalo mozzarella.  The results of this test are not included in the provided text.",
-    "timestamp": 1754450236226,
-    "title": "Cow vs. Water Buffalo Mozzarella",
-    "urlHash": "ee8d5efb1e821d1a98d3f42bc262def8"
-  },
-  "bc3681defb9a4d104113026fa243e3c2": {
-    "summary": "Kyber (YC W23) is hiring enterprise account executives",
-    "timestamp": 1754450236544,
-    "title": "Kyber (YC W23) is hiring enterprise account executives",
-    "urlHash": "bc3681defb9a4d104113026fa243e3c2"
-  },
-  "5421d2d600090539d376ec4c7d261838": {
-    "summary": "Stagewise is a browser-based coding agent designed to modify existing frontend codebases.  It works directly within the developer's local code, supporting various frameworks without requiring significant setup.  The tool aims to streamline frontend development by automating code changes.",
-    "timestamp": 1754450236550,
-    "title": "Show HN: Stagewise (YC S25) – Front end coding agent for existing codebases",
-    "urlHash": "5421d2d600090539d376ec4c7d261838"
-  },
-  "488de6693313908b154324e489cb0e41": {
-    "summary": "Build Your Own Lisp",
-    "timestamp": 1754450237865,
-    "title": "Build Your Own Lisp",
-    "urlHash": "488de6693313908b154324e489cb0e41"
-  },
-  "ac2b1365e922810a142acd7927378cfb": {
-    "summary": "Amaranth is an open-source hardware description language (HDL) toolchain using Python, aiming for ease of use and reduced errors in digital logic design.  It offers a complete workflow including simulation and build systems while remaining compatible with existing Verilog/VHDL tools.  This allows for flexible integration into various FPGA development processes.",
-    "timestamp": 1754452610580,
-    "title": "The Amaranth hardware description language",
-    "urlHash": "ac2b1365e922810a142acd7927378cfb"
-  },
-  "6477bc2048aefbc08a2aa9f874ac6597": {
-    "summary": "I built a tool to help people remove their info from the Tea App",
-    "timestamp": 1754452610844,
-    "title": "I built a tool to help people remove their info from the Tea App",
-    "urlHash": "6477bc2048aefbc08a2aa9f874ac6597"
-  },
-  "d9e76e43d2ebbca085e220b356960e8b": {
-    "summary": "The U.S. Marine Corps has released a 90-page handbook detailing the use of small unmanned aerial systems (sUAS) for both offensive and defensive purposes.  This follows the recent establishment of the military's first attack drone team, signifying a significant expansion of the Marines' drone capabilities. The handbook aims to guide the integration of sUAS into Marine Corps formations.",
-    "timestamp": 1754452610945,
-    "title": "Marines now have an official drone-fighting handbook",
-    "urlHash": "d9e76e43d2ebbca085e220b356960e8b"
-  },
-  "0a86713b303034d8af1346e62f914a2c": {
-    "summary": "Software rot, traditionally viewed as software degradation due to environmental changes (e.g., incompatible library updates), is better understood as a reflection of an unreliable software environment.  Instead of focusing solely on constant software maintenance, prioritizing the stability and longevity of the supporting environment is crucial for long-term software functionality.  This shift in perspective promotes more sustainable and resilient software systems.",
-    "timestamp": 1754452611612,
-    "title": "Software Rot",
-    "urlHash": "0a86713b303034d8af1346e62f914a2c"
-  },
-  "00ccb0849b3c3ab37bcd87dd3abb684a": {
-    "summary": "[r/programming] Understanding React Server Components in 2025",
-    "timestamp": 1754452912562,
-    "title": "[r/programming] Understanding React Server Components in 2025",
-    "urlHash": "00ccb0849b3c3ab37bcd87dd3abb684a"
-  },
-  "0f7dc3adac35980e03156d58996677ca": {
-    "summary": "[r/programming] The State of JavaScript Performance in 2025",
-    "timestamp": 1754452912858,
-    "title": "[r/programming] The State of JavaScript Performance in 2025",
-    "urlHash": "0f7dc3adac35980e03156d58996677ca"
-  },
-  "8f53979067ff413da3f4eef3779dbb9d": {
-    "summary": "[r/programming] Building Scalable APIs with TypeScript and Node.js",
-    "timestamp": 1754452913537,
-    "title": "[r/programming] Building Scalable APIs with TypeScript and Node.js",
-    "urlHash": "8f53979067ff413da3f4eef3779dbb9d"
-  },
-  "b6929613b5efdcb95774c57a68f11f06": {
-    "summary": "[r/programming] The Future of Web Development: Trends to Watch",
-    "timestamp": 1754452914925,
-    "title": "[r/programming] The Future of Web Development: Trends to Watch",
-    "urlHash": "b6929613b5efdcb95774c57a68f11f06"
-  },
-  "babaf0b1a28c5b2d4978987f5e7c8ade": {
-    "summary": "[r/programming] AI-Powered Code Review: A Developer's Experience",
-    "timestamp": 1754452917252,
-    "title": "[r/programming] AI-Powered Code Review: A Developer's Experience",
-    "urlHash": "babaf0b1a28c5b2d4978987f5e7c8ade"
-  },
-  "ec053c445f0beedafc818b7193361ffb": {
-    "summary": "The GitHub issue details the archiving of the Picocrypt open-source file encryption software.  A developer left a final parting message, prompting a request for analysis and understanding of its contents.  The archiving suggests the project is no longer actively maintained.",
-    "timestamp": 1754452918680,
-    "title": "I'm Archiving Picocrypt",
-    "urlHash": "ec053c445f0beedafc818b7193361ffb"
-  },
-  "99d2f169deb952ff4a879cbe41d0efc0": {
-    "summary": "[r/MachineLearning] AI-Powered Code Review: A Developer's Experience",
-    "timestamp": 1754453035693,
-    "title": "[r/MachineLearning] AI-Powered Code Review: A Developer's Experience",
-    "urlHash": "99d2f169deb952ff4a879cbe41d0efc0"
-  },
-  "6a21f3fc811bd4cb2fbea6ba98da6d5f": {
-    "summary": "[r/programming] AI-Powered Code Review: A Developer's Experience",
-    "timestamp": 1754453695642,
-    "title": "[r/programming] AI-Powered Code Review: A Developer's Experience",
-    "urlHash": "6a21f3fc811bd4cb2fbea6ba98da6d5f"
-  },
-  "9e53e3da2df4caf36ff8fcf1441686c9": {
-    "summary": "[r/javascript] JavaScript Memory Management Best Practices",
-    "timestamp": 1754453700812,
-    "title": "[r/javascript] JavaScript Memory Management Best Practices",
-    "urlHash": "9e53e3da2df4caf36ff8fcf1441686c9"
-  },
-  "10c380dad68c322ef2798841609e0cf5": {
-    "summary": "[r/javascript] Vue 4.0 Alpha Released: What's New",
-    "timestamp": 1754453701016,
-    "title": "[r/javascript] Vue 4.0 Alpha Released: What's New",
-    "urlHash": "10c380dad68c322ef2798841609e0cf5"
-  },
-  "f1b9a3a8fc78bf57bc8a0d48346975aa": {
-    "summary": "The article is not about TypeScript 5.5's new features but rather a comprehensive guide to learning TypeScript.  It provides various learning resources categorized by experience level and topic, ranging from quick introductions to in-depth handbooks and reference materials.  Key areas covered include basic types, advanced type manipulation, modules, and JSX.",
-    "timestamp": 1754453702357,
-    "title": "[r/javascript] TypeScript 5.5: New Features and Improvements",
-    "urlHash": "f1b9a3a8fc78bf57bc8a0d48346975aa"
-  },
-  "a23e50e79801b428c497ae2a6a76472b": {
-    "summary": "The provided text is not an article summary but rather a table of contents or outline for an ECMAScript 2026 specification document.  It doesn't describe specific features of ES2025 (the title is misleading),  but rather indicates sections covering conformance, normative references, and an overview of the specification itself.  No actual ES2026 features are detailed.",
-    "timestamp": 1754453703333,
-    "title": "[r/javascript] ES2025 Features Every Developer Should Know",
-    "urlHash": "a23e50e79801b428c497ae2a6a76472b"
-  },
-  "311e1adc9bc37d59b4c801c04bbe72d6": {
-    "summary": "The provided text is not an article about building Progressive Web Apps in 2025; it's a fragment of a webpage seemingly related to Google I/O and web.dev, including language selection options and a note about content organization.  There is no content summarizing PWA development.  Therefore, no summary regarding PWAs can be provided.",
-    "timestamp": 1754453703661,
-    "title": "[r/javascript] Building Progressive Web Apps in 2025",
-    "urlHash": "311e1adc9bc37d59b4c801c04bbe72d6"
-  },
-  "f37451e80173f5fc9b20ba47f656a7d3": {
-    "summary": "A clinical trial of Ozempic (semaglutide) on individuals with HIV-associated lipohypertrophy showed it reversed biological age by an average of 3.1 years over 32 weeks, as measured by epigenetic clocks.  The most significant improvements were observed in inflammatory and brain aging markers, potentially linked to semaglutide's impact on fat distribution and inflammation.  This suggests a possible connection between semaglutide and anti-aging effects.",
-    "timestamp": 1754454150968,
-    "title": "Ozempic shows anti-aging effects in trial",
-    "urlHash": "f37451e80173f5fc9b20ba47f656a7d3"
-  },
-  "07fae779a2d00ee0251d765b2552ca43": {
-    "summary": "GPT-5 leaked benchmarks show 95% accuracy improvement",
-    "timestamp": 1754454258715,
-    "title": "GPT-5 leaked benchmarks show 95% accuracy improvement",
-    "urlHash": "07fae779a2d00ee0251d765b2552ca43"
-  },
-  "79b60c60c236d6328462adc422f95253": {
-    "summary": "Apple's new M4 chip breaks all performance records",
-    "timestamp": 1754454259755,
-    "title": "Apple's new M4 chip breaks all performance records",
-    "urlHash": "79b60c60c236d6328462adc422f95253"
-  },
-  "25cecbe83ba80511c7811e3d7eb9e4c8": {
-    "summary": "Google's new LLM outperforms ChatGPT in coding tasks",
-    "timestamp": 1754454260780,
-    "title": "Google's new LLM outperforms ChatGPT in coding tasks",
-    "urlHash": "25cecbe83ba80511c7811e3d7eb9e4c8"
-  },
-  "aa481f777ef2da9304103f05425019d8": {
-    "summary": "Breakthrough in quantum algorithms for optimization",
-    "timestamp": 1754454261593,
-    "title": "Breakthrough in quantum algorithms for optimization",
-    "urlHash": "aa481f777ef2da9304103f05425019d8"
-  },
-  "7b93d75e51a7bb34f2241b482148887e": {
-    "summary": "Artificial general intelligence timeline predictions",
-    "timestamp": 1754454262255,
-    "title": "Artificial general intelligence timeline predictions",
-    "urlHash": "7b93d75e51a7bb34f2241b482148887e"
-  },
-  "8482456eb9a7ddba45288d48945a3e1d": {
-    "summary": "IBM announced a significant breakthrough in quantum computing, aiming to deliver a fault-tolerant quantum computer by 2029 capable of running 100 million gates on 200 logical qubits.  This milestone represents a crucial step towards achieving practical, large-scale quantum computation and unlocking its full potential.  IBM also highlights its full-stack approach, providing both hardware and software access to researchers and developers.",
-    "timestamp": 1754454262392,
-    "title": "Quantum computing breakthrough at IBM",
-    "urlHash": "8482456eb9a7ddba45288d48945a3e1d"
-  },
-  "d9d078c42cddeefd64fda3e18a8a3d51": {
-    "summary": "Machine learning model predicts climate change with 99% accuracy",
-    "timestamp": 1754454262845,
-    "title": "Machine learning model predicts climate change with 99% accuracy",
-    "urlHash": "d9d078c42cddeefd64fda3e18a8a3d51"
-  },
-  "d4013e1067178fec7d28e9a9b968ac1d": {
-    "summary": "New data structure achieves O(1) for all operations",
-    "timestamp": 1754454263935,
-    "title": "New data structure achieves O(1) for all operations",
-    "urlHash": "d4013e1067178fec7d28e9a9b968ac1d"
-  },
-  "d937689cef9757e34672dc8e8765903c": {
-    "summary": "CSS Grid vs Flexbox: When to use what in 2024",
-    "timestamp": 1754454264467,
-    "title": "CSS Grid vs Flexbox: When to use what in 2024",
-    "urlHash": "d937689cef9757e34672dc8e8765903c"
-  },
-  "583dc94e89a3c5297f2b3816181c768b": {
-    "summary": "The provided text only contains an error message and doesn't offer any information about GitHub Copilot supporting 50+ programming languages.  Therefore, no summary can be provided based on the given content.",
-    "timestamp": 1754454265647,
-    "title": "GitHub Copilot now supports 50+ programming languages",
-    "urlHash": "583dc94e89a3c5297f2b3816181c768b"
-  },
-  "a57313493cb293819bbbcc9e97f8fe52": {
-    "summary": "AI-powered code generation reaches production quality",
-    "timestamp": 1754454266007,
-    "title": "AI-powered code generation reaches production quality",
-    "urlHash": "a57313493cb293819bbbcc9e97f8fe52"
-  },
-  "046980457b3095d2b16ba03f52dff2ec": {
-    "summary": "Neural networks that can reason like humans",
-    "timestamp": 1754454266400,
-    "title": "Neural networks that can reason like humans",
-    "urlHash": "046980457b3095d2b16ba03f52dff2ec"
-  },
-  "96a94f0339aa25c96da32099552a4110": {
-    "summary": "Building responsive web apps with Container Queries",
-    "timestamp": 1754454266902,
-    "title": "Building responsive web apps with Container Queries",
-    "urlHash": "96a94f0339aa25c96da32099552a4110"
-  },
-  "95c4d0a89ac9d9d2707fa109672d9357": {
-    "summary": "Computer vision breakthrough in medical diagnosis",
-    "timestamp": 1754454269501,
-    "title": "Computer vision breakthrough in medical diagnosis",
-    "urlHash": "95c4d0a89ac9d9d2707fa109672d9357"
-  },
-  "a784f63ec7566271f6e75628d88acd71": {
-    "summary": "Building a compiler from scratch in Rust",
-    "timestamp": 1754454270003,
-    "title": "Building a compiler from scratch in Rust",
-    "urlHash": "a784f63ec7566271f6e75628d88acd71"
-  },
-  "d832e82b0a73ce876c23e81d0762196f": {
-    "summary": "Visual Studio Code's latest update incorporates AI-powered debugging features.  These features aim to improve the debugging experience by providing intelligent suggestions and automating certain tasks, ultimately helping developers resolve issues more efficiently.  This enhancement leverages AI to significantly speed up the debugging process and improve developer productivity.",
-    "timestamp": 1754454270567,
-    "title": "Visual Studio Code gets AI-powered debugging",
-    "urlHash": "d832e82b0a73ce876c23e81d0762196f"
-  },
-  "4b8b0a77eeeca9ab6cb0e904e7b093ee": {
-    "summary": "SpaceX successfully launched a reusable rocket, marking another significant step in the company's efforts to reduce the cost of space travel.  This successful launch demonstrates progress towards a more sustainable and economically viable space program.  The reusability aspect is key to achieving this goal.",
-    "timestamp": 1754454270597,
-    "title": "SpaceX successfully launches reusable rocket",
-    "urlHash": "4b8b0a77eeeca9ab6cb0e904e7b093ee"
-  },
-  "f907c7aa800cb67bb3273ca1f4a093c8": {
-    "summary": "AI discovers new antibiotic compounds",
-    "timestamp": 1754454271014,
-    "title": "AI discovers new antibiotic compounds",
-    "urlHash": "f907c7aa800cb67bb3273ca1f4a093c8"
-  },
-  "36887cabc4c0240e26019faced0adfc6": {
-    "summary": "Computer science curriculum overhaul at Stanford",
-    "timestamp": 1754454271543,
-    "title": "Computer science curriculum overhaul at Stanford",
-    "urlHash": "36887cabc4c0240e26019faced0adfc6"
-  },
-  "2c508acf0340008853aa19b0173ed110": {
-    "summary": "New JavaScript features in ES2024 that will blow your mind",
-    "timestamp": 1754454272170,
-    "title": "New JavaScript features in ES2024 that will blow your mind",
-    "urlHash": "2c508acf0340008853aa19b0173ed110"
-  },
-  "5ad88efc947ae3f86bc6e8ac69a0a2ad": {
-    "summary": "Tesla's new autopilot system uses advanced AI",
-    "timestamp": 1754454272679,
-    "title": "Tesla's new autopilot system uses advanced AI",
-    "urlHash": "5ad88efc947ae3f86bc6e8ac69a0a2ad"
-  },
-  "ed570ccf902c648ba6caacc333aad763": {
-    "summary": "Vue 4 vs React 19: Performance benchmarks",
-    "timestamp": 1754454273165,
-    "title": "Vue 4 vs React 19: Performance benchmarks",
-    "urlHash": "ed570ccf902c648ba6caacc333aad763"
-  },
-  "5eb77a695bcdede447bc4669a68e84c3": {
-    "summary": "The provided text is not an article about switching from React to Vanilla JS; it's a Medium sitemap showing a 404 error and a list of unrelated articles.  Therefore, no summary about React and Vanilla JS can be provided.",
-    "timestamp": 1754454274197,
-    "title": "Why I stopped using React and switched to Vanilla JS",
-    "urlHash": "5eb77a695bcdede447bc4669a68e84c3"
-  },
-  "67d28646fcca7fbc8a33d00acfe45957": {
-    "summary": "The article emphasizes the importance of adhering to Web Content Accessibility Guidelines (WCAG) for developers.  Key aspects highlighted include sufficient color contrast for text (varying ratios depending on font size and context) and the need to consider accessibility across various design elements, from buttons and controls to media content and navigation.  Following WCAG ensures websites are usable by people with disabilities.",
-    "timestamp": 1754454276037,
-    "title": "Web accessibility guidelines every developer must follow",
-    "urlHash": "67d28646fcca7fbc8a33d00acfe45957"
-  },
-  "b3f20aa58abd16ea370db9cac3fa33e5": {
-    "summary": "Ethical AI framework adopted by major tech companies",
-    "timestamp": 1754454280266,
-    "title": "Ethical AI framework adopted by major tech companies",
-    "urlHash": "b3f20aa58abd16ea370db9cac3fa33e5"
-  },
-  "f76af7c9a5ad17d0f843ae1da1c77c63": {
-    "summary": "Show HN: Kitten TTS – 25MB CPU-Only, Open-Source TTS Model",
-    "timestamp": 1754456793054,
-    "title": "Show HN: Kitten TTS – 25MB CPU-Only, Open-Source TTS Model",
-    "urlHash": "f76af7c9a5ad17d0f843ae1da1c77c63"
-  },
-  "3200f5ecf832c89e3813b0c3ace6c5e9": {
-    "summary": "Bourdain, My Camera, and Me (2021)",
-    "timestamp": 1754458080924,
-    "title": "Bourdain, My Camera, and Me (2021)",
-    "urlHash": "3200f5ecf832c89e3813b0c3ace6c5e9"
-  },
-  "d7cc05c48e35f77c5376e9c930772700": {
-    "summary": "AI is propping up the US economy",
-    "timestamp": 1754458081225,
-    "title": "AI is propping up the US economy",
-    "urlHash": "d7cc05c48e35f77c5376e9c930772700"
+  "690cfb37d88f9157ff2fbfad8ea76fff": {
+    "summary": "Cloudflare's MoQ project re-engineers the real-time media stack using QUIC, improving performance and reliability for streaming applications.  By replacing TCP with QUIC, MoQ offers inherent congestion control, reduced latency, and improved resilience to network interruptions, leading to a smoother user experience.\n",
+    "timestamp": 1755892228123,
+    "title": "Media over QUIC (MoQ): Refactoring the Internet's real-time media stack",
+    "urlHash": "690cfb37d88f9157ff2fbfad8ea76fff"
+  },
+  "1dc69a628cfcbd670f4016ccf487edb3": {
+    "summary": "The article \"Harper Evolves\" details the author's journey refining their Harper templating engine, focusing on improved performance and developer experience.  Key changes include a streamlined API,  enhanced error handling, and a shift towards a more declarative programming style, resulting in faster rendering and easier maintenance.\n",
+    "timestamp": 1755892228163,
+    "title": "Harper Evolves",
+    "urlHash": "1dc69a628cfcbd670f4016ccf487edb3"
+  },
+  "3186eeb946730d9e7c9d1200c3ba3580": {
+    "summary": "Clyp is a new clipboard manager for Linux designed to improve upon existing options by offering features like history synchronization across multiple devices and a user-friendly interface.  It aims to provide a more robust and feature-rich clipboard management experience compared to default Linux tools.\n",
+    "timestamp": 1755892228953,
+    "title": "Show HN: Clyp – Clipboard Manager for Linux",
+    "urlHash": "3186eeb946730d9e7c9d1200c3ba3580"
+  },
+  "96f6fc86adcbe0dfa9ce2bb2aca54813": {
+    "summary": "Researchers have identified a protein, called TET1, which, when reactivated in aging mice, reversed age-related cognitive decline and improved memory function.  This discovery suggests that TET1 plays a crucial role in maintaining brain health and offers a potential therapeutic target for age-related neurological diseases.\n",
+    "timestamp": 1755892229161,
+    "title": "Scientists just found a protein that reverses brain aging",
+    "urlHash": "96f6fc86adcbe0dfa9ce2bb2aca54813"
+  },
+  "0bc1c13dc59300ff5e753d7736128488": {
+    "summary": "LabPlot is a free, open-source, and cross-platform application designed for data visualization and analysis.  It offers a range of features including importing various data formats, creating diverse plot types, and performing basic statistical analysis, making it a versatile tool for scientific and educational purposes.  Its intuitive interface and compatibility with multiple operating systems enhance its accessibility.\n",
+    "timestamp": 1755892229364,
+    "title": "LabPlot: Free, open source and cross-platform Data Visualization and Analysis",
+    "urlHash": "0bc1c13dc59300ff5e753d7736128488"
+  },
+  "a688358c6ce1a413175b9d5992ee3d7a": {
+    "summary": "Waymo has received permission from New York City to begin testing its autonomous vehicles within the city limits.  This marks a significant expansion for Waymo's autonomous driving program into one of the world's most complex urban environments, paving the way for potential future commercial operations.\n",
+    "timestamp": 1755892229673,
+    "title": "Waymo granted permit to begin testing in New York City",
+    "urlHash": "a688358c6ce1a413175b9d5992ee3d7a"
+  },
+  "dd4a93884ac9fe7399a54a46884b7a93": {
+    "summary": "FFmpeg 8.0 is a major release boasting significant performance improvements across various codecs and filters, resulting in faster encoding and decoding speeds.  Notable additions include enhanced AV1 encoding support and new features for improved video processing and streaming capabilities.\n",
+    "timestamp": 1755892235452,
+    "title": "FFmpeg 8.0",
+    "urlHash": "dd4a93884ac9fe7399a54a46884b7a93"
+  },
+  "a49a86e5651471450dd4bb77f2c394ca": {
+    "summary": "Justin Searls' article explores augmenting ChatGPT with \"self-doubt\" mechanisms, arguing that this would improve its reliability and user trust.  By introducing uncertainty and acknowledging limitations, a more cautious and honest AI could avoid confidently delivering incorrect information, leading to a more responsible and helpful system.\n",
+    "timestamp": 1755892235643,
+    "title": "Sprinkling self-doubt on ChatGPT",
+    "urlHash": "a49a86e5651471450dd4bb77f2c394ca"
+  },
+  "7e2049ae6523d4f768baf747ebeb0d16": {
+    "summary": "The article details the creation of a zero-syscall HTTPS server in Rust leveraging io_uring for asynchronous I/O and kTLS for kernel-level TLS handling.  This architecture significantly reduces system call overhead, resulting in improved performance and efficiency compared to traditional HTTPS server implementations.  The key insight is the powerful combination of these technologies for building highly performant, low-latency network applications.\n",
+    "timestamp": 1755892235896,
+    "title": "Io_uring, kTLS and Rust for zero syscall HTTPS server",
+    "urlHash": "7e2049ae6523d4f768baf747ebeb0d16"
   }
 }
