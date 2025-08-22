@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useStoryAssets } from '@/hooks/useStoryAssets';
 
 type Category = 'hacker-news' | 'reddit';
 
@@ -12,9 +13,20 @@ function ensureUniqueIds(stories: Story[]): Story[] {
   return stories.map((story, index) => {
     let uniqueId = story.id;
     
-    // If ID already exists, create a new one
-    while (seenIds.has(uniqueId)) {
-      uniqueId = story.id + index + Date.now() % 10000;
+    // If ID already exists, create a deterministic new one based on title+url hash
+    if (seenIds.has(uniqueId)) {
+      // Simple hash function for consistent ID generation
+      const createHash = (str: string) => {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+          const char = str.charCodeAt(i);
+          hash = ((hash << 5) - hash) + char;
+          hash = hash | 0; // Convert to 32-bit signed integer
+        }
+        return Math.abs(hash);
+      };
+      
+      uniqueId = createHash(story.title + (story.url || '') + index.toString());
     }
     
     seenIds.add(uniqueId);
@@ -50,61 +62,10 @@ function SkeletonLoader() {
 }
 
 function StoryItemGrid({ story }: { story: Story }) {
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [summary, setSummary] = useState<string | null>(null);
-  const [isLoadingImage, setIsLoadingImage] = useState(true);
-  const [isLoadingSummary, setIsLoadingSummary] = useState(true);
-
-  function extractSubject(title: string): string {
-    const patterns = [
-      /Ask HN: (.+)/,
-      /Show HN: (.+)/,
-      /(.+) \(\d{4}\)/,
-    ];
-
-    for (const pattern of patterns) {
-      const match = title.match(pattern);
-      if (match && match[1]) {
-        return match[1].trim();
-      }
-    }
-
-    return title;
-  }
-
-  useEffect(() => {
-    async function fetchImage() {
-      const subject = extractSubject(story.title);
-      const response = await fetch(`/api/search-image?query=${encodeURIComponent(subject)}`);
-      const data = await response.json();
-      if (data.imageUrl) {
-        setImageUrl(data.imageUrl);
-      }
-      setIsLoadingImage(false);
-    }
-    fetchImage();
-  }, [story.title]);
-
-  useEffect(() => {
-    async function fetchSummary() {
-      if (!story.url) {
-        setIsLoadingSummary(false);
-        return;
-      }
-      
-      try {
-        const response = await fetch(`/api/summarize?url=${encodeURIComponent(story.url)}&title=${encodeURIComponent(story.title)}`);
-        const data = await response.json();
-        if (data.summary) {
-          setSummary(data.summary);
-        }
-      } catch (error) {
-        console.error('Error fetching summary:', error);
-      }
-      setIsLoadingSummary(false);
-    }
-    fetchSummary();
-  }, [story.url, story.title]);
+  const { imageUrl, summary, isLoadingImage, isLoadingSummary } = useStoryAssets({
+    title: story.title,
+    url: story.url,
+  });
 
   if (isLoadingImage) {
     return (
@@ -176,61 +137,10 @@ function StoryItemGrid({ story }: { story: Story }) {
 }
 
 function StoryItem({ story }: { story: Story }) {
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [summary, setSummary] = useState<string | null>(null);
-  const [isLoadingImage, setIsLoadingImage] = useState(true);
-  const [isLoadingSummary, setIsLoadingSummary] = useState(true);
-
-  function extractSubject(title: string): string {
-    const patterns = [
-      /Ask HN: (.+)/,
-      /Show HN: (.+)/,
-      /(.+) \(\d{4}\)/,
-    ];
-
-    for (const pattern of patterns) {
-      const match = title.match(pattern);
-      if (match && match[1]) {
-        return match[1].trim();
-      }
-    }
-
-    return title;
-  }
-
-  useEffect(() => {
-    async function fetchImage() {
-      const subject = extractSubject(story.title);
-      const response = await fetch(`/api/search-image?query=${encodeURIComponent(subject)}`);
-      const data = await response.json();
-      if (data.imageUrl) {
-        setImageUrl(data.imageUrl);
-      }
-      setIsLoadingImage(false);
-    }
-    fetchImage();
-  }, [story.title]);
-
-  useEffect(() => {
-    async function fetchSummary() {
-      if (!story.url) {
-        setIsLoadingSummary(false);
-        return;
-      }
-      
-      try {
-        const response = await fetch(`/api/summarize?url=${encodeURIComponent(story.url)}&title=${encodeURIComponent(story.title)}`);
-        const data = await response.json();
-        if (data.summary) {
-          setSummary(data.summary);
-        }
-      } catch (error) {
-        console.error('Error fetching summary:', error);
-      }
-      setIsLoadingSummary(false);
-    }
-    fetchSummary();
-  }, [story.url, story.title]);
+  const { imageUrl, summary, isLoadingImage, isLoadingSummary } = useStoryAssets({
+    title: story.title,
+    url: story.url,
+  });
 
   if (isLoadingImage) {
     return <SkeletonLoader />;
@@ -298,13 +208,29 @@ function StoryItem({ story }: { story: Story }) {
 }
 
 async function getTopStories(): Promise<number[]> {
-  const response = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
-  return response.json();
+  try {
+    const response = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
+    if (!response.ok) {
+      throw new Error(`Failed to fetch top stories: ${response.status} ${response.statusText}`);
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching top stories:', error);
+    return [];
+  }
 }
 
-async function getStory(id: number): Promise<Story> {
-  const response = await fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`);
-  return response.json();
+async function getStory(id: number): Promise<Story | null> {
+  try {
+    const response = await fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch story ${id}: ${response.status} ${response.statusText}`);
+    }
+    return response.json();
+  } catch (error) {
+    console.error(`Error fetching story ${id}:`, error);
+    return null;
+  }
 }
 
 export default function PageSuspenseWrapper() {
@@ -348,7 +274,8 @@ function HomeInner() {
     const params = new URLSearchParams(searchParams.toString());
     params.set('view', mode);
     params.set('category', category);
-    router.push(`/?${params.toString()}`);
+    // Use replace to avoid polluting browser history
+    router.replace(`/?${params.toString()}`);
   };
 
   // Fetch data based on category
@@ -394,17 +321,22 @@ function HomeInner() {
         const end = page * storiesPerPage;
         const start = end - storiesPerPage;
         const idsToFetch = storyIds.slice(start, end);
-        const newStories = await Promise.all(idsToFetch.map(id => getStory(id)));
         
-        // Ensure no duplicate stories by ID
-        setStories(prevStories => {
-          const existingIds = new Set(prevStories.map(story => story.id));
-          const uniqueNewStories = newStories.filter(story => !existingIds.has(story.id));
-          const combinedStories = [...prevStories, ...uniqueNewStories];
+        try {
+          const storyPromises = idsToFetch.map(id => getStory(id));
+          const fetchedStories = await Promise.all(storyPromises);
           
-          // Apply additional uniqueness check
-          return ensureUniqueIds(combinedStories);
-        });
+          // Filter out null stories and ensure no duplicates
+          const validStories = fetchedStories.filter((story): story is Story => story !== null);
+          
+          setStories(prevStories => {
+            const existingIds = new Set(prevStories.map(s => s.id));
+            const newUniqueStories = validStories.filter(story => !existingIds.has(story.id));
+            return [...prevStories, ...newUniqueStories];
+          });
+        } catch (error) {
+          console.error('Error fetching Hacker News stories:', error);
+        }
       } else if (category === 'reddit' && page > 1) {
         // Fetch more Reddit stories when page increases
         try {

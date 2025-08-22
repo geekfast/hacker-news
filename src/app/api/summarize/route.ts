@@ -15,6 +15,15 @@ interface SummarizeRequest {
 const summaryCache = new Map<string, { summary: string; timestamp: number; source: string }>();
 const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
+// Rate limiting (simple in-memory implementation)
+const rateLimitMap = new Map<string, { requests: number; resetTime: number }>();
+const RATE_LIMIT = 10; // requests per window
+const RATE_WINDOW = 60 * 1000; // 1 minute
+
+// Input validation constants
+const MAX_TITLE_LENGTH = 250;
+const MAX_URL_LENGTH = 2048;
+
 // Generate cache key from title and URL
 function generateCacheKey(title: string, url?: string): string {
   return `${title}-${url || ''}`.toLowerCase().replace(/[^a-z0-9]/g, '-');
@@ -23,6 +32,46 @@ function generateCacheKey(title: string, url?: string): string {
 // Check if cache entry is still valid
 function isCacheValid(timestamp: number): boolean {
   return Date.now() - timestamp < CACHE_DURATION;
+}
+
+// Rate limiting check
+function checkRateLimit(clientId: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(clientId);
+  
+  if (!entry || now > entry.resetTime) {
+    // New window or expired
+    rateLimitMap.set(clientId, { requests: 1, resetTime: now + RATE_WINDOW });
+    return true;
+  }
+  
+  if (entry.requests >= RATE_LIMIT) {
+    return false; // Rate limit exceeded
+  }
+  
+  entry.requests++;
+  return true;
+}
+
+// Input validation
+function validateInput(title: string, url?: string): { isValid: boolean; error?: string } {
+  if (!title || typeof title !== 'string') {
+    return { isValid: false, error: 'Title is required and must be a string' };
+  }
+  
+  if (title.trim().length === 0) {
+    return { isValid: false, error: 'Title cannot be empty' };
+  }
+  
+  if (title.length > MAX_TITLE_LENGTH) {
+    return { isValid: false, error: `Title too long (max ${MAX_TITLE_LENGTH} characters)` };
+  }
+  
+  if (url && url.length > MAX_URL_LENGTH) {
+    return { isValid: false, error: `URL too long (max ${MAX_URL_LENGTH} characters)` };
+  }
+  
+  return { isValid: true };
 }
 
 // AI-powered summarization using Google Gemini
@@ -153,13 +202,26 @@ function generateFallbackSummary(title: string): string {
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting check
+    const clientId = request.headers.get('x-forwarded-for') || 
+                    request.headers.get('x-real-ip') || 
+                    'anonymous';
+    
+    if (!checkRateLimit(clientId)) {
+      return NextResponse.json(
+        { error: 'Rate limit exceeded. Please try again later.' },
+        { status: 429 }
+      );
+    }
+
     const body: SummarizeRequest = await request.json();
     const { title, url } = body;
 
-    // Validate input
-    if (!title || title.trim().length === 0) {
+    // Input validation
+    const validation = validateInput(title, url);
+    if (!validation.isValid) {
       return NextResponse.json(
-        { error: 'Title is required' },
+        { error: validation.error },
         { status: 400 }
       );
     }
@@ -311,12 +373,25 @@ export async function GET(request: NextRequest) {
   // Handle summary generation via GET (for frontend compatibility)
   if (title) {
     try {
+      // Rate limiting check
+      const clientId = request.headers.get('x-forwarded-for') || 
+                      request.headers.get('x-real-ip') || 
+                      'anonymous';
+      
+      if (!checkRateLimit(clientId)) {
+        return NextResponse.json(
+          { error: 'Rate limit exceeded. Please try again later.' },
+          { status: 429 }
+        );
+      }
+
       console.log(`🔍 GET request for summary: "${title.substring(0, 50)}..."`);
 
-      // Validate input
-      if (!title || title.trim().length === 0) {
+      // Input validation
+      const validation = validateInput(title, url || undefined);
+      if (!validation.isValid) {
         return NextResponse.json(
-          { error: 'Title is required' },
+          { error: validation.error },
           { status: 400 }
         );
       }
