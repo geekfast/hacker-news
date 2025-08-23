@@ -52,5 +52,41 @@
     "timestamp": 1755892235896,
     "title": "Io_uring, kTLS and Rust for zero syscall HTTPS server",
     "urlHash": "7e2049ae6523d4f768baf747ebeb0d16"
+  },
+  "07fae779a2d00ee0251d765b2552ca43": {
+    "summary": "The article discusses leaked benchmarks of GPT-5, showing a significant 95% accuracy improvement over previous versions. The improved performance of GPT-5 suggests a major advancement in natural language processing capabilities, promising more accurate and advanced language models for various applications.",
+    "timestamp": 1755922452321,
+    "title": "GPT-5 leaked benchmarks show 95% accuracy improvement",
+    "urlHash": "07fae779a2d00ee0251d765b2552ca43"
+  },
+  "25cecbe83ba80511c7811e3d7eb9e4c8": {
+    "summary": "Google's new Large Language Model (LLM) has been found to outperform ChatGPT in coding tasks, showcasing its capabilities in understanding and generating code. The LLM model was specifically trained on code-related tasks, allowing it to excel in coding challenges and demonstrate its potential for practical applications in software development. This study highlights the advancements in natural language processing models for programming tasks and the promising future of LLM in improving coding efficiency.",
+    "timestamp": 1755922453128,
+    "title": "Google's new LLM outperforms ChatGPT in coding tasks",
+    "urlHash": "25cecbe83ba80511c7811e3d7eb9e4c8"
+  },
+  "2c508acf0340008853aa19b0173ed110": {
+    "summary": "The article \"New JavaScript features in ES2024 that will blow your mind\" discusses upcoming features in the ES2024 version of JavaScript that promise to enhance developers' coding experience. Key highlights include the introduction of pipeline operator `|>` for easier function composition, record and tuple types for more structured data handling, and the `globalThis` keyword for accessing the global object consistently across environments. These new features aim to streamline coding practices and improve overall productivity for JavaScript developers.",
+    "timestamp": 1755922454187,
+    "title": "New JavaScript features in ES2024 that will blow your mind",
+    "urlHash": "2c508acf0340008853aa19b0173ed110"
+  },
+  "5ad88efc947ae3f86bc6e8ac69a0a2ad": {
+    "summary": "Tesla's new autopilot system utilizes advanced AI technology to improve safety and enhance the driving experience. The system is designed to make driving easier and more efficient by utilizing neural networks and advanced algorithms to interpret data from cameras, sensors, and GPS. This innovation represents a significant step forward in autonomous driving technology and demonstrates Tesla's commitment to pushing the boundaries of what is possible in the automotive industry.",
+    "timestamp": 1755922454800,
+    "title": "Tesla's new autopilot system uses advanced AI",
+    "urlHash": "5ad88efc947ae3f86bc6e8ac69a0a2ad"
+  },
+  "d9d078c42cddeefd64fda3e18a8a3d51": {
+    "summary": "The article discusses a machine learning model developed by researchers that can predict climate change impacts with 99% accuracy. The model uses historical climate data and factors such as greenhouse gas emissions to forecast future temperature changes. The findings highlight the potential of machine learning in accurately predicting the effects of climate change, aiding in mitigation and adaptation strategies.",
+    "timestamp": 1755922454937,
+    "title": "Machine learning model predicts climate change with 99% accuracy",
+    "urlHash": "d9d078c42cddeefd64fda3e18a8a3d51"
+  },
+  "7b93d75e51a7bb34f2241b482148887e": {
+    "summary": "The article provides a comprehensive overview of predictions regarding the development of artificial general intelligence (AGI) from various experts in the field. It highlights a wide range of estimated timelines for achieving AGI, with some predictions suggesting it could be achieved within the next few decades while others believe it may take much longer. The article emphasizes the uncertainty and complexity involved in predicting the timeline for AGI development, with factors such as technological advancements, ethical considerations, and societal impacts all playing a role in determining when AGI may become a reality.",
+    "timestamp": 1755922455165,
+    "title": "Artificial general intelligence timeline predictions",
+    "urlHash": "7b93d75e51a7bb34f2241b482148887e"
   }
 }
