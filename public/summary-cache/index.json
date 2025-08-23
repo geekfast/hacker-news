@@ -227,12 +227,6 @@
     "title": "Ozempic shows anti-aging effects in trial",
     "urlHash": "f37451e80173f5fc9b20ba47f656a7d3"
   },
-  "7b93d75e51a7bb34f2241b482148887e": {
-    "summary": "Artificial general intelligence timeline predictions",
-    "timestamp": 1754454262255,
-    "title": "Artificial general intelligence timeline predictions",
-    "urlHash": "7b93d75e51a7bb34f2241b482148887e"
-  },
   "d4013e1067178fec7d28e9a9b968ac1d": {
     "summary": "New data structure achieves O(1) for all operations",
     "timestamp": 1754454263935,
@@ -244,12 +238,6 @@
     "timestamp": 1754454264467,
     "title": "CSS Grid vs Flexbox: When to use what in 2024",
     "urlHash": "d937689cef9757e34672dc8e8765903c"
-  },
-  "583dc94e89a3c5297f2b3816181c768b": {
-    "summary": "The provided text only contains an error message and doesn't offer any information about GitHub Copilot supporting 50+ programming languages.  Therefore, no summary can be provided based on the given content.",
-    "timestamp": 1754454265647,
-    "title": "GitHub Copilot now supports 50+ programming languages",
-    "urlHash": "583dc94e89a3c5297f2b3816181c768b"
   },
   "a57313493cb293819bbbcc9e97f8fe52": {
     "summary": "AI-powered code generation reaches production quality",
@@ -304,12 +292,6 @@
     "timestamp": 1754454273165,
     "title": "Vue 4 vs React 19: Performance benchmarks",
     "urlHash": "ed570ccf902c648ba6caacc333aad763"
-  },
-  "5eb77a695bcdede447bc4669a68e84c3": {
-    "summary": "The provided text is not an article about switching from React to Vanilla JS; it's a Medium sitemap showing a 404 error and a list of unrelated articles.  Therefore, no summary about React and Vanilla JS can be provided.",
-    "timestamp": 1754454274197,
-    "title": "Why I stopped using React and switched to Vanilla JS",
-    "urlHash": "5eb77a695bcdede447bc4669a68e84c3"
   },
   "67d28646fcca7fbc8a33d00acfe45957": {
     "summary": "The article emphasizes the importance of adhering to Web Content Accessibility Guidelines (WCAG) for developers.  Key aspects highlighted include sufficient color contrast for text (varying ratios depending on font size and context) and the need to consider accessibility across various design elements, from buttons and controls to media content and navigation.  Following WCAG ensures websites are usable by people with disabilities.",
@@ -454,5 +436,23 @@
     "timestamp": 1755921996292,
     "title": "Tesla's new autopilot system uses advanced AI",
     "urlHash": "5ad88efc947ae3f86bc6e8ac69a0a2ad"
+  },
+  "7b93d75e51a7bb34f2241b482148887e": {
+    "summary": "The \"Artificial general intelligence timeline predictions\" website aggregates expert opinions on the likely timeframe for achieving artificial general intelligence (AGI).  It reveals a wide range of predictions, highlighting significant uncertainty surrounding the development of AGI,  but with a noticeable trend towards predictions within the next few decades.\n",
+    "timestamp": 1755922317453,
+    "title": "Artificial general intelligence timeline predictions",
+    "urlHash": "7b93d75e51a7bb34f2241b482148887e"
+  },
+  "5eb77a695bcdede447bc4669a68e84c3": {
+    "summary": "The article \"Why I stopped using React and switched to Vanilla JS\" likely details the author's experience finding React overly complex and bloated for certain projects.  The author likely advocates for Vanilla JavaScript as a simpler, more performant alternative for projects where its lightweight nature is beneficial, prioritizing direct DOM manipulation and avoiding the overhead of a framework.\n",
+    "timestamp": 1755922319089,
+    "title": "Why I stopped using React and switched to Vanilla JS",
+    "urlHash": "5eb77a695bcdede447bc4669a68e84c3"
+  },
+  "583dc94e89a3c5297f2b3816181c768b": {
+    "summary": "GitHub Copilot, a popular AI-powered code completion tool, now supports over 50 programming languages, making it more versatile for developers. This expansion allows users to access Copilot's advanced code suggestions and auto-completion features across a wider range of programming projects. The update reflects GitHub's commitment to enhancing the coding experience for developers of various backgrounds and expertise levels.",
+    "timestamp": 1755922319645,
+    "title": "GitHub Copilot now supports 50+ programming languages",
+    "urlHash": "583dc94e89a3c5297f2b3816181c768b"
   }
 }

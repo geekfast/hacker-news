@@ -477,7 +477,7 @@ function HomeInner() {
         <div className="mb-6">
           <div className="flex flex-wrap gap-4 items-center">
             {/* Category Selector */}
-            <div className="flex gap-2">
+            <div className="flex gap-2 w-full">
               <button
                 onClick={() => {
                   const params = new URLSearchParams(searchParams.toString());
@@ -486,7 +486,7 @@ function HomeInner() {
                   router.push(`/?${params.toString()}`);
                   setCategory('hacker-news');
                 }}
-                className={`px-4 py-2 rounded-md font-medium transition-colors ${
+                className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${
                   category === 'hacker-news'
                     ? 'bg-link-color text-white outline outline-2 outline-link-color'
                     : 'bg-card-background text-foreground hover:bg-gray-100 dark:hover:bg-gray-800'
@@ -502,7 +502,7 @@ function HomeInner() {
                   router.push(`/?${params.toString()}`);
                   setCategory('reddit');
                 }}
-                className={`px-4 py-2 rounded-md font-medium transition-colors ${
+                className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${
                   category === 'reddit'
                     ? 'bg-link-color text-white outline outline-2 outline-link-color'
                     : 'bg-card-background text-foreground hover:bg-gray-100 dark:hover:bg-gray-800'
