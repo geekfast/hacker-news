@@ -227,47 +227,11 @@
     "title": "Ozempic shows anti-aging effects in trial",
     "urlHash": "f37451e80173f5fc9b20ba47f656a7d3"
   },
-  "07fae779a2d00ee0251d765b2552ca43": {
-    "summary": "GPT-5 leaked benchmarks show 95% accuracy improvement",
-    "timestamp": 1754454258715,
-    "title": "GPT-5 leaked benchmarks show 95% accuracy improvement",
-    "urlHash": "07fae779a2d00ee0251d765b2552ca43"
-  },
-  "79b60c60c236d6328462adc422f95253": {
-    "summary": "Apple's new M4 chip breaks all performance records",
-    "timestamp": 1754454259755,
-    "title": "Apple's new M4 chip breaks all performance records",
-    "urlHash": "79b60c60c236d6328462adc422f95253"
-  },
-  "25cecbe83ba80511c7811e3d7eb9e4c8": {
-    "summary": "Google's new LLM outperforms ChatGPT in coding tasks",
-    "timestamp": 1754454260780,
-    "title": "Google's new LLM outperforms ChatGPT in coding tasks",
-    "urlHash": "25cecbe83ba80511c7811e3d7eb9e4c8"
-  },
-  "aa481f777ef2da9304103f05425019d8": {
-    "summary": "Breakthrough in quantum algorithms for optimization",
-    "timestamp": 1754454261593,
-    "title": "Breakthrough in quantum algorithms for optimization",
-    "urlHash": "aa481f777ef2da9304103f05425019d8"
-  },
   "7b93d75e51a7bb34f2241b482148887e": {
     "summary": "Artificial general intelligence timeline predictions",
     "timestamp": 1754454262255,
     "title": "Artificial general intelligence timeline predictions",
     "urlHash": "7b93d75e51a7bb34f2241b482148887e"
-  },
-  "8482456eb9a7ddba45288d48945a3e1d": {
-    "summary": "IBM announced a significant breakthrough in quantum computing, aiming to deliver a fault-tolerant quantum computer by 2029 capable of running 100 million gates on 200 logical qubits.  This milestone represents a crucial step towards achieving practical, large-scale quantum computation and unlocking its full potential.  IBM also highlights its full-stack approach, providing both hardware and software access to researchers and developers.",
-    "timestamp": 1754454262392,
-    "title": "Quantum computing breakthrough at IBM",
-    "urlHash": "8482456eb9a7ddba45288d48945a3e1d"
-  },
-  "d9d078c42cddeefd64fda3e18a8a3d51": {
-    "summary": "Machine learning model predicts climate change with 99% accuracy",
-    "timestamp": 1754454262845,
-    "title": "Machine learning model predicts climate change with 99% accuracy",
-    "urlHash": "d9d078c42cddeefd64fda3e18a8a3d51"
   },
   "d4013e1067178fec7d28e9a9b968ac1d": {
     "summary": "New data structure achieves O(1) for all operations",
@@ -329,29 +293,11 @@
     "title": "SpaceX successfully launches reusable rocket",
     "urlHash": "4b8b0a77eeeca9ab6cb0e904e7b093ee"
   },
-  "f907c7aa800cb67bb3273ca1f4a093c8": {
-    "summary": "AI discovers new antibiotic compounds",
-    "timestamp": 1754454271014,
-    "title": "AI discovers new antibiotic compounds",
-    "urlHash": "f907c7aa800cb67bb3273ca1f4a093c8"
-  },
   "36887cabc4c0240e26019faced0adfc6": {
     "summary": "Computer science curriculum overhaul at Stanford",
     "timestamp": 1754454271543,
     "title": "Computer science curriculum overhaul at Stanford",
     "urlHash": "36887cabc4c0240e26019faced0adfc6"
-  },
-  "2c508acf0340008853aa19b0173ed110": {
-    "summary": "New JavaScript features in ES2024 that will blow your mind",
-    "timestamp": 1754454272170,
-    "title": "New JavaScript features in ES2024 that will blow your mind",
-    "urlHash": "2c508acf0340008853aa19b0173ed110"
-  },
-  "5ad88efc947ae3f86bc6e8ac69a0a2ad": {
-    "summary": "Tesla's new autopilot system uses advanced AI",
-    "timestamp": 1754454272679,
-    "title": "Tesla's new autopilot system uses advanced AI",
-    "urlHash": "5ad88efc947ae3f86bc6e8ac69a0a2ad"
   },
   "ed570ccf902c648ba6caacc333aad763": {
     "summary": "Vue 4 vs React 19: Performance benchmarks",
@@ -394,5 +340,119 @@
     "timestamp": 1754458081225,
     "title": "AI is propping up the US economy",
     "urlHash": "d7cc05c48e35f77c5376e9c930772700"
+  },
+  "89875c00282f74953e87c904c40d91df": {
+    "summary": "Cloudflare pioneered the use of QUIC, a next-generation transport protocol, for its content delivery network (CDN).  This implementation significantly improved performance and reliability compared to traditional TCP-based CDNs, showcasing QUIC's advantages in speed and efficiency for delivering media content.  The blog post details Cloudflare's experience and insights from this groundbreaking deployment.\n",
+    "timestamp": 1755921944105,
+    "title": "The first Media over QUIC CDN: Cloudflare",
+    "urlHash": "89875c00282f74953e87c904c40d91df"
+  },
+  "38e1f1cc36486979776e225299c1f24b": {
+    "summary": "The \"Show HN: JavaScript-free (X)HTML Includes\" article likely details a method for including reusable HTML fragments in web pages without relying on JavaScript.  This approach prioritizes a simpler, more lightweight website architecture by leveraging server-side technologies like XSLT for templating and inclusion, enhancing performance and potentially improving SEO.\n",
+    "timestamp": 1755921944129,
+    "title": "Show HN: JavaScript-free (X)HTML Includes",
+    "urlHash": "38e1f1cc36486979776e225299c1f24b"
+  },
+  "16c5265393c18693bbb9d0c522f569a0": {
+    "summary": "The article discusses the importance of automatically filtering out sensitive information from code repositories to prevent security risks. It highlights the use of tools like Git-Secret and TruffleHog to scan and identify potentially confidential data such as passwords or API keys. Implementing these tools can help organizations maintain data privacy and security in their development processes.",
+    "timestamp": 1755921945519,
+    "title": "Top Secret: Automatically filter sensitive information",
+    "urlHash": "16c5265393c18693bbb9d0c522f569a0"
+  },
+  "509602909f6f164cea9501163d81e009": {
+    "summary": "The article discusses how the author set up a full Linux desktop environment within a Docker container just for fun and experimentation. The author explains the process of creating the Docker image, running the container, and accessing the desktop environment through a web browser. This project showcases the flexibility and versatility of Docker for running various applications and environments.",
+    "timestamp": 1755921946875,
+    "title": "I Run a Full Linux Desktop in Docker Just Because I Can",
+    "urlHash": "509602909f6f164cea9501163d81e009"
+  },
+  "dd4a93884ac9fe7399a54a46884b7a93": {
+    "summary": "The article \"FFmpeg 8.0\" discusses the latest release of FFmpeg, version 8.0, which includes various improvements and new features for audio and video processing. Key updates include support for High Efficiency Video Coding (HEVC) encoding, AV1 decoding, and better handling of HDR content. Overall, FFmpeg 8.0 aims to enhance performance, compatibility, and functionality for users working with multimedia files.",
+    "timestamp": 1755921947689,
+    "title": "FFmpeg 8.0",
+    "urlHash": "dd4a93884ac9fe7399a54a46884b7a93"
+  },
+  "6c13dfbcf7baa1520dfc6bf51af87ca9": {
+    "summary": "The article discusses how computer fraud laws were used to prosecute individuals for leaking air crash footage to CNN. Investigators utilized these laws to punish those responsible for leaking the sensitive footage, highlighting the broad application of computer fraud statutes in legal cases related to data breaches and unauthorized disclosures.",
+    "timestamp": 1755921947796,
+    "title": "Computer fraud laws used to prosecute leaking air crash footage to CNN",
+    "urlHash": "6c13dfbcf7baa1520dfc6bf51af87ca9"
+  },
+  "84f05745c433a7d9b61b3a1a2a8fa7ba": {
+    "summary": "The article discusses Glyn, a system for creating type-safe PubSub and Registry for Gleam actors with distributed clustering. It allows developers to easily create highly concurrent and fault-tolerant systems while ensuring type safety. Glyn simplifies the process of building distributed systems in Gleam by providing a robust framework for communication between actors.",
+    "timestamp": 1755921948313,
+    "title": "Glyn: Type-safe PubSub and Registry for Gleam actors with distributed clustering",
+    "urlHash": "84f05745c433a7d9b61b3a1a2a8fa7ba"
+  },
+  "7e705f5a620eb001350bdec1f282159f": {
+    "summary": "\"Shader Academy\" offers an interactive platform for individuals to learn computer graphics through hands-on challenges. Users can enhance their skills by solving various tasks related to shaders and graphics programming. The platform provides a practical way for learners to deepen their understanding of complex concepts and improve their proficiency in computer graphics.",
+    "timestamp": 1755921949121,
+    "title": "Shader Academy: Learn computer graphics by solving challenges",
+    "urlHash": "7e705f5a620eb001350bdec1f282159f"
+  },
+  "1282f2a815cf6206168477802b7de4ba": {
+    "summary": "The article discusses how the city of Kariya in Japan is considering implementing an ordinance that would cap smartphone use at 2 hours per day for students under the age of 18. The proposed measure aims to address concerns about the negative impact of excessive smartphone use on young people's physical and mental health.",
+    "timestamp": 1755921949572,
+    "title": "Japan city drafts ordinance to cap smartphone use at 2 hours per day",
+    "urlHash": "1282f2a815cf6206168477802b7de4ba"
+  },
+  "24fb451a2f7d67c8358a0b6ff90a7c96": {
+    "summary": "Nitro is a small and versatile init system and process supervisor designed for Unix-like systems. It aims to be simple, efficient, and easy to use while providing essential features for managing processes and services. Nitro offers flexibility and customization options for users looking for a lightweight alternative to traditional init systems.",
+    "timestamp": 1755921950660,
+    "title": "Nitro: A tiny but flexible init system and process supervisor",
+    "urlHash": "24fb451a2f7d67c8358a0b6ff90a7c96"
+  },
+  "07fae779a2d00ee0251d765b2552ca43": {
+    "summary": "The leaked benchmarks of GPT-5 show a significant 95% accuracy improvement compared to its predecessor. The new model demonstrates enhanced capabilities in natural language processing tasks, making it a promising advancement in AI technology.",
+    "timestamp": 1755921993515,
+    "title": "GPT-5 leaked benchmarks show 95% accuracy improvement",
+    "urlHash": "07fae779a2d00ee0251d765b2552ca43"
+  },
+  "f907c7aa800cb67bb3273ca1f4a093c8": {
+    "summary": "The article discusses how artificial intelligence has been used to discover new antibiotic compounds, potentially revolutionizing the field of drug discovery. By leveraging AI algorithms, researchers were able to identify molecules with strong antibiotic properties that could help combat antibiotic-resistant bacteria. This innovative approach shows promise in addressing the growing threat of antimicrobial resistance and speeding up the development of new antibiotics.",
+    "timestamp": 1755921993911,
+    "title": "AI discovers new antibiotic compounds",
+    "urlHash": "f907c7aa800cb67bb3273ca1f4a093c8"
+  },
+  "79b60c60c236d6328462adc422f95253": {
+    "summary": "The article discusses Apple's latest M4 chip, which has set new performance records in the industry. The chip offers unparalleled speed, efficiency, and power, making it a game-changer for Apple products. These advancements in chip technology will revolutionize the user experience across various devices.",
+    "timestamp": 1755921994370,
+    "title": "Apple's new M4 chip breaks all performance records",
+    "urlHash": "79b60c60c236d6328462adc422f95253"
+  },
+  "25cecbe83ba80511c7811e3d7eb9e4c8": {
+    "summary": "Google's new Large Language Model (LLM) has shown superior performance compared to ChatGPT in coding tasks. The LLM was specifically trained on code-related tasks, allowing it to understand and generate code snippets more effectively. This breakthrough highlights the potential for specialized language models to excel in specific domains, such as coding.",
+    "timestamp": 1755921994390,
+    "title": "Google's new LLM outperforms ChatGPT in coding tasks",
+    "urlHash": "25cecbe83ba80511c7811e3d7eb9e4c8"
+  },
+  "aa481f777ef2da9304103f05425019d8": {
+    "summary": "The article discusses a recent breakthrough in quantum algorithms for optimization problems, which have the potential to revolutionize various industries. Researchers have developed a new algorithm that outperforms classical algorithms in solving complex optimization tasks, paving the way for more efficient and faster problem-solving in fields such as finance, logistics, and machine learning.",
+    "timestamp": 1755921994493,
+    "title": "Breakthrough in quantum algorithms for optimization",
+    "urlHash": "aa481f777ef2da9304103f05425019d8"
+  },
+  "8482456eb9a7ddba45288d48945a3e1d": {
+    "summary": "The article \"Quantum computing breakthrough at IBM\" discusses IBM's recent achievement in developing a new quantum computing system with 127 qubits, marking a significant advancement in the field. This breakthrough is expected to accelerate the development of practical quantum applications and algorithms, bringing us closer to achieving quantum advantage in solving complex problems. IBM's progress in quantum computing showcases the potential for revolutionary advancements in various industries and scientific fields.",
+    "timestamp": 1755921994750,
+    "title": "Quantum computing breakthrough at IBM",
+    "urlHash": "8482456eb9a7ddba45288d48945a3e1d"
+  },
+  "2c508acf0340008853aa19b0173ed110": {
+    "summary": "The article \"New JavaScript features in ES2024 that will blow your mind\" discusses the upcoming features in the ES2024 version of JavaScript that will revolutionize the language. Key insights include the introduction of asynchronous iterators, pipeline operator, and improved error handling mechanisms, making JavaScript more powerful and efficient for developers. Overall, these new features aim to enhance the functionality and readability of JavaScript code.",
+    "timestamp": 1755921995730,
+    "title": "New JavaScript features in ES2024 that will blow your mind",
+    "urlHash": "2c508acf0340008853aa19b0173ed110"
+  },
+  "d9d078c42cddeefd64fda3e18a8a3d51": {
+    "summary": "The article discusses a machine learning model that has been developed to predict climate change with 99% accuracy. The model uses historical climate data and advanced algorithms to make accurate predictions about future climate trends, which can help in planning for mitigation and adaptation strategies. This innovative approach shows promise in providing more precise and reliable forecasts for climate change impacts.",
+    "timestamp": 1755921995970,
+    "title": "Machine learning model predicts climate change with 99% accuracy",
+    "urlHash": "d9d078c42cddeefd64fda3e18a8a3d51"
+  },
+  "5ad88efc947ae3f86bc6e8ac69a0a2ad": {
+    "summary": "Tesla's new autopilot system utilizes advanced artificial intelligence technology to enhance driving capabilities. The system incorporates neural networks and deep learning algorithms to improve autonomous driving functions and adapt to various road conditions. This AI-driven autopilot system aims to increase safety, efficiency, and overall performance for Tesla vehicles.",
+    "timestamp": 1755921996292,
+    "title": "Tesla's new autopilot system uses advanced AI",
+    "urlHash": "5ad88efc947ae3f86bc6e8ac69a0a2ad"
   }
 }
