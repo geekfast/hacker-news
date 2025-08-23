@@ -48,7 +48,7 @@ async function summarizeWithGemini(title: string, url: string): Promise<string> 
       body: JSON.stringify({
         contents: [{
           parts: [{
-            text: `Please provide a concise 2-3 sentence summary of the article titled "${title}" from ${url}. Focus on the main points and key insights.`
+            text: `Please provide a concise 2-3 sentence summary of the article titled "${title}" from ${url}. Focus on the main points and key insights. If you cannot access the URL, provide a summary based on the title.`
           }]
         }]
       })
@@ -80,7 +80,7 @@ async function summarizeWithOpenAI(title: string, url: string): Promise<string> 
       messages: [
         {
           role: 'user',
-          content: `Please provide a concise 2-3 sentence summary of the article titled "${title}" from ${url}. Focus on the main points and key insights.`
+          content: `Please provide a concise 2-3 sentence summary of the article titled "${title}" from ${url}. Focus on the main points and key insights. If you cannot access the URL, provide a summary based on the title.`
         }
       ],
       max_tokens: 150,
@@ -161,6 +161,7 @@ export async function GET(request: NextRequest) {
       // First, try Gemini
       summary = await summarizeWithGemini(title, url);
       service = 'gemini';
+      console.log(`Summary generated via Gemini for: ${title.substring(0, 50)}...`);
     } catch (geminiError) {
       console.warn('Gemini failed:', geminiError);
       
@@ -168,17 +169,20 @@ export async function GET(request: NextRequest) {
         // Fallback to OpenAI
         summary = await summarizeWithOpenAI(title, url);
         service = 'openai';
+        console.log(`Summary generated via OpenAI for: ${title.substring(0, 50)}...`);
       } catch (openaiError) {
         console.warn('OpenAI failed:', openaiError);
         
-        // Final fallback - generate a template summary
-        summary = `This article discusses "${title}". It covers important developments and insights in this area. For the full details and analysis, please visit the original source.`;
+        // Final fallback - generate a template summary based on title
+        summary = generateFallbackSummary(title);
         service = 'fallback';
+        console.log(`Fallback summary generated for: ${title.substring(0, 50)}...`);
       }
     }
 
     // Cache the result
     await cacheSummary(url, summary, title);
+    console.log(`Summary cached for URL: ${url.substring(0, 50)}...`);
 
     return NextResponse.json(
       { summary },
@@ -198,4 +202,44 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+function generateFallbackSummary(title: string): string {
+  // Generate intelligent fallback summaries based on title content
+  const lowerTitle = title.toLowerCase();
+  
+  if (lowerTitle.includes('show hn')) {
+    return `This is a Show HN post where someone is sharing their project or creation with the community. The title "${title}" suggests they've built something interesting and are looking for feedback and discussion from fellow developers and tech enthusiasts.`;
+  }
+  
+  if (lowerTitle.includes('ask hn')) {
+    return `This is an Ask HN post where someone is seeking advice or opinions from the Hacker News community. The question "${title}" is looking to tap into the collective wisdom and experience of the tech community.`;
+  }
+  
+  if (lowerTitle.includes('ai') || lowerTitle.includes('machine learning') || lowerTitle.includes('ml')) {
+    return `This article discusses developments in artificial intelligence and machine learning. "${title}" covers important advances in AI technology and their implications for the future of computing and society.`;
+  }
+  
+  if (lowerTitle.includes('javascript') || lowerTitle.includes('js') || lowerTitle.includes('typescript') || lowerTitle.includes('react') || lowerTitle.includes('node')) {
+    return `This article focuses on JavaScript and web development technologies. "${title}" discusses tools, frameworks, or best practices that are relevant to modern web developers and the JavaScript ecosystem.`;
+  }
+  
+  if (lowerTitle.includes('python') || lowerTitle.includes('django') || lowerTitle.includes('flask')) {
+    return `This article covers Python programming and related technologies. "${title}" explores tools, libraries, or techniques that are valuable for Python developers and the broader programming community.`;
+  }
+  
+  if (lowerTitle.includes('startup') || lowerTitle.includes('company') || lowerTitle.includes('business')) {
+    return `This article discusses business and startup topics. "${title}" covers insights about entrepreneurship, company building, or business strategy that are relevant to the tech startup ecosystem.`;
+  }
+  
+  if (lowerTitle.includes('security') || lowerTitle.includes('privacy') || lowerTitle.includes('hack') || lowerTitle.includes('breach')) {
+    return `This article addresses cybersecurity and privacy concerns. "${title}" discusses important security developments, vulnerabilities, or privacy issues that affect the tech community and users.`;
+  }
+  
+  if (lowerTitle.includes('open source') || lowerTitle.includes('github') || lowerTitle.includes('git')) {
+    return `This article is about open source software and development tools. "${title}" covers projects, tools, or discussions that are relevant to the open source community and collaborative development.`;
+  }
+  
+  // Generic fallback
+  return `This article discusses "${title}". It covers important developments and insights in this area that are relevant to the tech community. The post explores key concepts and their implications for developers and technology enthusiasts.`;
 }
