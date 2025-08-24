@@ -6,6 +6,11 @@ const SUMMARY_CACHE_DIR = path.join(process.cwd(), 'public', 'summary-cache');
 const SUMMARY_INDEX_FILE = path.join(SUMMARY_CACHE_DIR, 'index.json');
 const CACHE_EXPIRY_DAYS = 7; // Summaries expire after 7 days
 
+// In-memory cache for better performance
+let memoryCache: SummaryCacheIndex | null = null;
+let memoryCacheTimestamp = 0;
+const MEMORY_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
 interface SummaryCacheEntry {
   summary: string;
   timestamp: number;
@@ -30,26 +35,66 @@ async function ensureCacheDirectory(): Promise<void> {
 }
 
 async function loadCacheIndex(): Promise<SummaryCacheIndex> {
+  const now = Date.now();
+  
+  // Check if memory cache is valid
+  if (memoryCache && (now - memoryCacheTimestamp) < MEMORY_CACHE_TTL) {
+    return memoryCache;
+  }
+  
   try {
     const indexData = await fs.readFile(SUMMARY_INDEX_FILE, 'utf-8');
-    return JSON.parse(indexData);
+    const index = JSON.parse(indexData);
+    
+    // Update memory cache
+    memoryCache = index;
+    memoryCacheTimestamp = now;
+    
+    return index;
   } catch {
-    return {};
+    const emptyIndex = {};
+    memoryCache = emptyIndex;
+    memoryCacheTimestamp = now;
+    return emptyIndex;
   }
 }
 
 async function saveCacheIndex(index: SummaryCacheIndex): Promise<void> {
   await ensureCacheDirectory();
   
-  // Atomic write: write to temp file then rename
-  const tempFile = SUMMARY_INDEX_FILE + '.tmp';
+  // Use a more robust atomic write with lock mechanism
+  const tempFile = SUMMARY_INDEX_FILE + '.tmp.' + Date.now();
+  const lockFile = SUMMARY_INDEX_FILE + '.lock';
+  
   try {
+    // Check for lock file (simple file-based locking)
+    try {
+      await fs.access(lockFile);
+      // If lock exists, wait a bit and retry
+      await new Promise(resolve => setTimeout(resolve, 100));
+      return await saveCacheIndex(index); // Retry
+    } catch {
+      // No lock, proceed
+    }
+    
+    // Create lock
+    await fs.writeFile(lockFile, Date.now().toString());
+    
+    // Write to temp file
     await fs.writeFile(tempFile, JSON.stringify(index, null, 2));
+    
+    // Atomic rename
     await fs.rename(tempFile, SUMMARY_INDEX_FILE);
+    
+    // Remove lock
+    await fs.unlink(lockFile);
   } catch (error) {
-    // Clean up temp file if it exists
+    // Clean up temp and lock files if they exist
     try {
       await fs.unlink(tempFile);
+    } catch {}
+    try {
+      await fs.unlink(lockFile);
     } catch {}
     throw error;
   }
@@ -112,11 +157,19 @@ export async function cacheSummary(url: string, summary: string, title: string):
     };
     
     index[urlHash] = cacheEntry;
+    
+    // Update memory cache before saving to file
+    memoryCache = { ...index };
+    memoryCacheTimestamp = now;
+    
     await saveCacheIndex(index);
     
     console.log(`Summary cached for URL: ${url.substring(0, 50)}...`);
   } catch (error) {
     console.error('Error caching summary:', error);
+    // Invalidate memory cache on error
+    memoryCache = null;
+    memoryCacheTimestamp = 0;
   }
 }
 
@@ -181,8 +234,16 @@ export async function getSummaryCacheStats(): Promise<{
 export async function clearSummaryCache(): Promise<void> {
   try {
     await fs.rm(SUMMARY_CACHE_DIR, { recursive: true, force: true });
+    // Clear memory cache
+    memoryCache = null;
+    memoryCacheTimestamp = 0;
     console.log('Summary cache cleared');
   } catch (error) {
     console.error('Error clearing summary cache:', error);
   }
+}
+
+export function invalidateMemoryCache(): void {
+  memoryCache = null;
+  memoryCacheTimestamp = 0;
 }

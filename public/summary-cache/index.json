@@ -316,5 +316,89 @@
     "timestamp": 1756049236274,
     "title": "Line scan camera image processing (train photography)",
     "urlHash": "b0c5903913d7ed5014262cfca4a1d76f"
+  },
+  "2f48be63fe82be5de7aa371abf655341": {
+    "summary": "The article discusses the importance of making websites accessible for AI agents to automate tasks online effortlessly. It emphasizes the need for websites to be designed in a way that allows AI agents to navigate and interact with them effectively. The main goal is to streamline online tasks and improve user experience through enhanced accessibility for AI technology.",
+    "timestamp": 1756050112239,
+    "title": "browser-use - 🌐 Make websites accessible for AI agents. Automate tasks online with ease.",
+    "urlHash": "2f48be63fe82be5de7aa371abf655341"
+  },
+  "396cb5e37f2896753da5d8f85e30cc13": {
+    "summary": "The article \"awesome-mcp-servers\" is a collection of various Minecraft Pocket Edition (MCP) servers that offer unique gameplay experiences and features. It serves as a comprehensive resource for players looking to explore different server options, from minigames to survival modes. The list includes a variety of servers curated by the author, showcasing the diverse community and creativity within the MCP server community.",
+    "timestamp": 1756050112732,
+    "title": "awesome-mcp-servers - A collection of MCP servers.",
+    "urlHash": "396cb5e37f2896753da5d8f85e30cc13"
+  },
+  "c5ccb9c890309761260ebb826e572bdb": {
+    "summary": "The Comet AI browser is susceptible to prompt injections from any site, potentially leading to the draining of users' bank accounts. This security vulnerability highlights the importance of maintaining secure browsing practices and being cautious of the websites visited while using the Comet AI browser.",
+    "timestamp": 1756050121567,
+    "title": "Comet AI browser can get prompt injected from any site, drain your bank account",
+    "urlHash": "c5ccb9c890309761260ebb826e572bdb"
+  },
+  "4cfc7ae26a7a8dc4cd7507e90ceaccc1": {
+    "summary": "The article \"Just so you know\" discusses the importance of clear communication in relationships. It emphasizes the need for open and honest dialogue to avoid misunderstandings and conflicts. The article suggests that being transparent and upfront about thoughts and feelings can lead to stronger and healthier relationships.",
+    "timestamp": 1756050354482,
+    "title": "Just so you know",
+    "urlHash": "4cfc7ae26a7a8dc4cd7507e90ceaccc1"
+  },
+  "f72cb5052ded9e8b0540c77b74938a98": {
+    "summary": "The article discusses how Coinbase CEO Brian Armstrong fired several employees who refused to use an AI-powered tool for preventing fraudulent transactions. Armstrong believed that integrating AI technology was crucial for the company's success and efficiency. This incident highlights the growing importance of AI in the tech industry and the potential consequences for employees who resist adopting new technologies.",
+    "timestamp": 1756050354650,
+    "title": "Coinbase CEO fired engineers who refused to use AI",
+    "urlHash": "f72cb5052ded9e8b0540c77b74938a98"
+  },
+  "d930dbc8449e2e4b7e94dd4bbb3783dd": {
+    "summary": "Burkina Faso has rejected a plan by Bill Gates to create genetically modified mosquitoes to combat malaria. The country's National Biosafety Agency cited concerns about the potential risks and lack of transparency surrounding the project. This decision highlights the importance of considering local perspectives and engaging with communities when implementing public health interventions.",
+    "timestamp": 1756050354767,
+    "title": "Burkina Faso says no to Bill Gates’ plan of creating modified species of mosquitoes",
+    "urlHash": "d930dbc8449e2e4b7e94dd4bbb3783dd"
+  },
+  "5c83db2fed360ff6eadd01bfc26c120e": {
+    "summary": "The article discusses how SurrealDB, a database management system, is sacrificing data durability in order to achieve better benchmark results. By prioritizing performance metrics over data integrity, SurrealDB is potentially putting users' data at risk. This trade-off raises concerns about the reliability and trustworthiness of SurrealDB as a database solution.",
+    "timestamp": 1756050355498,
+    "title": "SurrealDB is sacrificing data durability to make benchmarks look better",
+    "urlHash": "5c83db2fed360ff6eadd01bfc26c120e"
+  },
+  "fdef5e2096e573ef8fcea499cf0d19bc": {
+    "summary": "The article explores the idea of creating a free library of aesthetic web components and questions if there would be interest in such a resource. It discusses the potential benefits of having a collection of visually appealing web components that developers can easily incorporate into their projects. The article also touches on the importance of creating user-friendly and visually pleasing websites in today's digital landscape.",
+    "timestamp": 1756050356251,
+    "title": "Would anybody be interested in a free library of aesthetic web components?",
+    "urlHash": "fdef5e2096e573ef8fcea499cf0d19bc"
+  },
+  "2258434b25f72d7855ea826cdb582a4f": {
+    "summary": "The article discusses seven key programming lessons that the author learned over the course of 10+ years, aiming to help others avoid making the same mistakes and accelerate their learning curve. These lessons cover topics such as the importance of consistent practice, the value of seeking feedback and learning from others, and the significance of mastering the fundamentals before moving on to advanced concepts. Ultimately, the article emphasizes the need for patience, persistence, and a growth mindset in becoming a successful programmer.",
+    "timestamp": 1756050356514,
+    "title": "The 7 Programming Lessons That Took Me 10+ Years to Learn (And Could Save You a Decade)",
+    "urlHash": "2258434b25f72d7855ea826cdb582a4f"
+  },
+  "4d1ee5184e6deec169208377f3817dcb": {
+    "summary": "\"GitHub - larswaechter/markular: A lightweight Markdown Editor for Angular\" is a project that offers a simple and efficient Markdown editor specifically designed for Angular applications. The editor allows users to easily write and format Markdown text within their Angular projects, providing a streamlined experience for content creation. By integrating this tool, developers can enhance the editing capabilities of their Angular applications without sacrificing performance or complexity.",
+    "timestamp": 1756050357099,
+    "title": "GitHub - larswaechter/markular: A lightweight Markdown Editor for Angular.",
+    "urlHash": "4d1ee5184e6deec169208377f3817dcb"
+  },
+  "8a1f8c65a05ef1f082ed0d1c66d5fa2a": {
+    "summary": "The article discusses the author's ongoing work on a portfolio with a lerp theme, which they plan to eventually showcase on Neocities. The author seeks feedback on their portfolio design and execution, asking for the verdict on their progress so far. The main focus is on the author's dedication to creating a visually appealing and engaging portfolio centered around the lerp theme.",
+    "timestamp": 1756050357257,
+    "title": "I'm continually working on a lerp-themed portfolio to eventually put on neocities. What's the verdict?",
+    "urlHash": "8a1f8c65a05ef1f082ed0d1c66d5fa2a"
+  },
+  "1631f7d6fca21f934b5f1288dd4a519f": {
+    "summary": "The article discusses the best way to create an architecture website to showcase work without requiring extensive coding experience. It emphasizes the importance of choosing a user-friendly website builder platform such as Squarespace or Wix, which offer professional templates and drag-and-drop features. The article also provides a link to an example website, demonstrating how to effectively display architectural work with minimal coding knowledge.",
+    "timestamp": 1756050357436,
+    "title": "Best way to create an architecture website to display work with little to no coding experience? (example linked)",
+    "urlHash": "1631f7d6fca21f934b5f1288dd4a519f"
+  },
+  "6ac315fdb8139207107fb02f90ff8a43": {
+    "summary": "The article discusses how to achieve exactly-once processing across Kafka and databases by using Kafka transactions and idempotent writes. It explains the importance of maintaining consistency between Kafka and databases to ensure data integrity and reliability. The key insights include utilizing Kafka transactions to ensure atomicity and idempotent writes to prevent duplicate data in order to achieve exactly-once processing.",
+    "timestamp": 1756050358192,
+    "title": "Exactly-Once Processing Across Kafka and Databases: Using Kafka Transactions + Idempotent Writes",
+    "urlHash": "6ac315fdb8139207107fb02f90ff8a43"
+  },
+  "3dda402999b5297638af2b8fc7b2ac84": {
+    "summary": "The article discusses Claude, a new model proposed to address the issue of catastrophic forgetting in machine learning. Claude introduces the concept of phase memory, which aims to retain knowledge from previous tasks while learning new ones. By using phase memory, Claude is able to achieve continual learning without forgetting previous tasks, making it a promising solution to the challenge of catastrophic forgetting.",
+    "timestamp": 1756050362282,
+    "title": "Claude claims this solves catastrophic forgetting (Phase memory)",
+    "urlHash": "3dda402999b5297638af2b8fc7b2ac84"
   }
 }
