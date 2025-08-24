@@ -57,18 +57,18 @@ const SUBREDDITS = [
 
 // Enhanced timeout settings based on environment
 const getTimeoutSettings = () => {
-  const timeoutMs = parseInt(process.env.REDDIT_TIMEOUT_MS || '30000'); // Increased timeout for VPN
+  const timeoutMs = parseInt(process.env.REDDIT_TIMEOUT_MS || '45000'); // Increased timeout for VPN
   return {
     timeout: timeoutMs,
     signal: AbortSignal.timeout(timeoutMs)
   };
 };
 
-// OAuth token cache (currently unused - using public API)
-// let accessToken: string | null = null;
-// let tokenExpiration: number = 0;
+// OAuth token cache
+let accessToken: string | null = null;
+let tokenExpiration: number = 0;
 
-/* async function getAccessToken(): Promise<string> {
+async function getAccessToken(): Promise<string> {
   if (accessToken && tokenExpiration > Date.now()) {
     return accessToken;
   }
@@ -103,9 +103,9 @@ const getTimeoutSettings = () => {
   accessToken = data.access_token;
   tokenExpiration = Date.now() + (data.expires_in * 1000);
   return data.access_token;
-} */
+}
 
-async function fetchWithRetry(url: string, options: RequestInit, retries = 3): Promise<Response> {
+async function fetchWithRetry(url: string, options: RequestInit, retries = 5): Promise<Response> {
   for (let i = 0; i < retries; i++) {
     try {
       const response = await fetch(url, options);
@@ -114,18 +114,26 @@ async function fetchWithRetry(url: string, options: RequestInit, retries = 3): P
       }
       if (response.status === 429) { // Rate limit
         const retryAfter = parseInt(response.headers.get('retry-after') || '60');
+        console.log(`⏳ Rate limited, waiting ${retryAfter}s before retry...`);
         await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
         continue;
       }
       if (response.status === 403 || response.status === 401) {
-        // Token might be expired, clear it and retry
-        // accessToken = null;
+        console.log(`🚫 Access denied (${response.status}), retrying with different headers...`);
+        continue;
+      }
+      if (response.status === 503 || response.status === 502) {
+        console.log(`⚠️ Server error (${response.status}), retrying...`);
+        await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 2000));
         continue;
       }
       throw new Error(`HTTP ${response.status}`);
     } catch (error) {
+      console.log(`❌ Attempt ${i + 1}/${retries} failed:`, error instanceof Error ? error.message : 'Unknown error');
       if (i === retries - 1) throw error;
-      await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
+      const delay = Math.pow(2, i) * 2000 + Math.random() * 1000; // Add jitter
+      console.log(`⏳ Waiting ${delay}ms before retry...`);
+      await new Promise(resolve => setTimeout(resolve, delay));
     }
   }
   throw new Error('Max retries reached');
@@ -133,20 +141,87 @@ async function fetchWithRetry(url: string, options: RequestInit, retries = 3): P
 
 async function fetchSubredditPosts(subreddit: string, limit: number = 3): Promise<RedditPost[]> {
   try {
-    // Note: OAuth token available but using public API for now
-    // const token = await getAccessToken();
-    const url = `https://www.reddit.com/r/${subreddit}/hot.json?limit=${limit}&raw_json=1`;
+    // Try multiple Reddit endpoints for better reliability
+    const endpoints = [
+      `https://www.reddit.com/r/${subreddit}/hot.json?limit=${limit}&raw_json=1`,
+      `https://old.reddit.com/r/${subreddit}/hot.json?limit=${limit}&raw_json=1`,
+      `https://api.reddit.com/r/${subreddit}/hot?limit=${limit}&raw_json=1`
+    ];
+    
     const { signal } = getTimeoutSettings();
     
-    const response = await fetchWithRetry(url, {
-      headers: {
-        // Prefer env-configured UA; fallback to Reddit-friendly format
-        'User-Agent': process.env.REDDIT_USER_AGENT || 'web:hacker-news-clone:1.0 (by /u/example)',
-        'Accept': 'application/json'
-      },
-      signal,
-      cache: 'no-store'
-    });
+    // Randomize User-Agent to avoid detection
+    const userAgents = [
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+      'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+      'web:hacker-news-clone:2.0 (by /u/techuser)',
+      'HackerNewsAggregator/1.0'
+    ];
+    const randomUA = userAgents[Math.floor(Math.random() * userAgents.length)];
+    
+    let response: Response | null = null;
+    let lastError: Error | null = null;
+    
+    // Try each endpoint until one works
+    for (const url of endpoints) {
+      try {
+        console.log(`🔄 Trying endpoint: ${url}`);
+        response = await fetchWithRetry(url, {
+          headers: {
+            'User-Agent': process.env.REDDIT_USER_AGENT || randomUA,
+            'Accept': 'application/json',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'DNT': '1',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1',
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Site': 'none'
+          },
+          signal,
+          cache: 'no-store'
+        });
+        if (response.ok) {
+          console.log(`✅ Success with endpoint: ${url}`);
+          break;
+        }
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error('Unknown error');
+        console.log(`❌ Failed endpoint ${url}:`, lastError.message);
+        continue;
+      }
+    }
+    
+    // If all public endpoints fail, try OAuth API
+    if (!response || !response.ok) {
+      try {
+        console.log(`🔐 Trying OAuth API for r/${subreddit}...`);
+        const token = await getAccessToken();
+        const oauthUrl = `https://oauth.reddit.com/r/${subreddit}/hot?limit=${limit}&raw_json=1`;
+        
+        response = await fetchWithRetry(oauthUrl, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'User-Agent': process.env.REDDIT_USER_AGENT || randomUA,
+            'Accept': 'application/json'
+          },
+          signal,
+          cache: 'no-store'
+        });
+        
+        if (response.ok) {
+          console.log(`✅ OAuth API success for r/${subreddit}`);
+        }
+      } catch (oauthError) {
+        console.log(`❌ OAuth API also failed:`, oauthError instanceof Error ? oauthError.message : 'Unknown error');
+      }
+    }
+    
+    if (!response || !response.ok) {
+      throw lastError || new Error('All endpoints failed');
+    }
 
     if (!response.ok) {
       console.warn(`⚠️ Failed to fetch r/${subreddit}: HTTP ${response.status}`);
@@ -372,27 +447,28 @@ export async function GET(request: NextRequest) {
     console.error('❌ Error fetching from subreddits:', error);
   }
 
-  // Enhanced fallback logic - use environment variable to control fallback behavior
-  const fallbackEnabled = process.env.REDDIT_FALLBACK_ENABLED === 'true';
-  const shouldUseFallback = fallbackEnabled && (failedSubreddits >= SUBREDDITS.length * 0.75); // 75% failure rate
+  // Enhanced fallback logic - always enable fallback for Indonesia/VPN users
+  const fallbackEnabled = process.env.REDDIT_FALLBACK_ENABLED !== 'false'; // Default to true
+  const shouldUseFallback = fallbackEnabled && (allPosts.length < 3 || failedSubreddits >= SUBREDDITS.length * 0.5); // 50% failure rate
   
   if (shouldUseFallback) {
-    console.warn(`⚠️ ${failedSubreddits}/${SUBREDDITS.length} subreddits failed, Reddit appears to be blocked. Using fallback data.`);
+    console.warn(`⚠️ ${failedSubreddits}/${SUBREDDITS.length} subreddits failed (${allPosts.length} posts total). Reddit appears to be blocked. Using fallback data.`);
     const mockPosts = getMockRedditPosts()
       .sort((a, b) => b.score - a.score)
       .slice(0, limit);
     
-    console.log(`✅ Successfully aggregated ${mockPosts.length} top posts from ${SUBREDDITS.length} subreddits`);
+    console.log(`✅ Successfully aggregated ${mockPosts.length} top posts from ${SUBREDDITS.length} subreddits (fallback mode)`);
     if (mockPosts.length > 0) {
       console.log(`🏆 Top post: "${mockPosts[0].title}" with ${mockPosts[0].score} points from r/${mockPosts[0].subreddit}`);
     }
-    console.log(`📝 Note: Using mock data due to Reddit access restrictions${isProd ? '' : ' in Indonesia'}`);
+    console.log(`📝 Note: Using mock data due to Reddit access restrictions${isProd ? '' : ' (likely VPN/geo-blocking)'}`);
     
     return NextResponse.json({
       posts: mockPosts,
       source: 'fallback',
       region: region,
-      environment: isProd ? 'production' : 'development'
+      environment: isProd ? 'production' : 'development',
+      reason: 'reddit_blocked_or_limited'
     });
   }
 
