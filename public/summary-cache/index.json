@@ -154,5 +154,65 @@
     "timestamp": 1755924053927,
     "title": "A visual history of Visual C++ (2017)",
     "urlHash": "aacd5805b5ec556bf460dc95604ff1a9"
+  },
+  "9cad940684c3f9f27d2df4b043625606": {
+    "summary": "Clearcam is a tool that allows users to quickly add AI-powered object detection to their existing IP CCTV cameras.  This is achieved in under a minute, leveraging pre-trained models for efficient implementation, thus enhancing the security and monitoring capabilities of the cameras.\n",
+    "timestamp": 1756047844142,
+    "title": "Show HN: Clearcam – Add AI Object Detection to Your IP CCTV Cameras in a Minute",
+    "urlHash": "9cad940684c3f9f27d2df4b043625606"
+  },
+  "4781df30a85b958bb078f28b5ed233b3": {
+    "summary": "A German internet service provider (ISP), Telefonica, altered its DNS settings to block Lina's website, effectively censoring it for its users.  This action highlights the power ISPs have to control access to online content and raises concerns about censorship and freedom of speech on the internet.\n",
+    "timestamp": 1756047844162,
+    "title": "A German ISP changed their DNS to block my website",
+    "urlHash": "4781df30a85b958bb078f28b5ed233b3"
+  },
+  "9369bac5cc621344790dc50f81e7134e": {
+    "summary": "The article discusses a technique to dynamically patch a Python function's source code at runtime, allowing for modifications to the function's behavior without altering the original source code. By using the `inspect` module and a custom decorator, the author demonstrates how to insert additional code into a function at runtime, providing a powerful tool for debugging and testing. This method enables developers to experiment with different logic and functionalities without the need to rewrite the original function.",
+    "timestamp": 1756047845010,
+    "title": "Dynamically patch a Python function's source code at runtime",
+    "urlHash": "9369bac5cc621344790dc50f81e7134e"
+  },
+  "a3724b713526ba824c483f3263b31080": {
+    "summary": "The article \"How to build a coding agent\" discusses the process of creating a coding agent, which is a software program that can write code. The main points include understanding the basics of machine learning, training the coding agent using a dataset of code examples, and fine-tuning the model to improve its performance. Overall, the article provides insights into the steps and considerations involved in developing a coding agent.",
+    "timestamp": 1756047845613,
+    "title": "How to build a coding agent",
+    "urlHash": "a3724b713526ba824c483f3263b31080"
+  },
+  "f7ee7b2c564f56e1f7838b57273c6717": {
+    "summary": "The article provides a brief overview of optimal transport theory and Wasserstein distance, explaining how they are used in various fields such as economics, machine learning, and neuroscience. It discusses the fundamental concepts of optimal transport, the Kantorovich formulation, and the applications of Wasserstein distance in measuring the dissimilarity between probability distributions. The article highlights the importance of these mathematical tools in understanding complex data distributions and solving optimization problems.",
+    "timestamp": 1756047845853,
+    "title": "A short introduction to optimal transport and Wasserstein distance (2020)",
+    "urlHash": "f7ee7b2c564f56e1f7838b57273c6717"
+  },
+  "0f9c03be2ba1895cf07ee84749d48d40": {
+    "summary": "\"Bicyclopedia\" is a new online platform aimed at providing comprehensive information and resources for cycling enthusiasts. Users can access a wide range of content including bike maintenance tips, cycling routes, gear recommendations, and community forums. The website aims to be a one-stop destination for all things related to biking, catering to both beginners and experienced cyclists.",
+    "timestamp": 1756047846318,
+    "title": "Show HN: Bicyclopedia",
+    "urlHash": "0f9c03be2ba1895cf07ee84749d48d40"
+  },
+  "b444551c1d2fa648f81fe25e55722b1d": {
+    "summary": "The article discusses how the US government's attacks on renewable energy sources, such as solar and wind power, could result in a power crunch and lead to increased electricity prices. Policies like tariffs and cuts to tax credits for renewables could hinder the growth of clean energy, impacting both consumers and the environment. The article highlights the importance of supporting renewable energy to ensure a stable and affordable electricity supply in the future.",
+    "timestamp": 1756047846658,
+    "title": "US attack on renewables will lead to power crunch that spikes electricity prices",
+    "urlHash": "b444551c1d2fa648f81fe25e55722b1d"
+  },
+  "97a41a9a45f129b1c43f99f1fbbbac66": {
+    "summary": "The article argues that it is worth investing in a fast CPU for your computer, as it can greatly improve overall performance and user experience. A faster CPU can lead to quicker loading times, smoother multitasking, and better gaming performance, making it a worthwhile investment for those looking to enhance their computing capabilities.",
+    "timestamp": 1756047846879,
+    "title": "It is worth it to buy the fast CPU",
+    "urlHash": "97a41a9a45f129b1c43f99f1fbbbac66"
+  },
+  "77746980ef25902b45fdfaadb5bc087a": {
+    "summary": "Seed is an interactive software environment built on Common Lisp, providing a platform for developing and experimenting with Lisp-based code. It offers features such as a text-based user interface, integrated development environment, and support for various Lisp dialects. Seed aims to enhance the programming experience for Lisp developers by offering a versatile and user-friendly environment for coding and testing.",
+    "timestamp": 1756047847365,
+    "title": "Seed: Interactive software environment based on Common Lisp",
+    "urlHash": "77746980ef25902b45fdfaadb5bc087a"
+  },
+  "d30f18486d27d66aeb8a42b5bf4e209c": {
+    "summary": "The article discusses how trees in city streets are able to cope with drought conditions by tapping into leaky pipes for water. This method allows trees to survive and thrive in urban environments where access to water is limited. The study highlights the importance of urban trees in mitigating the effects of climate change and the need for better water management practices in cities.",
+    "timestamp": 1756047847714,
+    "title": "Trees on city streets cope with drought by drinking from leaky pipes",
+    "urlHash": "d30f18486d27d66aeb8a42b5bf4e209c"
   }
 }
