@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+        img {
+            max-width: 300px;
+            border: 1px solid #ddd;
+            margin: 10px;
+        }
+        .error {
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Loading Test</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: Placeholder Images (Local)</h2>
+        <img src="/placeholder.svg" alt="Placeholder" onload="logSuccess(this)" onerror="logError(this)">
+        <img src="/placeholder-small.svg" alt="Small Placeholder" onload="logSuccess(this)" onerror="logError(this)">
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 2: API Image URLs</h2>
+        <div id="api-images"></div>
+        <button onclick="loadApiImages()">Load API Images</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 3: Cached Images</h2>
+        <div id="cached-images"></div>
+        <button onclick="loadCachedImages()">Load Cached Images</button>
+    </div>
+    
+    <div id="logs"></div>
+
+    <script>
+        function logSuccess(img) {
+            const logs = document.getElementById('logs');
+            logs.innerHTML += `<div class="success">✅ Successfully loaded: ${img.src}</div>`;
+        }
+        
+        function logError(img) {
+            const logs = document.getElementById('logs');
+            logs.innerHTML += `<div class="error">❌ Failed to load: ${img.src}</div>`;
+        }
+        
+        async function loadApiImages() {
+            const container = document.getElementById('api-images');
+            container.innerHTML = 'Loading...';
+            
+            try {
+                const response = await fetch('/api/search-image?query=technology');
+                const data = await response.json();
+                console.log('API Response:', data);
+                
+                if (data.imageUrl) {
+                    container.innerHTML = `
+                        <p>API URL: ${data.imageUrl}</p>
+                        <img src="${data.imageUrl}" alt="API Image" onload="logSuccess(this)" onerror="logError(this)">
+                    `;
+                } else {
+                    container.innerHTML = '<p class="error">No imageUrl in response</p>';
+                }
+            } catch (error) {
+                container.innerHTML = `<p class="error">API Error: ${error.message}</p>`;
+                console.error('API Error:', error);
+            }
+        }
+        
+        async function loadCachedImages() {
+            const container = document.getElementById('cached-images');
+            container.innerHTML = 'Loading...';
+            
+            // Test beberapa gambar yang sudah di-cache berdasarkan server logs
+            const cachedQueries = [
+                'DeepSeek-V3 - No description',
+                'markitdown - Python tool for converting files and office documents to Markdown',
+                'browser-use - 🌐 Make websites accessible for AI agents. Automate tasks online with ease'
+            ];
+            
+            let html = '';
+            for (const query of cachedQueries) {
+                try {
+                    const response = await fetch(`/api/search-image?query=${encodeURIComponent(query)}`);
+                    const data = await response.json();
+                    
+                    if (data.imageUrl) {
+                        html += `
+                            <div>
+                                <p><strong>Query:</strong> ${query}</p>
+                                <p><strong>URL:</strong> ${data.imageUrl}</p>
+                                <p><strong>Cached:</strong> ${data.cached}</p>
+                                <img src="${data.imageUrl}" alt="${query}" onload="logSuccess(this)" onerror="logError(this)">
+                            </div>
+                        `;
+                    }
+                } catch (error) {
+                    html += `<p class="error">Error loading ${query}: ${error.message}</p>`;
+                }
+            }
+            
+            container.innerHTML = html;
+        }
+    </script>
+</body>
+</html>

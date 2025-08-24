@@ -39,20 +39,42 @@ export function useStoryAssets({ title, url }: UseStoryAssetsProps): UseStoryAss
     async function fetchImage() {
       try {
         const subject = extractSubject(title);
+        console.log('Fetching image for:', subject);
         const response = await fetch(`/api/search-image?query=${encodeURIComponent(subject)}`);
         
-        if (!response.ok) {
-          console.warn('Image search failed:', response.status);
+        // Always expect JSON response now (API returns placeholder for errors)
+        const contentType = response.headers.get('content-type');
+        if (!contentType?.includes('application/json')) {
+          console.warn('Response is not JSON:', contentType);
+          setImageUrl('/placeholder.svg');
           setIsLoadingImage(false);
           return;
         }
         
-        const data = await response.json();
+        const responseText = await response.text();
+        console.log('Raw response:', responseText);
+        
+        let data;
+        try {
+          data = JSON.parse(responseText);
+        } catch (parseError) {
+          console.error('JSON parse error:', parseError, 'Raw response:', responseText);
+          setImageUrl('/placeholder.svg');
+          setIsLoadingImage(false);
+          return;
+        }
+        
+        console.log('Image API response:', data);
         if (data.imageUrl) {
+          console.log('Setting imageUrl to:', data.imageUrl);
           setImageUrl(data.imageUrl);
+        } else {
+          console.log('No imageUrl in response, using placeholder');
+          setImageUrl('/placeholder.svg');
         }
       } catch (error) {
         console.error('Error fetching image:', error);
+        setImageUrl('/placeholder.svg');
       } finally {
         setIsLoadingImage(false);
       }

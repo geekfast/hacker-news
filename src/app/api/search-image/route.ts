@@ -6,8 +6,31 @@ export async function GET(request: Request) {
   const query = searchParams.get('query');
 
   if (!query) {
-    return NextResponse.json({ error: 'Query parameter is required' }, { status: 400 });
+    return NextResponse.json({ 
+      error: 'Query parameter is required' 
+    }, { 
+      status: 400,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
   }
+
+  // Helper function to return placeholder
+  const returnPlaceholder = (reason: string) => {
+    return NextResponse.json({
+      imageUrl: '/placeholder.svg',
+      cached: false,
+      source: 'placeholder',
+      reason: reason,
+      query: query
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'public, max-age=300'
+      }
+    });
+  };
 
   try {
     // In production (Vercel), skip local cache and fetch directly from Unsplash
@@ -20,7 +43,13 @@ export async function GET(request: Request) {
         console.log(`Serving cached image for query: ${query}`);
         return NextResponse.json({ 
           imageUrl: cachedImageUrl,
-          cached: true 
+          cached: true,
+          source: 'local-cache'
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'public, max-age=3600'
+          }
         });
       }
     }
@@ -28,7 +57,8 @@ export async function GET(request: Request) {
     // Fetch from Unsplash
     const accessKey = process.env.UNSPLASH_ACCESS_KEY;
     if (!accessKey) {
-      return NextResponse.json({ error: 'Unsplash API key is not configured' }, { status: 500 });
+      console.warn('Unsplash API key not configured, returning placeholder');
+      return returnPlaceholder('API key not configured');
     }
 
     const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=1`;
@@ -37,9 +67,18 @@ export async function GET(request: Request) {
       headers: {
         Authorization: `Client-ID ${accessKey}`,
       },
+      signal: AbortSignal.timeout(10000) // 10 second timeout
     });
 
     if (!response.ok) {
+      if (response.status === 410) {
+        console.warn(`Unsplash API returned 410 for query: ${query}, returning placeholder`);
+        return returnPlaceholder('Resource no longer available');
+      }
+      if (response.status === 403 || response.status === 429) {
+        console.warn(`Unsplash API rate limited (${response.status}) for query: ${query}, returning placeholder`);
+        return returnPlaceholder('API rate limited');
+      }
       throw new Error(`Unsplash API responded with status: ${response.status}`);
     }
 
@@ -47,7 +86,8 @@ export async function GET(request: Request) {
     const originalImageUrl = data.results[0]?.urls?.small;
 
     if (!originalImageUrl) {
-      return NextResponse.json({ error: 'No image found for the query' }, { status: 404 });
+      console.warn(`No image found for query: ${query}, returning placeholder`);
+      return returnPlaceholder('No image found for search term');
     }
 
     if (isProduction) {
@@ -57,6 +97,11 @@ export async function GET(request: Request) {
         imageUrl: originalImageUrl,
         cached: false,
         source: 'unsplash-direct'
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'public, max-age=1800'
+        }
       });
     } else {
       // Development: Cache the image locally
@@ -65,12 +110,23 @@ export async function GET(request: Request) {
       
       return NextResponse.json({ 
         imageUrl: localImageUrl,
-        cached: false 
+        cached: false,
+        source: 'unsplash-cached'
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'public, max-age=3600'
+        }
       });
     }
 
   } catch (error) {
     console.error('Error in image search:', error);
-    return NextResponse.json({ error: 'Failed to fetch image' }, { status: 500 });
+    
+    // For any error, return placeholder instead of error response
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.warn(`API error for query "${query}": ${errorMessage}, returning placeholder`);
+    
+    return returnPlaceholder(`API error: ${errorMessage}`);
   }
 }

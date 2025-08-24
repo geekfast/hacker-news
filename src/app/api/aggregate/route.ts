@@ -47,16 +47,6 @@ async function fetchFromSource(source: string, limit: number = 6): Promise<Sourc
         source,
         totalPosts: data.totalPosts || 0,
       };
-    } else if (source === 'lobsters') {
-      const { GET } = await import('../lobsters/route');
-      const mockRequest = new NextRequest(`http://localhost/api/lobsters?limit=${limit}`);
-      const response = await GET(mockRequest);
-      const data = await response.json();
-      result = {
-        posts: data.posts || [],
-        source,
-        totalPosts: data.totalPosts || 0,
-      };
     } else if (source === 'reddit') {
       const { GET } = await import('../reddit/route');
       const mockRequest = new NextRequest(`http://localhost/api/reddit?limit=${limit}`);
@@ -103,7 +93,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const limit = parseInt(searchParams.get('limit') || '20');
-    const sources = searchParams.get('sources')?.split(',') || ['github', 'devto', 'lobsters', 'reddit'];
+    const sources = searchParams.get('sources')?.split(',') || ['github', 'devto', 'reddit'];
     const includeReddit = searchParams.get('include_reddit') !== 'false';
 
     console.log(`🚀 Aggregation API request - limit: ${limit}, sources: ${sources.join(', ')}`);

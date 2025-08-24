@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test Console</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .console {
+            background: #000;
+            color: #0f0;
+            padding: 20px;
+            border-radius: 8px;
+            min-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-size: 14px;
+        }
+        .input-section {
+            margin: 20px 0;
+        }
+        input {
+            padding: 10px;
+            width: 300px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #007acc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #005aa3;
+        }
+        .error {
+            color: #ff5555;
+        }
+        .success {
+            color: #55ff55;
+        }
+        .info {
+            color: #5555ff;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 API Debug Console</h1>
+    
+    <div class="input-section">
+        <input type="text" id="queryInput" placeholder="Enter search query..." value="technology">
+        <button onclick="testAPI()">Test API</button>
+        <button onclick="clearConsole()">Clear</button>
+    </div>
+    
+    <div id="console" class="console">Ready to test...\n</div>
+
+    <script>
+        function log(message, type = 'info') {
+            const console = document.getElementById('console');
+            const timestamp = new Date().toLocaleTimeString();
+            const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : '📝';
+            console.innerHTML += `<span class="${type}">${prefix} [${timestamp}] ${message}</span>\n`;
+            console.scrollTop = console.scrollHeight;
+        }
+
+        function clearConsole() {
+            document.getElementById('console').innerHTML = 'Console cleared...\n';
+        }
+
+        async function testAPI() {
+            const query = document.getElementById('queryInput').value;
+            if (!query.trim()) {
+                log('Please enter a search query!', 'error');
+                return;
+            }
+
+            log(`Testing API with query: "${query}"`, 'info');
+            
+            try {
+                const startTime = performance.now();
+                log('🚀 Sending request to /api/search-image...', 'info');
+                
+                const response = await fetch(`/api/search-image?query=${encodeURIComponent(query)}`);
+                const endTime = performance.now();
+                const duration = Math.round(endTime - startTime);
+                
+                log(`📡 Response received in ${duration}ms`, 'info');
+                log(`📊 Status: ${response.status} ${response.statusText}`, response.ok ? 'success' : 'error');
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    log(`❌ Error Response: ${errorText}`, 'error');
+                    return;
+                }
+
+                const contentType = response.headers.get('content-type');
+                log(`📄 Content-Type: ${contentType}`, 'info');
+
+                const responseText = await response.text();
+                log(`📝 Raw Response (${responseText.length} chars):`, 'info');
+                log(`"${responseText}"`, 'info');
+
+                try {
+                    const data = JSON.parse(responseText);
+                    log('✅ JSON parsing successful!', 'success');
+                    log(`📋 Parsed Data:`, 'success');
+                    log(JSON.stringify(data, null, 2), 'success');
+                    
+                    if (data.imageUrl) {
+                        log(`🖼️ Testing image URL: ${data.imageUrl}`, 'info');
+                        
+                        // Test if image URL is accessible
+                        const img = new Image();
+                        img.onload = () => {
+                            log(`✅ Image loaded successfully! (${img.naturalWidth}x${img.naturalHeight})`, 'success');
+                        };
+                        img.onerror = () => {
+                            log(`❌ Failed to load image from: ${data.imageUrl}`, 'error');
+                        };
+                        img.src = data.imageUrl;
+                    }
+                } catch (parseError) {
+                    log(`❌ JSON Parse Error: ${parseError.message}`, 'error');
+                    log(`🔍 This might be the cause of "Unexpected end of JSON input"`, 'error');
+                }
+
+            } catch (error) {
+                log(`💥 Network Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Test on page load
+        window.addEventListener('load', () => {
+            log('🌟 Debug Console Ready!', 'success');
+            log('This will help us debug the image API issues...', 'info');
+        });
+    </script>
+</body>
+</html>

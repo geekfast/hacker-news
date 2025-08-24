@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Image Loading</title>
+</head>
+<body>
+    <h1>Image Debug Test</h1>
+    
+    <h2>Testing Placeholder Images</h2>
+    <div style="border: 1px solid red; padding: 10px; margin: 10px;">
+        <h3>Placeholder Grid (should be 400x192)</h3>
+        <img src="/placeholder.svg" alt="Grid placeholder" style="border: 1px solid blue;" />
+    </div>
+    
+    <div style="border: 1px solid red; padding: 10px; margin: 10px;">
+        <h3>Placeholder Small (should be 96x96)</h3>
+        <img src="/placeholder-small.svg" alt="Small placeholder" style="border: 1px solid blue;" />
+    </div>
+
+    <h2>Testing Sample Unsplash URL</h2>
+    <div style="border: 1px solid green; padding: 10px; margin: 10px;">
+        <h3>Sample Unsplash Image</h3>
+        <img src="https://images.unsplash.com/photo-1516886635086-2b3c423c0947?w=400&h=192&fit=crop" 
+             alt="Sample image" 
+             style="border: 1px solid blue;" 
+             onerror="console.log('Unsplash image failed to load'); this.src='/placeholder.svg';" 
+             onload="console.log('Unsplash image loaded successfully');" />
+    </div>
+
+    <script>
+        console.log('Testing placeholder files...');
+        
+        // Test placeholder files
+        fetch('/placeholder.svg')
+            .then(r => console.log('placeholder.svg status:', r.status))
+            .catch(e => console.error('placeholder.svg error:', e));
+            
+        fetch('/placeholder-small.svg')
+            .then(r => console.log('placeholder-small.svg status:', r.status))
+            .catch(e => console.error('placeholder-small.svg error:', e));
+    </script>
+</body>
+</html>

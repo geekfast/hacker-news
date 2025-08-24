@@ -430,5 +430,203 @@
     "timestamp": 1756052778246,
     "title": "void - No description",
     "urlHash": "453b85dd21591eb02c1508ad4d3dbfe6"
+  },
+  "c4b96e8f6b295130425396736824088c": {
+    "summary": "The article discusses how the authors utilized a coding agent placed within a while loop to efficiently ship six repositories overnight. By implementing this method, they were able to automate the process of mirroring repositories, saving time and effort. This approach showcases the power of automation in streamlining tasks and increasing productivity in software development.",
+    "timestamp": 1756053422310,
+    "title": "We Put a Coding Agent in a While Loop and It Shipped 6 Repos Overnight",
+    "urlHash": "c4b96e8f6b295130425396736824088c"
+  },
+  "edb831cd284019607e12d52464db9b37": {
+    "summary": "The article compares the experience of creating two card games in Go programming language without using loop linearization markers (LLMs) versus with LLMs. The author found that using LLMs significantly reduced the development time from 3 months to just 3 days, highlighting the importance of optimizing code for performance in game development projects.",
+    "timestamp": 1756053422582,
+    "title": "Making Games in Go: 3 Months Without LLMs vs. 3 Days with LLMs",
+    "urlHash": "edb831cd284019607e12d52464db9b37"
+  },
+  "3844d19c8961dc8680aefd6abc277257": {
+    "summary": "The article discusses how NASA's Juno mission has revolutionized our understanding of Jupiter by providing unprecedented insights into the planet's atmosphere, magnetic field, and interior structure. The data gathered by Juno has revealed new details about Jupiter's powerful storms, swirling clouds, and unique magnetic environment, leaving a lasting scientific legacy for future research on the gas giant.",
+    "timestamp": 1756053422874,
+    "title": "NASA's Juno Mission Leaves Legacy of Science at Jupiter",
+    "urlHash": "3844d19c8961dc8680aefd6abc277257"
+  },
+  "13fb5654262a1475ca453b946e0594e7": {
+    "summary": "The article discusses how SQLite, specifically when using Write-Ahead Logging (WAL), does not perform a `fsync` on each commit by default. This means that data may not be immediately flushed to disk, potentially leading to data loss in the event of a crash. It highlights the importance of understanding the default settings of SQLite and the potential risks associated with them.",
+    "timestamp": 1756053422950,
+    "title": "SQLite (with WAL) doesn't do `fsync` on each commit under default settings",
+    "urlHash": "13fb5654262a1475ca453b946e0594e7"
+  },
+  "4614d3383d71b53b45be55ad40d10abf": {
+    "summary": "The article discusses an issue with emoji domains, specifically mentioning that they resolve properly on desktop but fail to do so on Firefox for Android. This highlights an interoperability gap that exists between different platforms and browsers when it comes to handling emoji domains. The article raises questions about the consistency and compatibility of emoji domains across various devices and browsers.",
+    "timestamp": 1756053432173,
+    "title": "Emoji domains (🏀.to) resolve fine on desktop, but fail on Firefox Android, interop gap?",
+    "urlHash": "4614d3383d71b53b45be55ad40d10abf"
+  },
+  "b4440967d0c2005e6f6730edfc89872f": {
+    "summary": "The article discusses how artificial intelligence technology is being used to fact-check startup pitches by analyzing the astrological signs of the entrepreneurs. The AI system cross-references the information provided by the founders with their astrological profiles to determine the accuracy of their claims, helping investors make more informed decisions. This innovative approach highlights the potential for AI to be utilized in unique ways to enhance due diligence processes in the startup ecosystem.",
+    "timestamp": 1756053433882,
+    "title": "AI Astrology Now Fact-Checks Startup Pitches",
+    "urlHash": "b4440967d0c2005e6f6730edfc89872f"
+  },
+  "1a57528ba5a4a035d5790c1d6e1b45f6": {
+    "summary": "Codex is a lightweight coding agent that can run in your terminal, allowing for seamless integration into your workflow. It provides intelligent code completion and suggestions based on a vast amount of training data, helping to streamline the coding process and increase productivity.",
+    "timestamp": 1756054413443,
+    "title": "codex - Lightweight coding agent that runs in your terminal",
+    "urlHash": "1a57528ba5a4a035d5790c1d6e1b45f6"
+  },
+  "4da0616c73218b59dcd2d7b24fc99866": {
+    "summary": "The article \"OpenManus - No fortress, purely open ground. OpenManus is Coming\" introduces OpenManus, a new platform that aims to provide an open and transparent space for collaboration and innovation. The platform emphasizes breaking down barriers and fostering a spirit of openness among users. OpenManus is positioned as a tool for creativity and cooperation without the constraints of traditional structures.",
+    "timestamp": 1756054413443,
+    "title": "OpenManus - No fortress, purely open ground.  OpenManus is Coming.",
+    "urlHash": "4da0616c73218b59dcd2d7b24fc99866"
+  },
+  "86aa53f1b07692efadef1aa6add06dd6": {
+    "summary": "The article discusses the creation of an AI hedge fund team, highlighting the use of artificial intelligence in the investment industry. It explores how AI technologies can help in making more accurate and data-driven investment decisions, ultimately improving fund performance and profitability.",
+    "timestamp": 1756054413444,
+    "title": "ai-hedge-fund - An AI Hedge Fund Team",
+    "urlHash": "86aa53f1b07692efadef1aa6add06dd6"
+  },
+  "a51019204b6ce5fa861eae2aa9d6986b": {
+    "summary": "The article discusses the growing backlash against artificial intelligence (AI) technologies, with critics like Gary Marcus warning about the potential risks and limitations of AI. Despite the hype surrounding AI, concerns about the technology's ethical implications and lack of real-world impact are causing some to question its long-term viability. Marcus and others believe that the current excitement around AI may be a bubble that could eventually burst, leading to a reevaluation of the true value and potential of AI.",
+    "timestamp": 1756054444531,
+    "title": "'It's almost tragic': Bubble or not, the AI backlash is validating one critic's warnings",
+    "urlHash": "a51019204b6ce5fa861eae2aa9d6986b"
+  },
+  "fa6c32a457b2b0b199a21c636e67d746": {
+    "summary": "The article discusses how California Governor Gavin Newsom has been posting provocative messages on social media, including one where he joked about Trump buying a 10% stake in Intel. This has angered Republicans and sparked debate about the role of trolling in politics. Newsom's posts are seen as a way to challenge conservative ideologies and rally his base while also drawing attention to important issues.",
+    "timestamp": 1756054444756,
+    "title": "“ALL HAIL CHAIRMAN TRUMP! WITH HIS GLORIOUS 10% PURCHASE OF INTEL, THE SOCIALIST REPUBLIC OF AMERICA ENTERS A BOLD NEW ERA” -- California governor Newsom riles Republicans with Trump-trolling posts",
+    "urlHash": "fa6c32a457b2b0b199a21c636e67d746"
+  },
+  "ab3e53928a5ce97c0864c18c2a44ee94": {
+    "summary": "The article discusses how African countries are increasingly importing Chinese solar panels to meet their growing energy needs. This trend is driven by the affordability and efficiency of Chinese solar panels compared to other options. The article highlights the potential impact on the renewable energy sector in Africa and the role of Chinese manufacturers in driving the adoption of solar energy on the continent.",
+    "timestamp": 1756054445256,
+    "title": "Africa Is Buying a Record Number of Chinese Solar Panels",
+    "urlHash": "ab3e53928a5ce97c0864c18c2a44ee94"
+  },
+  "c5021ac46ff155bde7ab2c8b7981311f": {
+    "summary": "The article discusses how the author hacked their bedroom lights to sync with Google Fit in order to improve their physical activity levels. The lights flash in angry red if the author has been inactive for 2 hours, serving as a reminder to get up and move. This creative solution demonstrates the potential of using technology to promote healthier habits and increase physical activity.",
+    "timestamp": 1756054445581,
+    "title": "I hacked my bedroom lights to talk to Google Fit. If I haven’t moved in 2 hours, it flashes angry red until I get up.",
+    "urlHash": "c5021ac46ff155bde7ab2c8b7981311f"
+  },
+  "efaf610b07697a98b376818dfb8a9759": {
+    "summary": "Coinbase CEO Brian Armstrong revealed that he fired engineers who didn't prioritize integrating AI into their work. Armstrong emphasized the importance of staying ahead in the rapidly evolving tech industry and ensuring that employees are constantly innovating to drive the company's growth.",
+    "timestamp": 1756054446064,
+    "title": "Coinbase CEO explains why he fired engineers who didn’t try AI immediately",
+    "urlHash": "efaf610b07697a98b376818dfb8a9759"
+  },
+  "292aa96a978012372b433ce9aff3a934": {
+    "summary": "The article discusses a viral kids' cartoon produced by PragerU that minimizes the impact of slavery by portraying it as \"no big deal.\" The company's co-founder, Dennis Prager, has expressed intentions to indoctrinate children with right-wing ideology through their educational content. This has sparked controversy and raised concerns about the influence of such messaging on young minds.",
+    "timestamp": 1756054446475,
+    "title": "This The New PBS?! Viral Kids Cartoon Teaches Slavery As ‘No Big Deal’, Company’s Co-Founder Wants To Indoctrinate Children With Right-Wing Ideology",
+    "urlHash": "292aa96a978012372b433ce9aff3a934"
+  },
+  "be148e667680414f6aea50c1e6a678e8": {
+    "summary": "The article discusses PDFMathTranslate, a tool that enables the translation of scientific papers in PDF format while preserving their original layout. It supports various translation services such as Google, DeepL, Ollama, and OpenAI, and offers multiple interfaces including CLI, GUI, MCP, Docker, and Zotero integration. This tool makes it easier for researchers to access and understand scientific content in different languages without losing the original formatting of the document.",
+    "timestamp": 1756054472392,
+    "title": "PDFMathTranslate - PDF scientific paper translation with preserved formats - 基于 AI 完整保留排版的 PDF 文档全文双语翻译，支持 Google/DeepL/Ollama/OpenAI 等服务，提供 CLI/GUI/MCP/Docker/Zotero",
+    "urlHash": "be148e667680414f6aea50c1e6a678e8"
+  },
+  "d4ebf9f38a88ec4dc2238b4b9c1b6cd9": {
+    "summary": "The article discusses the open-r1 project, which aims to fully open-source the reproduction of DeepSeek-R1, a model for zero-shot ranking of documents. The project provides a detailed guide on how to replicate the DeepSeek-R1 model, allowing for transparency and reproducibility in the research community.",
+    "timestamp": 1756054472417,
+    "title": "open-r1 - Fully open reproduction of DeepSeek-R1",
+    "urlHash": "d4ebf9f38a88ec4dc2238b4b9c1b6cd9"
+  },
+  "2648ca5648c9a0a304fb60e15d5ef54f": {
+    "summary": "The article discusses \"react-bits,\" an open-source collection of React components that are animated, interactive, and customizable. These components can be used to create visually appealing and engaging websites. The project aims to help developers build stunning and memorable websites more efficiently by providing a library of pre-built components.",
+    "timestamp": 1756054473104,
+    "title": "react-bits - An open source collection of animated, interactive & fully customizable React components for building stunning, memorable websites.",
+    "urlHash": "2648ca5648c9a0a304fb60e15d5ef54f"
+  },
+  "f4eefa6ae35c44b938f9cd078a24598b": {
+    "summary": "The article discusses smolagents, a minimalistic library designed for agents that think in code. It emphasizes simplicity and ease of use, providing a straightforward solution for building and training intelligent agents. The library aims to streamline the process of developing code-based agents for various tasks and environments.",
+    "timestamp": 1756054473131,
+    "title": "smolagents - 🤗 smolagents: a barebones library for agents that think in code.",
+    "urlHash": "f4eefa6ae35c44b938f9cd078a24598b"
+  },
+  "c0b9868bd860a6d4cdc5668a95c5d595": {
+    "summary": "The article discusses the agenticSeek tool, which is a fully local Manus AI that does not require APIs or expensive monthly bills. Users can enjoy an autonomous agent that can think, browse the web, and code for only the cost of electricity. Official updates are only available via Twitter to avoid fake accounts.",
+    "timestamp": 1756054609709,
+    "title": "agenticSeek - Fully Local Manus AI. No APIs, No $200 monthly bills. Enjoy an autonomous agent that thinks, browses the web, and code for the sole cost of electricity. 🔔 Official updates only via twitter @Martin993886460 (Beware of fake account)",
+    "urlHash": "c0b9868bd860a6d4cdc5668a95c5d595"
+  },
+  "5fc83ff0a432cc8fa1fa75de683a812c": {
+    "summary": "The article \"My 2025 Roundup of Must-Know MCP Servers\" discusses the top MCP (Managed Cloud Platform) servers that developers should be familiar with in the year 2025. The author highlights key services such as AWS, Google Cloud, and Azure, and emphasizes the importance of staying updated on the latest advancements in cloud technology to remain competitive in the industry.",
+    "timestamp": 1756054612033,
+    "title": "My 2025 Roundup of Must-Know MCP Servers",
+    "urlHash": "5fc83ff0a432cc8fa1fa75de683a812c"
+  },
+  "7fa6150de5c4bc0b5c3471fa179fa872": {
+    "summary": "The article congratulates the winners of the world's largest hackathon writing challenge. It highlights the diverse range of topics covered by participants, showcasing their creativity and innovation in the field of technology. The winners are recognized for their outstanding contributions to the hackathon writing challenge.",
+    "timestamp": 1756054612720,
+    "title": "Congrats to the World's Largest Hackathon Writing Challenge Winners!",
+    "urlHash": "7fa6150de5c4bc0b5c3471fa179fa872"
+  },
+  "2a730dfbfb61727d9f2e134b69e0ef54": {
+    "summary": "The article discusses how to run AI models using Docker Compose, which allows for easy management of multiple containerized services. It highlights the benefits of using Docker Compose for deploying AI models, such as scalability, portability, and reproducibility. The author provides a step-by-step guide on setting up Docker Compose for running AI models efficiently.",
+    "timestamp": 1756054613041,
+    "title": "Running AI Models with Docker Compose",
+    "urlHash": "2a730dfbfb61727d9f2e134b69e0ef54"
+  },
+  "d43eec6fda17c2d033d9f4f7018c4be6": {
+    "summary": "The article compares three different APIs for document parsing - GPT-4o API, Claude Sonnet 3.5 API, and Invofox API. It provides code samples for each API and evaluates their performance and accuracy in parsing documents. The comparison highlights the strengths and weaknesses of each API, helping developers choose the most suitable option for their specific needs.",
+    "timestamp": 1756054613588,
+    "title": "Document Parsing using GPT-4o API vs Claude Sonnet 3.5 API vs Invofox API (with Code Samples)",
+    "urlHash": "d43eec6fda17c2d033d9f4f7018c4be6"
+  },
+  "58c7c2f9b351b4d470325bdd3c968a15": {
+    "summary": "The article explores why wind farms often attract misinformation and conspiracy theories, such as the belief that they poison groundwater. It discusses how these false narratives are perpetuated by individuals who deny climate change and are resistant to renewable energy sources. The article highlights the importance of addressing these misconceptions in order to promote the widespread adoption of wind energy as a crucial component of combating climate change.",
+    "timestamp": 1756054907841,
+    "title": "Why wind farms attract so much misinformation and conspiracy theory | If you think climate change is a hoax, you might believe wind turbines poison groundwater.",
+    "urlHash": "58c7c2f9b351b4d470325bdd3c968a15"
+  },
+  "48c8ffc7b8a6e32106a0478bbd8d41d3": {
+    "summary": "The article \"I made 3 cursed captchas (part II)\" discusses the creation of unique and challenging captchas designed to test users' cognitive abilities. The captchas featured in the article are intentionally difficult, requiring users to solve complex puzzles and answer thought-provoking questions to proceed. The author aims to push the boundaries of traditional captchas and explore new ways to engage users while enhancing security measures.",
+    "timestamp": 1756054907968,
+    "title": "I made 3 cursed captchas (part II)",
+    "urlHash": "48c8ffc7b8a6e32106a0478bbd8d41d3"
+  },
+  "4befe829a9ece72d4b09f854dfa050e5": {
+    "summary": "The article discusses a new drum machine that uses fractal patterns to create unique and complex beats. The machine allows users to input any beat pattern and generates a fractal-based rhythm that can be adjusted in real-time. The video demonstrates how this innovative technology can be used to create intricate and dynamic music compositions.",
+    "timestamp": 1756054915640,
+    "title": "Fractal drum machine plays any beat [video]",
+    "urlHash": "4befe829a9ece72d4b09f854dfa050e5"
+  },
+  "5507247eac605af9131b2fcaff68c306": {
+    "summary": "The article discusses how implementing a Netflix-inspired approach to client portals in agencies can significantly improve client retention rates. By increasing transparency through features like progress tracking, detailed analytics, and real-time updates, agencies can build trust and loyalty with their clients, leading to a 47% increase in retention. This approach allows clients to have a better understanding of the work being done for them, leading to improved communication and overall satisfaction.",
+    "timestamp": 1756054958872,
+    "title": "The Netflix Approach for Agency Client Portals: How Transparency Increased Our Retention 47%",
+    "urlHash": "5507247eac605af9131b2fcaff68c306"
+  },
+  "28aff3f566feb61a3d766a07554a5d1a": {
+    "summary": "The article \"Congrats to the Redis AI Challenge Winners!\" celebrates the winners of the Redis AI Challenge, a competition aimed at showcasing innovative uses of Redis AI for machine learning and artificial intelligence projects. The winners were recognized for their creative and impactful applications of Redis AI, highlighting the growing potential of AI technologies in the Redis community.",
+    "timestamp": 1756054958886,
+    "title": "Congrats to the Redis AI Challenge Winners!",
+    "urlHash": "28aff3f566feb61a3d766a07554a5d1a"
+  },
+  "ed8b3d3114f4cfeea17e718d0ca604c0": {
+    "summary": "The article discusses the limitations of AI tools and the benefits of custom AI systems in overcoming the plateau faced by SaaS companies. It highlights the importance of tailored AI solutions for achieving more advanced and specialized results, as well as the potential for increased efficiency and competitive advantage. The author emphasizes the need for companies to invest in developing custom AI systems to stay ahead in the rapidly evolving AI landscape.",
+    "timestamp": 1756054959484,
+    "title": "AI Tools vs Custom AI Systems: Breaking Out of the SaaS Plateau",
+    "urlHash": "ed8b3d3114f4cfeea17e718d0ca604c0"
+  },
+  "22e6b9ec26489a078d3b5b7f21a0179e": {
+    "summary": "The article discusses the author's decision to stop using React due to performance issues, complexity, and the rise of better alternatives like Svelte and Vue. The author highlights the drawbacks of React, such as its large bundle size and learning curve, and encourages developers to explore other options for building efficient and user-friendly web applications.",
+    "timestamp": 1756054959518,
+    "title": "Why I Stopped Using React (And You Should Too) 🔥",
+    "urlHash": "22e6b9ec26489a078d3b5b7f21a0179e"
+  },
+  "eb524968e42dde016cb7bb0b216f9e5d": {
+    "summary": "The article discusses how the UK government is using 4chan as a poster child to justify the blocking of non-pirate sites. The government argues that since 4chan has a history of hosting controversial and illegal content, it is a prime example of why broader site-blocking measures are necessary to protect internet users. This move raises concerns about censorship and the potential for overreach in blocking websites beyond just those hosting pirated content.",
+    "timestamp": 1756055336079,
+    "title": "Is 4chan the perfect Pirate Bay poster child to justify wider UK site-blocking?",
+    "urlHash": "eb524968e42dde016cb7bb0b216f9e5d"
+  },
+  "99a0721552da28004b2862ddd5f44094": {
+    "summary": "The article discusses how artificial intelligence (AI) is being used to create political cartoons, which threatens the livelihood of traditional political cartoonists. The author argues that AI-generated cartoons lack the wit, insight, and moral responsibility that human cartoonists bring to their work, and calls for the public to support and appreciate the unique value of human creativity in the field of political cartoons.",
+    "timestamp": 1756057097115,
+    "title": "I’m a political cartoonist. AI is making a mockery of my profession",
+    "urlHash": "99a0721552da28004b2862ddd5f44094"
   }
 }

@@ -17,11 +17,6 @@ const testEndpoints = [
     expectedFields: ['posts', 'source']
   },
   {
-    name: 'Lobsters API',
-    url: `${BASE_URL}/api/lobsters?limit=5`,
-    expectedFields: ['posts']
-  },
-  {
     name: 'Dev.to API',
     url: `${BASE_URL}/api/devto?limit=5`,
     expectedFields: ['posts']
@@ -33,7 +28,7 @@ const testEndpoints = [
   },
   {
     name: 'Aggregate API (All Sources)',
-    url: `${BASE_URL}/api/aggregate?limit=20&sources=github,devto,lobsters,reddit`,
+    url: `${BASE_URL}/api/aggregate?limit=20&sources=github,devto,reddit`,
     expectedFields: ['posts', 'sources']
   }
 ];

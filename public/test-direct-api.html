@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #0a0a0a;
+            color: white;
+        }
+        .container {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .result {
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        .test-button {
+            background: #007ACC;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #005a9f;
+        }
+        .error {
+            background: #4a1a1a;
+            border-left: 4px solid #ff4444;
+        }
+        .success {
+            background: #1a4a1a;
+            border-left: 4px solid #44ff44;
+        }
+    </style>
+</head>
+<body>
+    <h1>Direct API Test - Image Loading Debug</h1>
+    
+    <div class="container">
+        <h2>🔍 Test API Endpoints Directly</h2>
+        <button class="test-button" onclick="testSearchImage()">Test Search Image API</button>
+        <button class="test-button" onclick="testCachedImage()">Test Cached Image</button>
+        <button class="test-button" onclick="testHookLogic()">Test Hook Logic</button>
+        <button class="test-button" onclick="clearResults()">Clear Results</button>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        function addResult(title, content, isError = false) {
+            const resultsDiv = document.getElementById('results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `result ${isError ? 'error' : 'success'}`;
+            resultDiv.innerHTML = `<strong>${title}</strong>\n${content}`;
+            resultsDiv.appendChild(resultDiv);
+            resultsDiv.scrollTop = resultsDiv.scrollHeight;
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+
+        async function testSearchImage() {
+            const testQuery = 'codex - Lightweight coding agent that runs in your terminal';
+            addResult('🧪 Testing Search Image API', `Query: ${testQuery}`);
+            
+            try {
+                console.log('Starting fetch to search-image API...');
+                const response = await fetch(`/api/search-image?query=${encodeURIComponent(testQuery)}`);
+                
+                console.log('Response received:', response);
+                addResult('📡 Response Status', `Status: ${response.status} ${response.statusText}`);
+                
+                // Check content type
+                const contentType = response.headers.get('content-type');
+                addResult('📋 Content Type', contentType || 'No content-type header');
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    addResult('❌ API Error', `Status ${response.status}: ${errorText}`, true);
+                    return;
+                }
+                
+                // Get raw text first to see what we're dealing with
+                const rawText = await response.text();
+                addResult('📄 Raw Response', rawText.substring(0, 500) + (rawText.length > 500 ? '...' : ''));
+                
+                // Try to parse as JSON
+                try {
+                    const data = JSON.parse(rawText);
+                    addResult('✅ JSON Parse Success', JSON.stringify(data, null, 2));
+                    
+                    // Test if image exists
+                    if (data.imageUrl) {
+                        const img = new Image();
+                        img.onload = () => addResult('🖼️ Image Load Test', 'Image loaded successfully!');
+                        img.onerror = () => addResult('🖼️ Image Load Test', 'Image failed to load!', true);
+                        img.src = data.imageUrl;
+                    }
+                } catch (parseError) {
+                    addResult('❌ JSON Parse Error', parseError.message, true);
+                }
+                
+            } catch (error) {
+                console.error('Fetch error:', error);
+                addResult('❌ Fetch Error', error.message, true);
+            }
+        }
+
+        async function testCachedImage() {
+            addResult('🧪 Testing Cached Images', 'Checking existing cached images...');
+            
+            // Test some known cached images
+            const cachedQueries = [
+                'codex - Lightweight coding agent that runs in your terminal',
+                'DeepSeek-V3 - No description',
+                'browser-use - 🌐 Make websites accessible for AI agents. Automate tasks online with ease'
+            ];
+            
+            for (const query of cachedQueries) {
+                try {
+                    const response = await fetch(`/api/search-image?query=${encodeURIComponent(query)}`);
+                    const status = response.status;
+                    const text = await response.text();
+                    
+                    addResult(`🔄 Cached Query Test: ${query.substring(0, 50)}...`, 
+                        `Status: ${status}\nResponse: ${text.substring(0, 200)}...`);
+                        
+                } catch (error) {
+                    addResult(`❌ Cached Query Error: ${query.substring(0, 50)}...`, error.message, true);
+                }
+            }
+        }
+
+        async function testHookLogic() {
+            addResult('🧪 Testing Hook Logic', 'Simulating useStoryAssets hook behavior...');
+            
+            const testQuery = 'test hook logic';
+            
+            try {
+                console.log('Simulating hook fetch...');
+                const response = await fetch(`/api/search-image?query=${encodeURIComponent(testQuery)}`);
+                
+                // Check content-type like the hook does
+                const contentType = response.headers.get('content-type');
+                console.log('Content-type:', contentType);
+                
+                if (!contentType || !contentType.includes('application/json')) {
+                    addResult('⚠️ Hook Logic - Content Type Check', 
+                        `Expected JSON, got: ${contentType}. Hook would fail here.`, true);
+                    return;
+                }
+                
+                if (!response.ok) {
+                    addResult('⚠️ Hook Logic - Response Check', 
+                        `Response not OK: ${response.status}. Hook would fail here.`, true);
+                    return;
+                }
+                
+                const text = await response.text();
+                console.log('Raw response text:', text);
+                
+                try {
+                    const data = JSON.parse(text);
+                    addResult('✅ Hook Logic - JSON Parse', 
+                        `Successfully parsed: ${JSON.stringify(data, null, 2)}`);
+                        
+                    if (data.imageUrl) {
+                        addResult('✅ Hook Logic - Image URL', `Found image URL: ${data.imageUrl}`);
+                    } else {
+                        addResult('⚠️ Hook Logic - No Image URL', 'No imageUrl in response', true);
+                    }
+                } catch (parseError) {
+                    addResult('❌ Hook Logic - JSON Parse Error', 
+                        `Parse failed (like in hook): ${parseError.message}`, true);
+                }
+                
+            } catch (error) {
+                addResult('❌ Hook Logic - Fetch Error', error.message, true);
+            }
+        }
+
+        // Test immediately on load
+        window.onload = function() {
+            addResult('🚀 Page Loaded', 'Ready to test API endpoints');
+        }
+    </script>
+</body>
+</html>

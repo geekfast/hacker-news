@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Placeholder Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .test-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-image {
+            width: 100%;
+            height: 192px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+        .test-image-small {
+            width: 96px;
+            height: 96px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-right: 12px;
+            float: left;
+        }
+        h1, h2 { color: #333; }
+        h3 { 
+            color: #0066cc; 
+            font-size: 16px;
+            margin: 8px 0;
+        }
+        p { 
+            color: #666; 
+            font-size: 14px;
+            margin: 4px 0;
+        }
+        .status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status.working { background: #d4edda; color: #155724; }
+        .status.broken { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>🖼️ Image Placeholder Test Page</h1>
+    <p>This page tests our FallbackImage component with various scenarios:</p>
+
+    <h2>Grid View Placeholders (400x192)</h2>
+    <div class="test-container">
+        <div class="test-card">
+            <img src="/placeholder.svg" alt="Grid Placeholder" class="test-image">
+            <h3>Working Placeholder</h3>
+            <p><span class="status working">✅ Working</span> - Default grid placeholder</p>
+        </div>
+        
+        <div class="test-card">
+            <img src="/broken-image-url.jpg" alt="Broken Image" class="test-image" 
+                 onerror="this.src='/placeholder.svg'">
+            <h3>Broken Image Fallback</h3>
+            <p><span class="status broken">❌ Broken</span> - Should show placeholder</p>
+        </div>
+        
+        <div class="test-card">
+            <img src="https://httpstat.us/404" alt="404 Image" class="test-image" 
+                 onerror="this.src='/placeholder.svg'">
+            <h3>404 Image Fallback</h3>
+            <p><span class="status broken">❌ 404</span> - Should show placeholder</p>
+        </div>
+    </div>
+
+    <h2>List View Placeholders (96x96)</h2>
+    <div class="test-container">
+        <div class="test-card">
+            <img src="/placeholder-small.svg" alt="Small Placeholder" class="test-image-small">
+            <h3>Working Small Placeholder</h3>
+            <p><span class="status working">✅ Working</span> - Default list placeholder</p>
+            <div style="clear: both;"></div>
+        </div>
+        
+        <div class="test-card">
+            <img src="/nonexistent.png" alt="Missing Image" class="test-image-small" 
+                 onerror="this.src='/placeholder-small.svg'">
+            <h3>Missing Image Fallback</h3>
+            <p><span class="status broken">❌ Missing</span> - Should show small placeholder</p>
+            <div style="clear: both;"></div>
+        </div>
+    </div>
+
+    <h2>Dark Mode Test</h2>
+    <div style="background: #1a1a1a; padding: 20px; border-radius: 8px; margin: 20px 0;">
+        <div style="color: white;">
+            <h3 style="color: #60a5fa;">Dark Mode Placeholders</h3>
+            <div style="display: flex; gap: 20px; align-items: center;">
+                <img src="/placeholder.svg" alt="Dark Placeholder" style="width: 200px; height: 100px; border-radius: 6px;">
+                <img src="/placeholder-small.svg" alt="Dark Small Placeholder" style="width: 80px; height: 80px; border-radius: 6px;">
+            </div>
+        </div>
+    </div>
+
+    <h2>Component Test Results</h2>
+    <div class="test-card">
+        <h3>🎯 Expected Behavior:</h3>
+        <ul>
+            <li>✅ Valid images should load normally</li>
+            <li>✅ Broken/missing images should show placeholder</li>
+            <li>✅ Loading state should show spinner</li>
+            <li>✅ Placeholders should work in light/dark mode</li>
+            <li>✅ Different sizes for grid vs list view</li>
+        </ul>
+    </div>
+
+    <script>
+        // Test image loading
+        console.log('Image Placeholder Test Page Loaded');
+        
+        // Add error handling to all images
+        document.querySelectorAll('img').forEach(img => {
+            img.addEventListener('load', () => {
+                console.log('Image loaded successfully:', img.src);
+            });
+            
+            img.addEventListener('error', () => {
+                console.log('Image failed to load:', img.src);
+            });
+        });
+    </script>
+</body>
+</html>
