@@ -400,5 +400,35 @@
     "timestamp": 1756050362282,
     "title": "Claude claims this solves catastrophic forgetting (Phase memory)",
     "urlHash": "3dda402999b5297638af2b8fc7b2ac84"
+  },
+  "d877e72a1b1804cb9622b7b7f5b01fe4": {
+    "summary": "\"OpenCut\" is an open-source alternative to CapCut, offering similar video editing capabilities for free. Users can access a range of editing features, including trimming, cutting, adding effects, and more, without any cost. The project aims to provide a user-friendly and accessible platform for video editing, catering to individuals looking for a free alternative to popular editing software like CapCut.",
+    "timestamp": 1756052776548,
+    "title": "OpenCut - The open-source CapCut alternative",
+    "urlHash": "d877e72a1b1804cb9622b7b7f5b01fe4"
+  },
+  "b50254409ec38137ff1f41d2373df858": {
+    "summary": "The article discusses Model Context Protocol Servers, which are servers that implement the Model Context Protocol to enable interoperability between different modeling tools. These servers allow for seamless communication and data exchange between various modeling environments, improving collaboration and efficiency in the modeling process. The main goal is to standardize the way modeling tools interact, making it easier for users to work with different tools in a unified manner.",
+    "timestamp": 1756052776685,
+    "title": "servers - Model Context Protocol Servers",
+    "urlHash": "b50254409ec38137ff1f41d2373df858"
+  },
+  "06303f9fb5057b646c9290d13abe0986": {
+    "summary": "\"Ink-kit\" is an onchain-focused SDK that offers developers ready-to-use templates, themes, and animated components to streamline the process of building decentralized applications. The SDK aims to simplify the development of blockchain projects by providing a range of design tools and features that can be easily integrated into various applications. With its focus on onchain functionality and user-friendly design elements, \"Ink-kit\" offers a convenient solution for developers looking to create engaging and visually appealing decentralized applications.",
+    "timestamp": 1756052776951,
+    "title": "ink-kit - Onchain-focused SDK with ready-to-use templates, themes, and magical animated components ✨",
+    "urlHash": "06303f9fb5057b646c9290d13abe0986"
+  },
+  "ae0aabd0ee7b34a7b917502cea9107f2": {
+    "summary": "The article discusses the Context7 MCP Server, which offers up-to-date code documentation for LLMs and AI code editors. It highlights the importance of having accurate and timely documentation to improve the efficiency and effectiveness of AI-driven code editing processes. The server aims to provide developers with the necessary resources and information to enhance their coding experience.",
+    "timestamp": 1756052777928,
+    "title": "context7 - Context7 MCP Server -- Up-to-date code documentation for LLMs and AI code editors",
+    "urlHash": "ae0aabd0ee7b34a7b917502cea9107f2"
+  },
+  "453b85dd21591eb02c1508ad4d3dbfe6": {
+    "summary": "The article titled \"void - No description\" appears to be about a text editor named Void. The main points likely discuss the features and functions of the Void text editor, potentially highlighting its simplicity and efficiency for coding and writing tasks. It may also mention how Void differs from other text editors in terms of design and usability.",
+    "timestamp": 1756052778246,
+    "title": "void - No description",
+    "urlHash": "453b85dd21591eb02c1508ad4d3dbfe6"
   }
 }

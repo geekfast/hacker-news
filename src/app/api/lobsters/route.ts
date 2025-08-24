@@ -9,7 +9,8 @@ interface TrendingPost {
   author: string;
   created_utc: number;
   num_comments: number;
-  subreddit: string;
+  subreddit?: string; // Optional for non-Reddit sources
+  source?: string; // Add source field for better identification
 }
 
 function parseRSSFallback(rssText: string): TrendingPost[] {
@@ -44,7 +45,7 @@ function parseRSSFallback(rssText: string): TrendingPost[] {
             author: author.trim(),
             created_utc: pubDate ? Math.floor(new Date(pubDate).getTime() / 1000) : Math.floor(Date.now() / 1000),
             num_comments: 0,
-            subreddit: 'lobsters',
+            source: 'lobsters',
           });
         }
       } catch (error) {
@@ -129,7 +130,7 @@ async function fetchLobstersRSS(): Promise<TrendingPost[]> {
             author: author.trim(),
             created_utc: pubDate ? Math.floor(new Date(pubDate).getTime() / 1000) : Math.floor(Date.now() / 1000),
             num_comments: comments,
-            subreddit: 'lobsters',
+            source: 'lobsters', // Use source instead of subreddit
           });
         } catch (itemError) {
           console.error('Error parsing RSS item:', itemError);
@@ -220,7 +221,7 @@ async function fetchLobstersHottest(): Promise<TrendingPost[]> {
             author: author.trim(),
             created_utc: pubDate ? Math.floor(new Date(pubDate).getTime() / 1000) : Math.floor(Date.now() / 1000),
             num_comments: comments,
-            subreddit: 'lobsters-hot',
+            source: 'lobsters-trending', // Use source instead of subreddit for trending items
           });
         } catch (itemError) {
           console.error('Error parsing hottest RSS item:', itemError);
@@ -237,7 +238,7 @@ async function fetchLobstersHottest(): Promise<TrendingPost[]> {
         ...post,
         id: `hot-${post.id}`,
         score: Math.max(post.score * 1.3, 5),
-        subreddit: 'lobsters-hot',
+        source: 'lobsters-trending',
       }));
     }
     

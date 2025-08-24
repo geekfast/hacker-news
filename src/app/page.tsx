@@ -44,6 +44,7 @@ interface Story {
   descendants?: number;
   subreddit?: string; // For Reddit: subreddit name
   thumbnail?: string; // For Reddit thumbnails
+  source?: string; // For identifying data source (lobsters, github, devto, etc.)
 }
 
 function SkeletonLoader() {
@@ -103,6 +104,14 @@ function StoryItemGrid({ story }: { story: Story }) {
             {story.subreddit && (
               <span className="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-xs block mt-1">
                 r/{story.subreddit}
+              </span>
+            )}
+            {story.source && !story.subreddit && (
+              <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded text-xs block mt-1">
+                {story.source === 'lobsters' ? 'Lobste.rs' : 
+                 story.source === 'lobsters-trending' ? 'Lobste.rs Trending' :
+                 story.source === 'github' ? 'GitHub' :
+                 story.source === 'devto' ? 'Dev.to' : story.source}
               </span>
             )}
           </p>
@@ -173,6 +182,14 @@ function StoryItem({ story }: { story: Story }) {
               {story.subreddit && (
                 <span className="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-xs">
                   r/{story.subreddit}
+                </span>
+              )}
+              {story.source && !story.subreddit && (
+                <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded text-xs ml-2">
+                  {story.source === 'lobsters' ? 'Lobste.rs' : 
+                   story.source === 'lobsters-trending' ? 'Lobste.rs Trending' :
+                   story.source === 'github' ? 'GitHub' :
+                   story.source === 'devto' ? 'Dev.to' : story.source}
                 </span>
               )}
             </p>
@@ -353,6 +370,7 @@ function HomeInner() {
               num_comments?: number;
               descendants?: number;
               subreddit?: string;
+              source?: string;
             }) => ({
               id: typeof post.id === 'string' ? parseInt(post.id) || Math.floor(Math.random() * 1000000) : post.id,
               title: post.title,
@@ -362,6 +380,7 @@ function HomeInner() {
               time: post.created_utc || Math.floor(Date.now() / 1000),
               descendants: post.num_comments || 0,
               subreddit: post.subreddit,
+              source: post.source,
             }));
             
             const uniqueStories = ensureUniqueIds(techStories);
@@ -408,6 +427,7 @@ function HomeInner() {
               num_comments?: number;
               descendants?: number;
               subreddit?: string;
+              source?: string;
             }) => ({
               id: typeof post.id === 'string' ? parseInt(post.id) || Math.floor(Math.random() * 1000000) : post.id,
               title: post.title,
@@ -417,6 +437,7 @@ function HomeInner() {
               time: post.created_utc || Math.floor(Date.now() / 1000),
               descendants: post.num_comments || 0,
               subreddit: post.subreddit,
+              source: post.source,
             }));
             
             const uniqueStories = ensureUniqueIds(allStories);
@@ -601,38 +622,6 @@ function HomeInner() {
                   🚀 Reddit
                 </button>
               )}
-              <button
-                onClick={() => {
-                  const params = new URLSearchParams(searchParams.toString());
-                  params.set('category', 'tech-news');
-                  params.set('view', viewMode);
-                  router.push(`/?${params.toString()}`);
-                  setCategory('tech-news');
-                }}
-                className={`px-4 py-2 rounded-md font-medium transition-colors ${
-                  category === 'tech-news'
-                    ? 'bg-link-color text-white outline outline-2 outline-link-color'
-                    : 'bg-card-background text-foreground hover:bg-gray-100 dark:hover:bg-gray-800'
-                }`}
-              >
-                💻 Tech News
-              </button>
-              <button
-                onClick={() => {
-                  const params = new URLSearchParams(searchParams.toString());
-                  params.set('category', 'all');
-                  params.set('view', viewMode);
-                  router.push(`/?${params.toString()}`);
-                  setCategory('all');
-                }}
-                className={`px-4 py-2 rounded-md font-medium transition-colors ${
-                  category === 'all'
-                    ? 'bg-link-color text-white outline outline-2 outline-link-color'
-                    : 'bg-card-background text-foreground hover:bg-gray-100 dark:hover:bg-gray-800'
-                }`}
-              >
-                🌐 All Sources
-              </button>
             </div>
           </div>
         </div>
