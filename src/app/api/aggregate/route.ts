@@ -134,7 +134,7 @@ export async function GET(request: NextRequest) {
       
       if (result.status === 'fulfilled') {
         const { posts, error, totalPosts } = result.value;
-        const available = (result.value as any).available !== false;
+            const available = (result.value as { available?: boolean }).available !== false;
         allPosts.push(...posts);
         sourceStats[source] = {
           success: !error && available,

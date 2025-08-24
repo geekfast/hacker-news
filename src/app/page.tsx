@@ -421,17 +421,12 @@ function HomeInner() {
           const data = await response.json();
           
           // Update available sources based on response
-          let newAvailableSources = ['hacker-news', 'tech-news', 'all'];
-          if (data.sources) {
-            // Check if Reddit is available
-            const redditAvailable = data.sources.reddit && 
-              data.sources.reddit.available !== false && 
-              data.sources.reddit.success;
-            
-            if (redditAvailable) {
-              newAvailableSources.push('reddit');
-            }
-          }
+          const redditAvailable = data.sources && data.sources.reddit && 
+            data.sources.reddit.available !== false && 
+            data.sources.reddit.success;
+          const newAvailableSources = redditAvailable
+            ? ['hacker-news', 'tech-news', 'all', 'reddit']
+            : ['hacker-news', 'tech-news', 'all'];
           setAvailableSources(newAvailableSources);
           
           if (data.posts && data.posts.length > 0) {
