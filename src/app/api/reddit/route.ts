@@ -64,11 +64,11 @@ const getTimeoutSettings = () => {
   };
 };
 
-// OAuth token cache
-let accessToken: string | null = null;
-let tokenExpiration: number = 0;
+// OAuth token cache (currently unused - using public API)
+// let accessToken: string | null = null;
+// let tokenExpiration: number = 0;
 
-async function getAccessToken(): Promise<string> {
+/* async function getAccessToken(): Promise<string> {
   if (accessToken && tokenExpiration > Date.now()) {
     return accessToken;
   }
@@ -103,7 +103,7 @@ async function getAccessToken(): Promise<string> {
   accessToken = data.access_token;
   tokenExpiration = Date.now() + (data.expires_in * 1000);
   return data.access_token;
-}
+} */
 
 async function fetchWithRetry(url: string, options: RequestInit, retries = 3): Promise<Response> {
   for (let i = 0; i < retries; i++) {
@@ -119,7 +119,7 @@ async function fetchWithRetry(url: string, options: RequestInit, retries = 3): P
       }
       if (response.status === 403 || response.status === 401) {
         // Token might be expired, clear it and retry
-        accessToken = null;
+        // accessToken = null;
         continue;
       }
       throw new Error(`HTTP ${response.status}`);
@@ -133,8 +133,9 @@ async function fetchWithRetry(url: string, options: RequestInit, retries = 3): P
 
 async function fetchSubredditPosts(subreddit: string, limit: number = 3): Promise<RedditPost[]> {
   try {
-    const token = await getAccessToken();
-    const url = `https://oauth.reddit.com/r/${subreddit}/hot?limit=${limit}&raw_json=1`;
+    // Note: OAuth token available but using public API for now
+    // const token = await getAccessToken();
+    const url = `https://www.reddit.com/r/${subreddit}/hot.json?limit=${limit}&raw_json=1`;
     const { signal } = getTimeoutSettings();
     
     const response = await fetchWithRetry(url, {
@@ -156,7 +157,7 @@ async function fetchSubredditPosts(subreddit: string, limit: number = 3): Promis
     let data;
     try {
       data = JSON.parse(text);
-    } catch (error) {
+    } catch {
       console.warn(`⚠️ Failed to parse response from r/${subreddit}: ${text.substring(0, 100)}...`);
       return [];
     }

@@ -52,21 +52,21 @@ export const fetchRedditStories = async (limit: number = 12): Promise<Story[]> =
 
 // Helper function to convert Reddit post to Story format
 const convertRedditToStory = (redditPost: RedditPost): Story => {
-  // Create a hash from the title and URL for a consistent numeric ID
+  // Create a stable hash from the title and URL for a consistent numeric ID
   const stringToHash = (str: string) => {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
       hash = ((hash << 5) - hash) + char;
-      hash = hash & hash; // Convert to 32-bit integer
+      hash = hash | 0; // Convert to 32-bit signed integer
     }
-    return hash;
+    return Math.abs(hash); // Ensure positive number
   };
 
-  const hashId = Math.abs(stringToHash(redditPost.title + redditPost.url));
+  const hashId = stringToHash(redditPost.title + redditPost.url);
   
   return {
-    id: hashId + (redditPost.created % 1000000), // Ensure uniqueness
+    id: hashId + (redditPost.created % 1000), // Ensure uniqueness with timestamp
     title: redditPost.title,
     url: redditPost.url,
     score: redditPost.score,

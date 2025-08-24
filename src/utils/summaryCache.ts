@@ -40,7 +40,19 @@ async function loadCacheIndex(): Promise<SummaryCacheIndex> {
 
 async function saveCacheIndex(index: SummaryCacheIndex): Promise<void> {
   await ensureCacheDirectory();
-  await fs.writeFile(SUMMARY_INDEX_FILE, JSON.stringify(index, null, 2));
+  
+  // Atomic write: write to temp file then rename
+  const tempFile = SUMMARY_INDEX_FILE + '.tmp';
+  try {
+    await fs.writeFile(tempFile, JSON.stringify(index, null, 2));
+    await fs.rename(tempFile, SUMMARY_INDEX_FILE);
+  } catch (error) {
+    // Clean up temp file if it exists
+    try {
+      await fs.unlink(tempFile);
+    } catch {}
+    throw error;
+  }
 }
 
 function isExpired(timestamp: number): boolean {
@@ -61,9 +73,8 @@ export async function getCachedSummary(url: string): Promise<string | null> {
     
     // Check if cache entry is expired
     if (isExpired(cachedEntry.timestamp)) {
-      // Remove expired entry
-      delete index[urlHash];
-      await saveCacheIndex(index);
+      // Mark for cleanup but don't do it synchronously to avoid slowing down reads
+      // The cleanup will happen during the next cache write or via scheduled cleanup
       return null;
     }
     
@@ -79,9 +90,23 @@ export async function cacheSummary(url: string, summary: string, title: string):
     const urlHash = generateUrlHash(url);
     const index = await loadCacheIndex();
     
+    // Clean up expired entries while we're here (lazy cleanup)
+    const now = Date.now();
+    let cleanedCount = 0;
+    for (const [key, entry] of Object.entries(index)) {
+      if (isExpired(entry.timestamp)) {
+        delete index[key];
+        cleanedCount++;
+      }
+    }
+    
+    if (cleanedCount > 0) {
+      console.log(`Cleaned ${cleanedCount} expired summary cache entries during write`);
+    }
+    
     const cacheEntry: SummaryCacheEntry = {
       summary,
-      timestamp: Date.now(),
+      timestamp: now,
       title,
       urlHash
     };
