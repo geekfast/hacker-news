@@ -447,28 +447,20 @@ export async function GET(request: NextRequest) {
     console.error('❌ Error fetching from subreddits:', error);
   }
 
-  // Enhanced fallback logic - always enable fallback for Indonesia/VPN users
-  const fallbackEnabled = process.env.REDDIT_FALLBACK_ENABLED !== 'false'; // Default to true
-  const shouldUseFallback = fallbackEnabled && (allPosts.length < 3 || failedSubreddits >= SUBREDDITS.length * 0.5); // 50% failure rate
+  // Disable fallback - if Reddit fails, return empty result
+  const fallbackEnabled = process.env.REDDIT_FALLBACK_ENABLED === 'true'; // Default to false
+  const shouldUseFallback = false; // Never use fallback
   
-  if (shouldUseFallback) {
-    console.warn(`⚠️ ${failedSubreddits}/${SUBREDDITS.length} subreddits failed (${allPosts.length} posts total). Reddit appears to be blocked. Using fallback data.`);
-    const mockPosts = getMockRedditPosts()
-      .sort((a, b) => b.score - a.score)
-      .slice(0, limit);
-    
-    console.log(`✅ Successfully aggregated ${mockPosts.length} top posts from ${SUBREDDITS.length} subreddits (fallback mode)`);
-    if (mockPosts.length > 0) {
-      console.log(`🏆 Top post: "${mockPosts[0].title}" with ${mockPosts[0].score} points from r/${mockPosts[0].subreddit}`);
-    }
-    console.log(`📝 Note: Using mock data due to Reddit access restrictions${isProd ? '' : ' (likely VPN/geo-blocking)'}`);
+  if (allPosts.length === 0) {
+    console.warn(`⚠️ ${failedSubreddits}/${SUBREDDITS.length} subreddits failed. Reddit appears to be blocked. Returning empty result.`);
     
     return NextResponse.json({
-      posts: mockPosts,
-      source: 'fallback',
+      posts: [],
+      source: 'reddit_failed',
       region: region,
       environment: isProd ? 'production' : 'development',
-      reason: 'reddit_blocked_or_limited'
+      reason: 'reddit_blocked_or_limited',
+      available: false
     });
   }
 
@@ -488,6 +480,7 @@ export async function GET(request: NextRequest) {
     region: region,
     environment: isProd ? 'production' : 'development',
     successfulSubreddits: SUBREDDITS.length - failedSubreddits,
-    totalSubreddits: SUBREDDITS.length
+    totalSubreddits: SUBREDDITS.length,
+    available: topPosts.length > 0
   });
 }

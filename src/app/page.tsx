@@ -253,6 +253,7 @@ function HomeInner() {
   const [category, setCategory] = useState<Category>(
     (searchParams.get('category') as Category) || 'all'
   );
+  const [availableSources, setAvailableSources] = useState<string[]>(['hacker-news', 'reddit', 'tech-news']);
   const storiesPerPage = 10;
 
   // Load view mode preference from URL or localStorage
@@ -292,6 +293,20 @@ function HomeInner() {
       } else if (category === 'reddit') {
         // Fetch initial Reddit data
         try {
+          const response = await fetch('/api/reddit?limit=12');
+          const data = await response.json();
+          
+          // Check if Reddit is available
+          if (data.available === false || data.posts.length === 0) {
+            console.warn('Reddit is not available, switching to tech-news');
+            setAvailableSources(prev => prev.filter(s => s !== 'reddit'));
+            setCategory('tech-news');
+            return;
+          }
+          
+          // Reddit is available, ensure it's in available sources
+          setAvailableSources(prev => [...new Set([...prev, 'reddit'])]);
+          
           const { fetchRedditStories } = await import('@/utils/redditApi');
           const redditStories = await fetchRedditStories(12);
           
@@ -302,13 +317,27 @@ function HomeInner() {
           setStoryIds([]); // Reddit doesn't use storyIds
         } catch (error) {
           console.error('Failed to fetch Reddit stories:', error);
+          setAvailableSources(prev => prev.filter(s => s !== 'reddit'));
           setStories([]); // Set empty array on error
+          // Switch to tech-news if Reddit fails
+          setCategory('tech-news');
         }
       } else if (category === 'tech-news') {
         // Fetch from alternative tech sources (GitHub, Dev.to, Lobste.rs)
         try {
           const response = await fetch('/api/aggregate?sources=github,devto,lobsters&include_reddit=false&limit=20');
           const data = await response.json();
+          
+          // Update available sources based on response
+          const newAvailableSources = ['hacker-news', 'tech-news'];
+          if (data.sources && Object.keys(data.sources).length > 0) {
+            const workingSources = Object.keys(data.sources).filter(source => 
+              data.sources[source].available !== false && data.sources[source].success
+            );
+            if (workingSources.length > 0) {
+              setAvailableSources(prev => [...new Set([...prev, ...newAvailableSources])]);
+            }
+          }
           
           if (data.posts && data.posts.length > 0) {
             // Convert to our Story format
@@ -350,6 +379,20 @@ function HomeInner() {
         try {
           const response = await fetch('/api/aggregate?sources=github,devto,lobsters,reddit&include_reddit=true&limit=20');
           const data = await response.json();
+          
+          // Update available sources based on response
+          let newAvailableSources = ['hacker-news', 'tech-news', 'all'];
+          if (data.sources) {
+            // Check if Reddit is available
+            const redditAvailable = data.sources.reddit && 
+              data.sources.reddit.available !== false && 
+              data.sources.reddit.success;
+            
+            if (redditAvailable) {
+              newAvailableSources.push('reddit');
+            }
+          }
+          setAvailableSources(newAvailableSources);
           
           if (data.posts && data.posts.length > 0) {
             // Convert to our Story format
@@ -540,21 +583,55 @@ function HomeInner() {
               >
                 🔥 Hacker News
               </button>
+              {availableSources.includes('reddit') && (
+                <button
+                  onClick={() => {
+                    const params = new URLSearchParams(searchParams.toString());
+                    params.set('category', 'reddit');
+                    params.set('view', viewMode);
+                    router.push(`/?${params.toString()}`);
+                    setCategory('reddit');
+                  }}
+                  className={`px-4 py-2 rounded-md font-medium transition-colors ${
+                    category === 'reddit'
+                      ? 'bg-link-color text-white outline outline-2 outline-link-color'
+                      : 'bg-card-background text-foreground hover:bg-gray-100 dark:hover:bg-gray-800'
+                  }`}
+                >
+                  🚀 Reddit
+                </button>
+              )}
               <button
                 onClick={() => {
                   const params = new URLSearchParams(searchParams.toString());
-                  params.set('category', 'reddit');
+                  params.set('category', 'tech-news');
                   params.set('view', viewMode);
                   router.push(`/?${params.toString()}`);
-                  setCategory('reddit');
+                  setCategory('tech-news');
                 }}
                 className={`px-4 py-2 rounded-md font-medium transition-colors ${
-                  category === 'reddit'
+                  category === 'tech-news'
                     ? 'bg-link-color text-white outline outline-2 outline-link-color'
                     : 'bg-card-background text-foreground hover:bg-gray-100 dark:hover:bg-gray-800'
                 }`}
               >
-                🚀 Reddit
+                💻 Tech News
+              </button>
+              <button
+                onClick={() => {
+                  const params = new URLSearchParams(searchParams.toString());
+                  params.set('category', 'all');
+                  params.set('view', viewMode);
+                  router.push(`/?${params.toString()}`);
+                  setCategory('all');
+                }}
+                className={`px-4 py-2 rounded-md font-medium transition-colors ${
+                  category === 'all'
+                    ? 'bg-link-color text-white outline outline-2 outline-link-color'
+                    : 'bg-card-background text-foreground hover:bg-gray-100 dark:hover:bg-gray-800'
+                }`}
+              >
+                🌐 All Sources
               </button>
             </div>
           </div>

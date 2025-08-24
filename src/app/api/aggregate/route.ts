@@ -17,6 +17,7 @@ interface SourceResult {
   source: string;
   error?: string;
   totalPosts: number;
+  available?: boolean;
 }
 
 async function fetchFromSource(source: string, limit: number = 6): Promise<SourceResult> {
@@ -61,11 +62,25 @@ async function fetchFromSource(source: string, limit: number = 6): Promise<Sourc
       const mockRequest = new NextRequest(`http://localhost/api/reddit?limit=${limit}`);
       const response = await GET(mockRequest);
       const data = await response.json();
-      result = {
-        posts: data.posts || [],
-        source,
-        totalPosts: data.totalPosts || 0,
-      };
+      
+      // Check if Reddit is available
+      if (data.available === false || data.posts.length === 0) {
+        console.log(`⚠️ Reddit API unavailable, skipping...`);
+        result = {
+          posts: [],
+          source,
+          error: 'Reddit unavailable',
+          totalPosts: 0,
+          available: false,
+        };
+      } else {
+        result = {
+          posts: data.posts || [],
+          source,
+          totalPosts: data.totalPosts || 0,
+          available: true,
+        };
+      }
     } else {
       throw new Error(`Unknown source: ${source}`);
     }
@@ -121,6 +136,7 @@ export async function GET(request: NextRequest) {
       error?: string | null; 
       totalPosts?: number; 
       success?: boolean;
+      available?: boolean;
     }> = {};
     
     results.forEach((result, index) => {
@@ -128,13 +144,15 @@ export async function GET(request: NextRequest) {
       
       if (result.status === 'fulfilled') {
         const { posts, error, totalPosts } = result.value;
+        const available = (result.value as any).available !== false;
         allPosts.push(...posts);
         sourceStats[source] = {
-          success: !error,
+          success: !error && available,
           posts: posts.length,
           count: posts.length,
           error: error || null,
           totalPosts,
+          available,
         };
       } else {
         sourceStats[source] = {
@@ -143,6 +161,7 @@ export async function GET(request: NextRequest) {
           count: 0,
           error: result.reason?.message || 'Promise rejected',
           totalPosts: 0,
+          available: false,
         };
       }
     });
@@ -162,23 +181,37 @@ export async function GET(request: NextRequest) {
 
     const limitedPosts = uniquePosts.slice(0, limit);
 
-    // Calculate success rate
-    const successfulSources = Object.values(sourceStats).filter(stat => stat.success).length;
-    const totalSources = sources.length;
+    // Calculate success rate and filter out unavailable sources
+    const availableSources = sources.filter(source => {
+      const stats = sourceStats[source];
+      return stats && stats.success && (stats.available !== false);
+    });
+    
+    const successfulSources = Object.values(sourceStats).filter(stat => stat.success && stat.available !== false).length;
+    const totalSources = availableSources.length;
 
-    console.log(`📊 Aggregation complete: ${limitedPosts.length} posts from ${successfulSources}/${totalSources} sources`);
+    console.log(`📊 Aggregation complete: ${limitedPosts.length} posts from ${successfulSources}/${totalSources} available sources`);
+    
+    // Only include stats for available sources
+    const filteredSourceStats: typeof sourceStats = {};
+    availableSources.forEach(source => {
+      if (sourceStats[source]) {
+        filteredSourceStats[source] = sourceStats[source];
+      }
+    });
 
     return NextResponse.json({
       posts: limitedPosts,
-      sourceStats,
+      sources: filteredSourceStats,
       meta: {
         totalPosts: limitedPosts.length,
         totalSources,
         successfulSources,
+        availableSources,
         region: process.env.VERCEL_REGION || 'unknown',
         environment: process.env.NODE_ENV || 'development',
         requestedLimit: limit,
-        sources: sources,
+        originalSources: sources,
       },
     });
 
