@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useStoryAssets } from '@/hooks/useStoryAssets';
 
-type Category = 'hacker-news' | 'reddit';
+type Category = 'hacker-news' | 'reddit' | 'tech-news' | 'all';
 
 // Helper function to ensure unique IDs
 function ensureUniqueIds(stories: Story[]): Story[] {
@@ -251,7 +251,7 @@ function HomeInner() {
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid');
   const [isViewModeLoaded, setIsViewModeLoaded] = useState(false);
   const [category, setCategory] = useState<Category>(
-    (searchParams.get('category') as Category) || 'hacker-news'
+    (searchParams.get('category') as Category) || 'all'
   );
   const storiesPerPage = 10;
 
@@ -303,6 +303,64 @@ function HomeInner() {
         } catch (error) {
           console.error('Failed to fetch Reddit stories:', error);
           setStories([]); // Set empty array on error
+        }
+      } else if (category === 'tech-news') {
+        // Fetch from alternative tech sources (GitHub, Dev.to, Lobste.rs)
+        try {
+          const response = await fetch('/api/aggregate?sources=github,devto,lobsters&include_reddit=false&limit=20');
+          const data = await response.json();
+          
+          if (data.posts && data.posts.length > 0) {
+            // Convert to our Story format
+            const techStories = data.posts.map((post: any) => ({
+              id: parseInt(post.id) || Math.floor(Math.random() * 1000000),
+              title: post.title,
+              url: post.url || post.permalink,
+              score: post.score || 1,
+              by: post.author || 'unknown',
+              time: post.created_utc || Math.floor(Date.now() / 1000),
+              descendants: post.num_comments || 0,
+              subreddit: post.subreddit,
+            }));
+            
+            const uniqueStories = ensureUniqueIds(techStories);
+            setStories(uniqueStories);
+          } else {
+            setStories([]);
+          }
+          setStoryIds([]); // Tech news doesn't use storyIds
+        } catch (error) {
+          console.error('Failed to fetch tech news:', error);
+          setStories([]);
+        }
+      } else if (category === 'all') {
+        // Fetch from all sources including Reddit
+        try {
+          const response = await fetch('/api/aggregate?sources=github,devto,lobsters,reddit&include_reddit=true&limit=20');
+          const data = await response.json();
+          
+          if (data.posts && data.posts.length > 0) {
+            // Convert to our Story format
+            const allStories = data.posts.map((post: any) => ({
+              id: parseInt(post.id) || Math.floor(Math.random() * 1000000),
+              title: post.title,
+              url: post.url || post.permalink,
+              score: post.score || 1,
+              by: post.author || 'unknown',
+              time: post.created_utc || Math.floor(Date.now() / 1000),
+              descendants: post.num_comments || 0,
+              subreddit: post.subreddit,
+            }));
+            
+            const uniqueStories = ensureUniqueIds(allStories);
+            setStories(uniqueStories);
+          } else {
+            setStories([]);
+          }
+          setStoryIds([]); // Aggregated sources don't use storyIds
+        } catch (error) {
+          console.error('Failed to fetch all sources:', error);
+          setStories([]);
         }
       }
       
@@ -409,7 +467,39 @@ function HomeInner() {
         <div className="mb-6">
           <div className="flex flex-wrap gap-4 items-center">
             {/* Category Selector */}
-            <div className="flex gap-2 w-full">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 w-full">
+              <button
+                onClick={() => {
+                  const params = new URLSearchParams(searchParams.toString());
+                  params.set('category', 'all');
+                  params.set('view', viewMode);
+                  router.push(`/?${params.toString()}`);
+                  setCategory('all');
+                }}
+                className={`px-4 py-2 rounded-md font-medium transition-colors ${
+                  category === 'all'
+                    ? 'bg-link-color text-white outline outline-2 outline-link-color'
+                    : 'bg-card-background text-foreground hover:bg-gray-100 dark:hover:bg-gray-800'
+                }`}
+              >
+                🌐 All Sources
+              </button>
+              <button
+                onClick={() => {
+                  const params = new URLSearchParams(searchParams.toString());
+                  params.set('category', 'tech-news');
+                  params.set('view', viewMode);
+                  router.push(`/?${params.toString()}`);
+                  setCategory('tech-news');
+                }}
+                className={`px-4 py-2 rounded-md font-medium transition-colors ${
+                  category === 'tech-news'
+                    ? 'bg-link-color text-white outline outline-2 outline-link-color'
+                    : 'bg-card-background text-foreground hover:bg-gray-100 dark:hover:bg-gray-800'
+                }`}
+              >
+                💻 Tech News
+              </button>
               <button
                 onClick={() => {
                   const params = new URLSearchParams(searchParams.toString());
@@ -418,7 +508,7 @@ function HomeInner() {
                   router.push(`/?${params.toString()}`);
                   setCategory('hacker-news');
                 }}
-                className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${
+                className={`px-4 py-2 rounded-md font-medium transition-colors ${
                   category === 'hacker-news'
                     ? 'bg-link-color text-white outline outline-2 outline-link-color'
                     : 'bg-card-background text-foreground hover:bg-gray-100 dark:hover:bg-gray-800'
@@ -434,7 +524,7 @@ function HomeInner() {
                   router.push(`/?${params.toString()}`);
                   setCategory('reddit');
                 }}
-                className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${
+                className={`px-4 py-2 rounded-md font-medium transition-colors ${
                   category === 'reddit'
                     ? 'bg-link-color text-white outline outline-2 outline-link-color'
                     : 'bg-card-background text-foreground hover:bg-gray-100 dark:hover:bg-gray-800'
@@ -443,8 +533,6 @@ function HomeInner() {
                 🚀 Reddit
               </button>
             </div>
-
-
           </div>
         </div>
 
@@ -496,6 +584,20 @@ function HomeInner() {
         {category === 'reddit' && stories.length > 0 && (
           <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
             Showing top {stories.length} posts across all subreddits, sorted by score
+          </div>
+        )}
+        
+        {/* Tech News Info */}
+        {category === 'tech-news' && stories.length > 0 && (
+          <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
+            📚 Aggregated from GitHub Trending, Dev.to, and Lobste.rs - {stories.length} posts
+          </div>
+        )}
+        
+        {/* All Sources Info */}
+        {category === 'all' && stories.length > 0 && (
+          <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
+            🌐 Combined from all available sources - {stories.length} posts
           </div>
         )}
       </div>

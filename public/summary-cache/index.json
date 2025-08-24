@@ -214,5 +214,107 @@
     "timestamp": 1756047847714,
     "title": "Trees on city streets cope with drought by drinking from leaky pipes",
     "urlHash": "d30f18486d27d66aeb8a42b5bf4e209c"
+  },
+  "51be604eeab68db5d9cfccfb08a90626": {
+    "summary": "The article titled \"DeepSeek-V3 - No description\" appears to be a technical document or software update related to the DeepSeek-V3 platform. The main points likely include details about the latest version of DeepSeek, improvements or new features, and potentially information on how to use or install the software. This update may offer enhanced functionality and performance for users of the DeepSeek-V3 platform.",
+    "timestamp": 1756049181066,
+    "title": "DeepSeek-V3 - No description",
+    "urlHash": "51be604eeab68db5d9cfccfb08a90626"
+  },
+  "bff49da1cc26e821c01b478cc5d04fce": {
+    "summary": "The author built a user interface tool designed to help developers reduce the size of their application bundles, improving performance.  This tool, which was open-sourced, aims to simplify the process of identifying and removing unnecessary code or assets that contribute to bloated bundle sizes.\n",
+    "timestamp": 1756049182113,
+    "title": "I built a bundle-saving UI tool and open-sourced it 🔥",
+    "urlHash": "bff49da1cc26e821c01b478cc5d04fce"
+  },
+  "64e64e49fdf7aece72c48f0755f20542": {
+    "summary": "The article \"DeepSeek-R1 - No description\" seems to lack a description or summary of its content. It is unclear what the main points or key insights of the article are without further information.",
+    "timestamp": 1756049182572,
+    "title": "DeepSeek-R1 - No description",
+    "urlHash": "64e64e49fdf7aece72c48f0755f20542"
+  },
+  "8d49e667cf2061b43c72b154900a56e9": {
+    "summary": "The article discusses gemini-cli, an open-source AI agent that allows users to access the power of Gemini directly within their terminal. This tool enables users to interact with Gemini, an advanced natural language understanding system, through simple commands in the terminal, making it easier to leverage the capabilities of Gemini in various applications. Gemini-cli provides a convenient and efficient way for developers and researchers to integrate Gemini's AI functionalities into their projects without the need for a complex setup.",
+    "timestamp": 1756049182639,
+    "title": "gemini-cli - An open-source AI agent that brings the power of Gemini directly into your terminal.",
+    "urlHash": "8d49e667cf2061b43c72b154900a56e9"
+  },
+  "5a7c4dff8bd1f7d2f3380b8d95796882": {
+    "summary": "The article \"9 Open Source Gems Every Developer Should Know\" highlights nine useful open-source tools that developers should be familiar with, including Postman, Hyper, and ngrok. These tools can streamline development processes, enhance productivity, and improve the overall workflow for developers. By incorporating these tools into their toolkit, developers can save time and effort while creating high-quality software.",
+    "timestamp": 1756049182762,
+    "title": "9 Open Source Gems Every Developer Should Know 🔥",
+    "urlHash": "5a7c4dff8bd1f7d2f3380b8d95796882"
+  },
+  "33054ecb8bf0f85519b894002e0d45e8": {
+    "summary": "\"markitdown\" is a Python tool developed by Microsoft that allows users to easily convert various types of files and office documents into Markdown format. This tool provides a convenient way to streamline the conversion process, making it easier to work with Markdown files for documentation and collaboration purposes. Users can simply run the tool with a specified input file or directory, and markitdown will convert the files to Markdown format efficiently.",
+    "timestamp": 1756049183247,
+    "title": "markitdown - Python tool for converting files and office documents to Markdown.",
+    "urlHash": "33054ecb8bf0f85519b894002e0d45e8"
+  },
+  "506d014d3d8fb8bbc96651dc43b9bf9e": {
+    "summary": "The article \"Top 10 Free Tools Every Web Developer Should Know\" lists essential tools for web developers, including VS Code for code editing, GitHub for version control, and Can I Use for checking browser compatibility. Other tools mentioned are ColorZilla for color picking, Google Fonts for typography, and Flexbox Froggy for learning CSS flexbox. The article emphasizes the importance of these tools in enhancing productivity and efficiency for web development projects.",
+    "timestamp": 1756049184214,
+    "title": "Top 10 Free Tools Every Web Developer Should Know",
+    "urlHash": "506d014d3d8fb8bbc96651dc43b9bf9e"
+  },
+  "47c90766ea0a0d27b5d08bba6bc56dd2": {
+    "summary": "The article discusses the Midnight Network \"Privacy First\" Challenge where developers are invited to create privacy-focused applications. Participants have the chance to win $5,000 in prizes by showcasing their ability to prioritize user privacy in their software projects. The challenge aims to promote the importance of privacy in technology and encourage developers to build secure and protective applications.",
+    "timestamp": 1756049184511,
+    "title": "Join the Midnight Network \"Privacy First\" Challenge: $5,000 in Prizes!",
+    "urlHash": "47c90766ea0a0d27b5d08bba6bc56dd2"
+  },
+  "cbed7bffafd1da3bd28089d0f51bde01": {
+    "summary": "The article challenges the prevailing narrative that developers must learn AI or risk becoming obsolete. It argues that while AI is important, there are many other skills and technologies that are valuable in the tech industry. The author emphasizes the importance of diversifying skill sets and knowledge rather than solely focusing on AI.",
+    "timestamp": 1756049185830,
+    "title": "There's something off in the \"dev with AI or die\" narrative",
+    "urlHash": "cbed7bffafd1da3bd28089d0f51bde01"
+  },
+  "7c327c664535d3367e06d53c0a52ce4e": {
+    "summary": "The Google DeepMind team hosted an \"Ask Me Anything\" session on Dev.to to discuss their work on several projects, most notably Gemini and Google AI Studio.  The session aimed to provide insights into the development and future direction of these large language models and AI development tools.\n",
+    "timestamp": 1756049209785,
+    "title": "We're the Google DeepMind Team building Gemini, Google AI Studio, and more! Ask Us Anything.",
+    "urlHash": "7c327c664535d3367e06d53c0a52ce4e"
+  },
+  "6c53e3f521579cf0e8f20c480803fc48": {
+    "summary": "The article discusses various AI-powered code review tools that can help developers save time and improve code quality. It highlights tools such as CodeGuru, DeepCode, and CodeScene that use machine learning algorithms to analyze code and provide valuable feedback. These tools can help developers identify bugs, optimize performance, and enforce best coding practices, ultimately leading to more efficient development processes.",
+    "timestamp": 1756049210727,
+    "title": "Best AI Code Review Tools That Will Save You Hours🕛",
+    "urlHash": "6c53e3f521579cf0e8f20c480803fc48"
+  },
+  "0551f1dd8fd2aedc9b3f6b9305d4e5b0": {
+    "summary": "The article \"Deep Think with Confidence\" discusses the importance of developing confidence in our ability to think deeply and critically. It emphasizes the need to trust our own judgment and intuition while also being open to new ideas and perspectives. The key insight is that by building confidence in our thinking abilities, we can become more effective problem solvers and decision makers.",
+    "timestamp": 1756049214469,
+    "title": "Deep Think with Confidence",
+    "urlHash": "0551f1dd8fd2aedc9b3f6b9305d4e5b0"
+  },
+  "d790ddf181aa540ffd5a7950074925e7": {
+    "summary": "The article discusses the importance of taking breaks and making time for relaxation during the weekend. It emphasizes the need to prioritize self-care and leisure activities to avoid burnout and maintain a healthy work-life balance. The author suggests engaging in activities that bring joy and fulfillment, whether it's spending time with loved ones, pursuing hobbies, or simply resting and recharging.",
+    "timestamp": 1756049233801,
+    "title": "What are you doing this weekend?",
+    "urlHash": "d790ddf181aa540ffd5a7950074925e7"
+  },
+  "6af256c4bf534f569705603f6d5913cd": {
+    "summary": "The article discusses how to manage secrets on NixOS using sops-nix, a tool that integrates sops with the Nix package manager. sops-nix allows for encrypted secrets to be stored directly in the Nix expressions, providing a secure and convenient way to manage sensitive information within NixOS configurations. The author highlights the benefits of using sops-nix for secret management, such as simplifying the process of managing secrets and improving security by encrypting sensitive data.",
+    "timestamp": 1756049234194,
+    "title": "Secret Management on NixOS with sops-nix",
+    "urlHash": "6af256c4bf534f569705603f6d5913cd"
+  },
+  "e2abe3d409ada0fe8d1f347a15ca68c7": {
+    "summary": "The article \"Optimizing FizzBuzz in Rust\" explores various techniques to optimize the popular FizzBuzz problem in the Rust programming language. The author discusses strategies such as using a lookup table, SIMD instructions, and multithreading to improve the performance of the FizzBuzz algorithm. The article highlights the importance of understanding low-level optimizations and leveraging Rust's features to enhance code efficiency.",
+    "timestamp": 1756049234695,
+    "title": "Optimizing FizzBuzz in Rust",
+    "urlHash": "e2abe3d409ada0fe8d1f347a15ca68c7"
+  },
+  "999770cf98c9ddcbd66306695e0173c7": {
+    "summary": "The article \"Big O\" explains the concept of Big O notation in computer science, which is used to analyze the time and space complexity of algorithms. It discusses how Big O notation helps in comparing different algorithms based on their efficiency and scalability, allowing developers to make informed decisions when selecting algorithms for their projects. Additionally, the article provides examples and explanations of common Big O complexities such as O(1), O(log n), O(n), O(n^2), and O(n!).",
+    "timestamp": 1756049235153,
+    "title": "Big O",
+    "urlHash": "999770cf98c9ddcbd66306695e0173c7"
+  },
+  "b0c5903913d7ed5014262cfca4a1d76f": {
+    "summary": "The article discusses the process of image processing for train photography using line scan cameras. It highlights the importance of proper camera settings and image processing techniques to achieve high-quality images of moving trains. Additionally, the article emphasizes the significance of understanding the technical aspects of line scan cameras to capture clear and detailed images.",
+    "timestamp": 1756049236274,
+    "title": "Line scan camera image processing (train photography)",
+    "urlHash": "b0c5903913d7ed5014262cfca4a1d76f"
   }
 }
