@@ -115,7 +115,13 @@ export async function GET(request: NextRequest) {
     const results = await Promise.allSettled(sourcePromises);
     
     const allPosts: TrendingPost[] = [];
-    const sourceStats: Record<string, any> = {};
+    const sourceStats: Record<string, { 
+      posts: number; 
+      count: number;
+      error?: string | null; 
+      totalPosts?: number; 
+      success?: boolean;
+    }> = {};
     
     results.forEach((result, index) => {
       const source = sources[index];
@@ -125,6 +131,7 @@ export async function GET(request: NextRequest) {
         allPosts.push(...posts);
         sourceStats[source] = {
           success: !error,
+          posts: posts.length,
           count: posts.length,
           error: error || null,
           totalPosts,
@@ -132,6 +139,7 @@ export async function GET(request: NextRequest) {
       } else {
         sourceStats[source] = {
           success: false,
+          posts: 0,
           count: 0,
           error: result.reason?.message || 'Promise rejected',
           totalPosts: 0,

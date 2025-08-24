@@ -76,24 +76,37 @@ async function fetchLobstersRSS(): Promise<TrendingPost[]> {
 
     const rssText = await response.text();
     
-    // Parse XML using a more Node.js-friendly approach
-    const { parseStringPromise } = await import('xml2js');
-    
+    // Parse XML using simple regex parsing (avoiding xml2js dependency)
     try {
-      const result = await parseStringPromise(rssText);
-      const items = result?.rss?.channel?.[0]?.item || [];
+      // Simple regex-based XML parsing for RSS items
+      const itemRegex = /<item[^>]*>([\s\S]*?)<\/item>/gi;
+      const titleRegex = /<title[^>]*><!\[CDATA\[(.*?)\]\]><\/title>/i;
+      const linkRegex = /<link[^>]*>(.*?)<\/link>/i;
+      const authorRegex = /<dc:creator[^>]*><!\[CDATA\[(.*?)\]\]><\/dc:creator>/i;
+      const pubDateRegex = /<pubDate[^>]*>(.*?)<\/pubDate>/i;
       
-      console.log(`📰 Found ${items.length} RSS items`);
+      const itemMatches = Array.from(rssText.matchAll(itemRegex));
+      
+      console.log(`📰 Found ${itemMatches.length} RSS items`);
 
       const posts: TrendingPost[] = [];
       
-      items.forEach((item: any, index: number) => {
+      itemMatches.forEach((itemMatch, index) => {
         try {
-          const title = item.title?.[0] || '';
-          const link = item.link?.[0] || '';
-          const author = item['dc:creator']?.[0] || item.author?.[0] || 'unknown';
-          const pubDate = item.pubDate?.[0] || '';
-          const description = item.description?.[0] || '';
+          const itemContent = itemMatch[1];
+          const titleMatch = itemContent.match(titleRegex);
+          const linkMatch = itemContent.match(linkRegex);
+          const authorMatch = itemContent.match(authorRegex);
+          const pubDateMatch = itemContent.match(pubDateRegex);
+          
+          const title = titleMatch?.[1] || '';
+          const link = linkMatch?.[1] || '';
+          const author = authorMatch?.[1] || 'unknown';
+          const pubDate = pubDateMatch?.[1] || '';
+          
+          // Extract score and comments from description if available
+          const descMatch = itemContent.match(/<description[^>]*><!\[CDATA\[(.*?)\]\]><\/description>/i);
+          const description = descMatch?.[1] || '';
           
           // Extract score from description if available
           const scoreMatch = description.match(/(\d+)\s*points?/i);
@@ -155,23 +168,36 @@ async function fetchLobstersHottest(): Promise<TrendingPost[]> {
 
     const rssText = await response.text();
     
-    // Parse XML using xml2js
-    const { parseStringPromise } = await import('xml2js');
-    
+    // Parse XML using simple regex parsing (avoiding xml2js dependency)
     try {
-      const result = await parseStringPromise(rssText);
-      const items = result?.rss?.channel?.[0]?.item || [];
+      // Simple regex-based XML parsing for RSS items
+      const itemRegex = /<item[^>]*>([\s\S]*?)<\/item>/gi;
+      const titleRegex = /<title[^>]*><!\[CDATA\[(.*?)\]\]><\/title>/i;
+      const linkRegex = /<link[^>]*>(.*?)<\/link>/i;
+      const authorRegex = /<dc:creator[^>]*><!\[CDATA\[(.*?)\]\]><\/dc:creator>/i;
+      const pubDateRegex = /<pubDate[^>]*>(.*?)<\/pubDate>/i;
+      
+      const itemMatches = Array.from(rssText.matchAll(itemRegex));
       
       const posts: TrendingPost[] = [];
       
       // Take only the first few items and treat them as "hottest"
-      items.slice(0, 10).forEach((item: any, index: number) => {
+      itemMatches.slice(0, 10).forEach((itemMatch, index) => {
         try {
-          const title = item.title?.[0] || '';
-          const link = item.link?.[0] || '';
-          const author = item['dc:creator']?.[0] || item.author?.[0] || 'unknown';
-          const pubDate = item.pubDate?.[0] || '';
-          const description = item.description?.[0] || '';
+          const itemContent = itemMatch[1];
+          const titleMatch = itemContent.match(titleRegex);
+          const linkMatch = itemContent.match(linkRegex);
+          const authorMatch = itemContent.match(authorRegex);
+          const pubDateMatch = itemContent.match(pubDateRegex);
+          
+          const title = titleMatch?.[1] || '';
+          const link = linkMatch?.[1] || '';
+          const author = authorMatch?.[1] || 'unknown';
+          const pubDate = pubDateMatch?.[1] || '';
+          
+          // Extract score and comments from description if available
+          const descMatch = itemContent.match(/<description[^>]*><!\[CDATA\[(.*?)\]\]><\/description>/i);
+          const description = descMatch?.[1] || '';
           
           // Extract score from description if available
           const scoreMatch = description.match(/(\d+)\s*points?/i);
@@ -229,7 +255,7 @@ export async function GET(request: NextRequest) {
 
     console.log(`🔍 Lobste.rs API request - limit: ${limit}, feed: ${feed}`);
 
-    let allPosts: TrendingPost[] = [];
+    const allPosts: TrendingPost[] = [];
     
     if (feed === 'newest' || feed === 'both') {
       const newestPosts = await fetchLobstersRSS();

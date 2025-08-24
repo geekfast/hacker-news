@@ -28,7 +28,7 @@ interface TrendingPost {
   subreddit: string;
 }
 
-async function fetchGitHubTrending(language: string = '', since: string = 'daily'): Promise<TrendingPost[]> {
+async function fetchGitHubTrending(language: string = ''): Promise<TrendingPost[]> {
   try {
     // Use a simpler search query to avoid rate limits
     const query = language 

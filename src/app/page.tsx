@@ -312,8 +312,20 @@ function HomeInner() {
           
           if (data.posts && data.posts.length > 0) {
             // Convert to our Story format
-            const techStories = data.posts.map((post: any) => ({
-              id: parseInt(post.id) || Math.floor(Math.random() * 1000000),
+            const techStories = data.posts.map((post: {
+              id: string | number;
+              title: string;
+              url?: string;
+              permalink?: string;
+              score?: number;
+              author?: string;
+              time?: number;
+              created_utc?: number;
+              num_comments?: number;
+              descendants?: number;
+              subreddit?: string;
+            }) => ({
+              id: typeof post.id === 'string' ? parseInt(post.id) || Math.floor(Math.random() * 1000000) : post.id,
               title: post.title,
               url: post.url || post.permalink,
               score: post.score || 1,
@@ -341,8 +353,20 @@ function HomeInner() {
           
           if (data.posts && data.posts.length > 0) {
             // Convert to our Story format
-            const allStories = data.posts.map((post: any) => ({
-              id: parseInt(post.id) || Math.floor(Math.random() * 1000000),
+            const allStories = data.posts.map((post: {
+              id: string | number;
+              title: string;
+              url?: string;
+              permalink?: string;
+              score?: number;
+              author?: string;
+              time?: number;
+              created_utc?: number;
+              num_comments?: number;
+              descendants?: number;
+              subreddit?: string;
+            }) => ({
+              id: typeof post.id === 'string' ? parseInt(post.id) || Math.floor(Math.random() * 1000000) : post.id,
               title: post.title,
               url: post.url || post.permalink,
               score: post.score || 1,
