@@ -30,59 +30,47 @@ function extractSubject(title: string): string {
 }
 
 export function useStoryAssets({ title, url }: UseStoryAssetsProps): UseStoryAssetsReturn {
-  console.log('🎯 useStoryAssets called with title:', title);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [summary, setSummary] = useState<string | null>(null);
   const [isLoadingImage, setIsLoadingImage] = useState(true);
   const [isLoadingSummary, setIsLoadingSummary] = useState(true);
 
   useEffect(() => {
-    console.log('🎪 useStoryAssets useEffect triggered for:', title);
+    let isMounted = true;
+    
     async function fetchImage() {
       try {
         const subject = extractSubject(title);
-        console.log('🔍 Fetching image for:', subject);
         const response = await fetch(`/api/search-image?query=${encodeURIComponent(subject)}`);
         
-        // Always expect JSON response now (API returns placeholder for errors)
-        const contentType = response.headers.get('content-type');
-        if (!contentType?.includes('application/json')) {
-          console.warn('⚠️ Response is not JSON:', contentType);
-          setImageUrl('/placeholder.svg');
-          setIsLoadingImage(false);
-          return;
+        if (!response.ok) {
+          throw new Error(`Image API failed with status: ${response.status}`);
         }
+
+        const data = await response.json();
         
-        const responseText = await response.text();
-        console.log('Raw response:', responseText);
-        
-        let data;
-        try {
-          data = JSON.parse(responseText);
-        } catch (parseError) {
-          console.error('JSON parse error:', parseError, 'Raw response:', responseText);
-          setImageUrl('/placeholder.svg');
+        if (isMounted) {
+          if (data.imageUrl) {
+            setImageUrl(data.imageUrl);
+          } else {
+            setImageUrl('/placeholder.svg');
+          }
           setIsLoadingImage(false);
-          return;
-        }
-        
-        console.log('Image API response:', data);
-        if (data.imageUrl) {
-          console.log('Setting imageUrl to:', data.imageUrl);
-          setImageUrl(data.imageUrl);
-        } else {
-          console.log('No imageUrl in response, using placeholder');
-          setImageUrl('/placeholder.svg');
         }
       } catch (error) {
         console.error('Error fetching image:', error);
-        setImageUrl('/placeholder.svg');
-      } finally {
-        setIsLoadingImage(false);
+        if (isMounted) {
+          setImageUrl('/placeholder.svg');
+          setIsLoadingImage(false);
+        }
       }
     }
     
     fetchImage();
+
+    return () => {
+      isMounted = false;
+    };
   }, [title]);
 
   useEffect(() => {

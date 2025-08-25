@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
-import { getCachedImage, cacheImage } from '@/utils/imageCache';
+// TEMPORARY: Disable cache import for testing
+// import { getCachedImage, cacheImage } from '@/utils/imageCache';
 
 export async function GET(request: Request) {
   console.log('🔍 Search Image API called:', new Date().toISOString());
+  console.log('🔧 TESTING: Modified API v3 - CACHE COMPLETELY DISABLED!');
   const { searchParams } = new URL(request.url);
   const query = searchParams.get('query');
   console.log('📝 Query parameter:', query);
@@ -35,26 +37,29 @@ export async function GET(request: Request) {
   };
 
   try {
-    // In production (Vercel), skip local cache and fetch directly from Unsplash
+    // TEMPORARY: Skip caching for testing
     const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL === '1';
     
-    if (!isProduction) {
-      // Development: Use local cache
-      const cachedImageUrl = await getCachedImage(query);
-      if (cachedImageUrl) {
-        console.log(`Serving cached image for query: ${query}`);
-        return NextResponse.json({ 
-          imageUrl: cachedImageUrl,
-          cached: true,
-          source: 'local-cache'
-        }, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Cache-Control': 'public, max-age=3600'
-          }
-        });
-      }
-    }
+    // Disable caching temporarily to test if that's the issue
+    console.log('🔧 TESTING: Skipping cache to test direct Unsplash images');
+    
+    // if (!isProduction) {
+    //   // Development: Use local cache
+    //   const cachedImageUrl = await getCachedImage(query);
+    //   if (cachedImageUrl) {
+    //     console.log(`Serving cached image for query: ${query}`);
+    //     return NextResponse.json({ 
+    //       imageUrl: cachedImageUrl,
+    //       cached: true,
+    //       source: 'local-cache'
+    //     }, {
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         'Cache-Control': 'public, max-age=3600'
+    //       }
+    //     });
+    //   }
+    // }
 
     // Fetch from Unsplash
     const accessKey = process.env.UNSPLASH_ACCESS_KEY;
@@ -81,10 +86,20 @@ export async function GET(request: Request) {
         console.warn(`Unsplash API rate limited (${response.status}) for query: ${query}, returning placeholder`);
         return returnPlaceholder('API rate limited');
       }
-      throw new Error(`Unsplash API responded with status: ${response.status}`);
+      console.warn(`Unsplash API responded with status: ${response.status} for query: ${query}, returning placeholder`);
+      return returnPlaceholder(`API error: HTTP ${response.status}`);
     }
 
-    const data = await response.json();
+    const responseText = await response.text();
+    console.log('🔧 Raw response length:', responseText.length);
+    
+    let data;
+    try {
+      data = JSON.parse(responseText);
+    } catch (parseError) {
+      console.error('🚨 JSON Parse Error:', parseError, 'Raw response:', responseText.substring(0, 200));
+      return returnPlaceholder('Invalid JSON response from API');
+    }
     const originalImageUrl = data.results[0]?.urls?.small;
 
     if (!originalImageUrl) {
@@ -92,35 +107,18 @@ export async function GET(request: Request) {
       return returnPlaceholder('No image found for search term');
     }
 
-    if (isProduction) {
-      // Production: Return direct Unsplash URL
-      console.log(`Serving direct Unsplash image for query: ${query}`);
-      return NextResponse.json({ 
-        imageUrl: originalImageUrl,
-        cached: false,
-        source: 'unsplash-direct'
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 'public, max-age=1800'
-        }
-      });
-    } else {
-      // Development: Cache the image locally
-      const localImageUrl = await cacheImage(query, originalImageUrl);
-      console.log(`Cached new image for query: ${query}`);
-      
-      return NextResponse.json({ 
-        imageUrl: localImageUrl,
-        cached: false,
-        source: 'unsplash-cached'
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 'public, max-age=3600'
-        }
-      });
-    }
+    // TESTING: Always return direct Unsplash URL, no caching
+    console.log(`🔧 TESTING: Serving DIRECT UNSPLASH URL for query: ${query} - URL: ${originalImageUrl}`);
+    return NextResponse.json({ 
+      imageUrl: originalImageUrl,
+      cached: false,
+      source: 'unsplash-direct-test-v3'
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache, no-store, must-revalidate'
+      }
+    });
 
   } catch (error) {
     console.error('Error in image search:', error);

@@ -682,5 +682,53 @@
     "timestamp": 1756096862462,
     "title": "The two versions of Parquet",
     "urlHash": "c4570a75afc12bd5a2bd415df467b439"
+  },
+  "05f2039898614c9148310dce3689c30f": {
+    "summary": "I lack the ability to access external websites, including the URL you provided.  Therefore, I cannot summarize the content of the article \"Git-Annex\".  However, based on the title alone, I can infer that the article likely describes the features and functionality of the Git-Annex system, a tool that probably extends Git's capabilities to manage large files more efficiently.\n",
+    "timestamp": 1756115122403,
+    "title": "Git-Annex",
+    "urlHash": "05f2039898614c9148310dce3689c30f"
+  },
+  "46b0c2582d9e7e55cf6d0762205936f7": {
+    "summary": "SmallJS is a compiler that translates Smalltalk-80 code into JavaScript, enabling Smalltalk programmers to leverage the vast ecosystem of web technologies.  This allows for the development of web applications using the familiar Smalltalk paradigm, benefiting from its elegant object-oriented features and dynamic nature.\n",
+    "timestamp": 1756115122417,
+    "title": "SmallJS: Smalltalk-80 that compiles to JavaScript",
+    "urlHash": "46b0c2582d9e7e55cf6d0762205936f7"
+  },
+  "1d63b23c2558d234a2e13fbfe2ede5cc": {
+    "summary": "OKLCH colors represent a color space that prioritizes perceptual uniformity, meaning that small changes in numerical values correspond to small changes in perceived color difference.  This is achieved by using a cylindrical coordinate system based on lightness (L), chroma (C), hue (H), and a correlation coefficient (k) related to color appearance.  Unlike other color spaces, OKLCH aims for better intuitiveness and ease of manipulation for designers and artists.\n",
+    "timestamp": 1756115122633,
+    "title": "What are OKLCH colors?",
+    "urlHash": "1d63b23c2558d234a2e13fbfe2ede5cc"
+  },
+  "5396e84a87d09ea11783748e5f4474e8": {
+    "summary": "I lack the ability to access external websites, including the provided URL.  Therefore, I cannot summarize the content of the linked article.  Based solely on the title \"MCP Gateway and Registry,\" the article likely describes a system, possibly for managing microservices, that utilizes a gateway for routing requests and a registry for service discovery and management within a larger MCP (likely a Micro-service Control Plane) framework.  This system aims to simplify communication and management of interconnected microservices.\n",
+    "timestamp": 1756115123355,
+    "title": "MCP Gateway and Registry",
+    "urlHash": "5396e84a87d09ea11783748e5f4474e8"
+  },
+  "6f52654706bdf663248107692fb4819e": {
+    "summary": "I lack the ability to access external websites, including the URL you provided.  Therefore, I cannot summarize the article.  Based solely on the title, \"Ban me at the IP level if you don't like me,\" the article likely discusses the frustrations of a user facing online censorship or bans, advocating for a more transparent and direct method of blocking, such as IP-level bans, rather than more sophisticated methods that might be more difficult to detect or circumvent. The author likely prefers this straightforward approach even if it is less nuanced.\n",
+    "timestamp": 1756115123762,
+    "title": "Ban me at the IP level if you don't like me",
+    "urlHash": "6f52654706bdf663248107692fb4819e"
+  },
+  "a983e1fb27ba5278bb063a1f4af8dcf4": {
+    "summary": "Since I lack the ability to access external websites, including the URL you provided, I can only offer a summary based on the title: \"In-Memory Filesystems in Rust\".  The article likely explores the implementation and potential benefits of creating in-memory file systems using the Rust programming language.  It probably discusses aspects such as performance, data structures used, and comparisons to traditional disk-based file systems.\n",
+    "timestamp": 1756115125174,
+    "title": "In-Memory Filesystems in Rust",
+    "urlHash": "a983e1fb27ba5278bb063a1f4af8dcf4"
+  },
+  "160816bdd8e0ed64e0ae885e281d14b9": {
+    "summary": "Buypass has announced it will cease issuing new TLS/SSL certificates.  This decision ends their participation in the certificate authority market, likely due to strategic shifts within the company.  Existing customers will continue to receive support for their already-issued certificates during their validity period.\n",
+    "timestamp": 1756116527600,
+    "title": "Buypass Discontinues Issuance of TLS/SSL Certificates",
+    "urlHash": "160816bdd8e0ed64e0ae885e281d14b9"
+  },
+  "c9dba86c31cbae17497a7988d2e61502": {
+    "summary": "The SD Association has released a free, cross-platform (Windows, macOS, Linux) utility for formatting SD memory cards.  This official tool ensures proper formatting, improving compatibility and reliability across various devices.\n",
+    "timestamp": 1756117563679,
+    "title": "The SD Association has an official SD card format utility [Win/OS X/Linux]",
+    "urlHash": "c9dba86c31cbae17497a7988d2e61502"
   }
 }

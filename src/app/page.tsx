@@ -64,11 +64,12 @@ function SkeletonLoader() {
 }
 
 function StoryItemGrid({ story }: { story: Story }) {
-  console.log('🎯 StoryItemGrid rendering for:', story.title);
   const { imageUrl, summary, isLoadingImage, isLoadingSummary } = useStoryAssets({
     title: story.title,
     url: story.url,
   });
+
+  console.log('🖼️ StoryItemGrid - story:', story.title, 'imageUrl:', imageUrl, 'isLoadingImage:', isLoadingImage);
 
   if (isLoadingImage) {
     return (
@@ -145,7 +146,6 @@ function StoryItemGrid({ story }: { story: Story }) {
 }
 
 function StoryItem({ story }: { story: Story }) {
-  console.log('📋 StoryItem rendering for:', story.title);
   const { imageUrl, summary, isLoadingImage, isLoadingSummary } = useStoryAssets({
     title: story.title,
     url: story.url,

@@ -40,44 +40,36 @@ export default function FallbackImage({
     setIsLoading(false);
   };
 
-  // Show placeholder if no src, has error, or src is empty string
-  if (hasError || !src || src.trim() === '') {
-    console.log('Showing placeholder because:', { hasError, noSrc: !src, emptyString: src?.trim() === '' });
+  // Show placeholder if has error or src is invalid
+  if (hasError || !src || src.trim() === '' || src.includes('placeholder')) {
     return (
       <div className={`${className} bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center overflow-hidden`}>
-        <Image
+        <img
           src={placeholderSrc}
           alt="Content placeholder"
           width={width}
           height={height}
           className={className}
-          priority={false}
         />
       </div>
     );
   }
 
+  // Render a standard <img> tag to bypass Next.js Image optimization for testing
   return (
-    <div className="relative overflow-hidden">
-      {isLoading && (
-        <div className={`absolute inset-0 ${className} bg-gray-100 dark:bg-gray-700 animate-pulse flex items-center justify-center z-10`}>
-          <div className="w-6 h-6 border-2 border-gray-300 dark:border-gray-600 border-t-blue-500 dark:border-t-blue-400 rounded-full animate-spin"></div>
-        </div>
-      )}
-      <Image
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
-        className={className}
-        onError={handleError}
-        onLoad={handleLoad}
-        style={{ 
-          display: isLoading ? 'none' : 'block',
-          opacity: isLoading ? 0 : 1,
-          transition: 'opacity 0.3s ease-in-out'
-        }}
-      />
-    </div>
+    <img
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      className={className}
+      onError={handleError}
+      onLoad={handleLoad}
+      style={{ 
+        display: isLoading ? 'none' : 'block',
+        opacity: isLoading ? 0 : 1,
+        transition: 'opacity 0.3s ease-in-out'
+      }}
+    />
   );
 }

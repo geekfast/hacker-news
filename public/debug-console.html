@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Console - Open Dev Tools</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .instructions {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        .step {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+        }
+        .link {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 12px 24px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        .link:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Debug Console Instructions</h1>
+        
+        <div class="instructions">
+            <h3>To debug image loading issues:</h3>
+            
+            <div class="step">
+                <strong>Step 1:</strong> Open the main app link below
+            </div>
+            
+            <div class="step">
+                <strong>Step 2:</strong> Press F12 or right-click → "Inspect Element" to open Developer Tools
+            </div>
+            
+            <div class="step">
+                <strong>Step 3:</strong> Go to the "Console" tab
+            </div>
+            
+            <div class="step">
+                <strong>Step 4:</strong> Look for:
+                <ul>
+                    <li>🔍 FallbackImage received src: [URL] logs</li>
+                    <li>❌ Image failed to load: [URL] logs</li>
+                    <li>✅ Image loaded successfully: [URL] logs</li>
+                    <li>⚠️ Any error messages</li>
+                </ul>
+            </div>
+            
+            <div class="step">
+                <strong>Step 5:</strong> Go to "Network" tab to check if image requests are being made and their responses
+            </div>
+        </div>
+        
+        <a href="http://localhost:3000" class="link" target="_blank">
+            🚀 Open Main App (localhost:3000)
+        </a>
+        
+        <div style="margin-top: 30px; padding: 15px; background: #fff3cd; border-radius: 6px;">
+            <strong>Expected behavior:</strong> You should see console logs showing image URLs being received and either loading successfully or failing. If images aren't appearing, check the Network tab for 404, 500, or CORS errors.
+        </div>
+    </div>
+
+    <script>
+        console.log("🔧 Debug page loaded - now open the main app and check console");
+    </script>
+</body>
+</html>
