@@ -2,8 +2,10 @@ import { NextResponse } from 'next/server';
 import { getCachedImage, cacheImage } from '@/utils/imageCache';
 
 export async function GET(request: Request) {
+  console.log('🔍 Search Image API called:', new Date().toISOString());
   const { searchParams } = new URL(request.url);
   const query = searchParams.get('query');
+  console.log('📝 Query parameter:', query);
 
   if (!query) {
     return NextResponse.json({ 

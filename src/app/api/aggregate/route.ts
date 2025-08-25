@@ -94,7 +94,9 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const limit = parseInt(searchParams.get('limit') || '20');
     const sources = searchParams.get('sources')?.split(',') || ['github', 'devto', 'reddit'];
-    const includeReddit = searchParams.get('include_reddit') !== 'false';
+    // Temporarily disable Reddit due to timeout issues
+    // const includeReddit = searchParams.get('include_reddit') !== 'false';
+    const includeReddit = false; // Disabled for testing
 
     console.log(`🚀 Aggregation API request - limit: ${limit}, sources: ${sources.join(', ')}`);
 

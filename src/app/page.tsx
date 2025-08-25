@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useStoryAssets } from '@/hooks/useStoryAssets';
 import FallbackImage from '@/components/FallbackImage';
 
-type Category = 'hacker-news' | 'reddit' | 'tech-news' | 'all';
+type Category = 'hacker-news' | 'reddit' | 'tech-news';
 
 // Helper function to ensure unique IDs
 function ensureUniqueIds(stories: Story[]): Story[] {
@@ -64,6 +64,7 @@ function SkeletonLoader() {
 }
 
 function StoryItemGrid({ story }: { story: Story }) {
+  console.log('🎯 StoryItemGrid rendering for:', story.title);
   const { imageUrl, summary, isLoadingImage, isLoadingSummary } = useStoryAssets({
     title: story.title,
     url: story.url,
@@ -144,6 +145,7 @@ function StoryItemGrid({ story }: { story: Story }) {
 }
 
 function StoryItem({ story }: { story: Story }) {
+  console.log('📋 StoryItem rendering for:', story.title);
   const { imageUrl, summary, isLoadingImage, isLoadingSummary } = useStoryAssets({
     title: story.title,
     url: story.url,
@@ -265,7 +267,7 @@ function HomeInner() {
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid');
   const [isViewModeLoaded, setIsViewModeLoaded] = useState(false);
   const [category, setCategory] = useState<Category>(
-    (searchParams.get('category') as Category) || 'all'
+    (searchParams.get('category') as Category) || 'hacker-news'
   );
   const [availableSources, setAvailableSources] = useState<string[]>(['hacker-news', 'reddit', 'tech-news']);
   
@@ -414,58 +416,6 @@ function HomeInner() {
           console.error('Failed to fetch tech news:', error);
           setStories([]);
         }
-      } else if (category === 'all') {
-        // Fetch from all sources including Reddit
-        try {
-          const response = await fetch('/api/aggregate?sources=github,devto,reddit&include_reddit=true&limit=50');
-          const data = await response.json();
-          
-          // Update available sources based on response
-          const redditAvailable = data.sources && data.sources.reddit && 
-            data.sources.reddit.available !== false && 
-            data.sources.reddit.success;
-          const newAvailableSources = redditAvailable
-            ? ['hacker-news', 'tech-news', 'all', 'reddit']
-            : ['hacker-news', 'tech-news', 'all'];
-          setAvailableSources(newAvailableSources);
-          
-          if (data.posts && data.posts.length > 0) {
-            // Convert to our Story format
-            const allStories = data.posts.map((post: {
-              id: string | number;
-              title: string;
-              url?: string;
-              permalink?: string;
-              score?: number;
-              author?: string;
-              time?: number;
-              created_utc?: number;
-              num_comments?: number;
-              descendants?: number;
-              subreddit?: string;
-              source?: string;
-            }) => ({
-              id: typeof post.id === 'string' ? parseInt(post.id) || Math.floor(Math.random() * 1000000) : post.id,
-              title: post.title,
-              url: post.url || post.permalink,
-              score: post.score || 1,
-              by: post.author || 'unknown',
-              time: post.created_utc || Math.floor(Date.now() / 1000),
-              descendants: post.num_comments || 0,
-              subreddit: post.subreddit,
-              source: post.source,
-            }));
-            
-            const uniqueStories = ensureUniqueIds(allStories);
-            setStories(uniqueStories);
-          } else {
-            setStories([]);
-          }
-          setStoryIds([]); // Aggregated sources don't use storyIds
-        } catch (error) {
-          console.error('Failed to fetch all sources:', error);
-          setStories([]);
-        }
       }
       
       setIsLoading(false);
@@ -506,8 +456,7 @@ function HomeInner() {
           <h1 className="text-2xl font-bold">
             {category === 'hacker-news' ? 'Hacker News' : 
              category === 'reddit' ? 'Reddit' :
-             category === 'tech-news' ? 'Tech News' :
-             category === 'all' ? 'All Sources' : 'News'}
+             category === 'tech-news' ? 'Tech News' : 'News'}
           </h1>
           
           {/* View Toggle - only render after view mode is loaded */}
@@ -547,23 +496,7 @@ function HomeInner() {
         <div className="mb-6">
           <div className="flex flex-wrap gap-4 items-center">
             {/* Category Selector */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 w-full">
-              <button
-                onClick={() => {
-                  const params = new URLSearchParams(searchParams.toString());
-                  params.set('category', 'all');
-                  params.set('view', viewMode);
-                  router.push(`/?${params.toString()}`);
-                  setCategory('all');
-                }}
-                className={`px-4 py-2 rounded-md font-medium transition-colors ${
-                  category === 'all'
-                    ? 'bg-link-color text-white outline outline-2 outline-link-color'
-                    : 'bg-card-background text-foreground hover:bg-gray-100 dark:hover:bg-gray-800'
-                }`}
-              >
-                🌐 All Sources
-              </button>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 w-full">
               <button
                 onClick={() => {
                   const params = new URLSearchParams(searchParams.toString());
@@ -696,13 +629,6 @@ function HomeInner() {
         {category === 'tech-news' && displayedStories.length > 0 && (
           <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
             📚 Aggregated from GitHub Trending and Dev.to - Showing {displayedStories.length} of {stories.length} posts
-          </div>
-        )}
-        
-        {/* All Sources Info */}
-        {category === 'all' && displayedStories.length > 0 && (
-          <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
-            🌐 Combined from all available sources - Showing {displayedStories.length} of {stories.length} posts
           </div>
         )}
       </div>

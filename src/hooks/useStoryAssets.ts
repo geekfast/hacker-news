@@ -30,22 +30,24 @@ function extractSubject(title: string): string {
 }
 
 export function useStoryAssets({ title, url }: UseStoryAssetsProps): UseStoryAssetsReturn {
+  console.log('🎯 useStoryAssets called with title:', title);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [summary, setSummary] = useState<string | null>(null);
   const [isLoadingImage, setIsLoadingImage] = useState(true);
   const [isLoadingSummary, setIsLoadingSummary] = useState(true);
 
   useEffect(() => {
+    console.log('🎪 useStoryAssets useEffect triggered for:', title);
     async function fetchImage() {
       try {
         const subject = extractSubject(title);
-        console.log('Fetching image for:', subject);
+        console.log('🔍 Fetching image for:', subject);
         const response = await fetch(`/api/search-image?query=${encodeURIComponent(subject)}`);
         
         // Always expect JSON response now (API returns placeholder for errors)
         const contentType = response.headers.get('content-type');
         if (!contentType?.includes('application/json')) {
-          console.warn('Response is not JSON:', contentType);
+          console.warn('⚠️ Response is not JSON:', contentType);
           setImageUrl('/placeholder.svg');
           setIsLoadingImage(false);
           return;

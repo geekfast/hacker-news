@@ -628,5 +628,59 @@
     "timestamp": 1756057097115,
     "title": "I’m a political cartoonist. AI is making a mockery of my profession",
     "urlHash": "99a0721552da28004b2862ddd5f44094"
+  },
+  "64861286929077962205faaf13037e71": {
+    "summary": "Sping is a user-friendly command-line tool designed for measuring HTTP and TCP latency.  It prioritizes a visually appealing output, making it easier to interpret network performance data than many existing tools.\n",
+    "timestamp": 1756096722058,
+    "title": "Show HN: Sping – An HTTP/TCP latency tool that's easy on the eye",
+    "urlHash": "64861286929077962205faaf13037e71"
+  },
+  "7b112ae064355c937d21e80e9193f358": {
+    "summary": "I lack the ability to access external websites, including the URL you provided.  Therefore, I cannot provide a summary based on the content of the article.  However, based on the title \"From Hackathon to YC,\" the article likely details the journey of a startup team that originated at a hackathon and subsequently secured funding from Y Combinator (YC), a prominent startup accelerator.  This suggests a case study showcasing how a rapid prototyping environment can lead to significant investment and business growth.\n",
+    "timestamp": 1756096722306,
+    "title": "From Hackathon to YC",
+    "urlHash": "7b112ae064355c937d21e80e9193f358"
+  },
+  "55d56d8185a4370fffcc29cc9e984dd6": {
+    "summary": "The article discusses the concept of busy beaver numbers, which are extremely large numbers that represent the maximum number of steps a Turing machine can take before halting. These numbers are so vast that they surpass the limits of traditional mathematics, challenging mathematicians to explore new methods and techniques to understand them. The article delves into the fascination and complexity of busy beaver numbers, highlighting the ongoing research and discoveries in this field.",
+    "timestamp": 1756096723294,
+    "title": "Busy beaver hunters reach numbers that overwhelm ordinary math",
+    "urlHash": "55d56d8185a4370fffcc29cc9e984dd6"
+  },
+  "eca74f60be524afdd94e1fa08ef673c1": {
+    "summary": "The article discusses how the website ghrc.io is flagged as malicious by security tools due to suspicious behavior. The author warns readers to be cautious when interacting with this website as it may pose a security risk.",
+    "timestamp": 1756096726445,
+    "title": "Ghrc.io appears to be malicious",
+    "urlHash": "eca74f60be524afdd94e1fa08ef673c1"
+  },
+  "35827d6083a08b9cb3349cc23b1f461d": {
+    "summary": "\"Burner Phone 101\" provides a comprehensive guide on how to use burner phones effectively for privacy and security. The article covers topics such as how burner phones work, why they are useful, and tips for buying and using them discreetly. It emphasizes the importance of protecting personal information and maintaining anonymity in a digital age.",
+    "timestamp": 1756096726615,
+    "title": "Burner Phone 101",
+    "urlHash": "35827d6083a08b9cb3349cc23b1f461d"
+  },
+  "25ec184cef5946025b960b4b48447ebd": {
+    "summary": "The Unix-Haters Handbook is a collection of essays written by individuals who criticize the Unix operating system for its perceived flaws and shortcomings. The authors argue that Unix is overly complex, lacks user-friendly features, and is poorly designed. Despite being published in 1994, many of the criticisms and complaints outlined in the handbook are still relevant today.",
+    "timestamp": 1756096836397,
+    "title": "The Unix-Haters Handbook (1994) [pdf]",
+    "urlHash": "25ec184cef5946025b960b4b48447ebd"
+  },
+  "f6ba357bf695ed0b1946f114202276ea": {
+    "summary": "Y Combinator, a prominent startup accelerator, has filed a legal brief in support of Epic Games' lawsuit against Apple, arguing that the high fees charged by app stores stifle innovation and harm small developers. The brief highlights the need for fair competition and lower barriers to entry in the app marketplace to allow startups to thrive.",
+    "timestamp": 1756096836627,
+    "title": "Y Combinator files brief supporting Epic Games, says store fees stifle startups",
+    "urlHash": "f6ba357bf695ed0b1946f114202276ea"
+  },
+  "355a7c4e279baf63dc67038a50bfce39": {
+    "summary": "The article discusses a German contest that offers people the chance to live in a depopulated Soviet-era city, which has garnered international attention and interest. This initiative aims to revitalize the city and boost its economy by attracting new residents, showcasing the potential for creative solutions to address issues of depopulation and urban decay.",
+    "timestamp": 1756096838726,
+    "title": "German contest to live in depopulated Soviet-era city proves global hit",
+    "urlHash": "355a7c4e279baf63dc67038a50bfce39"
+  },
+  "c4570a75afc12bd5a2bd415df467b439": {
+    "summary": "The article discusses the differences between two versions of Parquet, a columnar storage format optimized for analytics workloads in big data systems like Apache Hadoop. It explains the evolution of Parquet from version 1 to version 2, highlighting improvements in performance, compression, and compatibility with other data processing frameworks. The author emphasizes the importance of understanding these differences to make informed decisions when choosing which version of Parquet to use in data processing pipelines.",
+    "timestamp": 1756096862462,
+    "title": "The two versions of Parquet",
+    "urlHash": "c4570a75afc12bd5a2bd415df467b439"
   }
 }
