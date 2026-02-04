@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useStoryAssets } from '@/hooks/useStoryAssets';
 import FallbackImage from '@/components/FallbackImage';
 
-type Category = 'hacker-news' | 'reddit' | 'tech-news';
+type Category = 'hacker-news' | 'reddit';
 
 // Helper function to ensure unique IDs
 function ensureUniqueIds(stories: Story[]): Story[] {
@@ -101,20 +101,22 @@ function StoryItemGrid({ story }: { story: Story }) {
           {story.title}
         </h3>
         <div className="flex items-center justify-between mb-3">
-          <p className="text-sm text-text-secondary">
-            by {story.by}
-            {story.subreddit && (
-              <span className="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-xs block mt-1">
-                r/{story.subreddit}
-              </span>
-            )}
-            {story.source && !story.subreddit && (
-              <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded text-xs block mt-1">
-                {story.source === 'github' ? 'GitHub' :
-                 story.source === 'devto' ? 'Dev.to' : story.source}
-              </span>
-            )}
-          </p>
+          <div className="text-sm text-text-secondary">
+            <div>by {story.by}</div>
+            <div className="mt-1 flex flex-wrap gap-2">
+              {story.subreddit && (
+                <span className="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-xs">
+                  r/{story.subreddit}
+                </span>
+              )}
+              {story.source && !story.subreddit && (
+                <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded text-xs">
+                  {story.source === 'github' ? 'GitHub' :
+                   story.source === 'devto' ? 'Dev.to' : story.source}
+                </span>
+              )}
+            </div>
+          </div>
           <div className="flex flex-col items-end gap-1">
             {story.descendants && story.descendants > 0 && (
               <span className="text-xs text-text-secondary">
@@ -176,20 +178,22 @@ function StoryItem({ story }: { story: Story }) {
             {story.title}
           </h3>
           <div className="flex items-center justify-between mb-2">
-            <p className="text-sm text-text-secondary">
-              by {story.by}
-              {story.subreddit && (
-                <span className="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-xs">
-                  r/{story.subreddit}
-                </span>
-              )}
-              {story.source && !story.subreddit && (
-                <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded text-xs ml-2">
-                  {story.source === 'github' ? 'GitHub' :
-                   story.source === 'devto' ? 'Dev.to' : story.source}
-                </span>
-              )}
-            </p>
+            <div className="text-sm text-text-secondary">
+              <div>by {story.by}</div>
+              <div className="mt-1 flex flex-wrap gap-2">
+                {story.subreddit && (
+                  <span className="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-xs">
+                    r/{story.subreddit}
+                  </span>
+                )}
+                {story.source && !story.subreddit && (
+                  <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded text-xs">
+                    {story.source === 'github' ? 'GitHub' :
+                     story.source === 'devto' ? 'Dev.to' : story.source}
+                  </span>
+                )}
+              </div>
+            </div>
             <div className="flex items-center gap-2">
               {story.descendants && story.descendants > 0 && (
                 <span className="text-xs text-text-secondary">
@@ -269,7 +273,7 @@ function HomeInner() {
   const [category, setCategory] = useState<Category>(
     (searchParams.get('category') as Category) || 'hacker-news'
   );
-  const [availableSources, setAvailableSources] = useState<string[]>(['hacker-news', 'reddit', 'tech-news']);
+  const [availableSources, setAvailableSources] = useState<string[]>(['hacker-news', 'reddit']);
   
   const ITEMS_PER_PAGE = 12;
 
@@ -331,25 +335,22 @@ function HomeInner() {
         const ids = await getTopStories();
         setStoryIds(ids);
       } else if (category === 'reddit') {
-        // Fetch initial Reddit data
+        // Fetch Reddit data (single request to avoid double-calls)
         try {
-          const response = await fetch('/api/reddit?limit=50');
-          const data = await response.json();
+          const { fetchRedditStories } = await import('@/utils/redditApi');
+          const redditStories = await fetchRedditStories(50);
           
           // Check if Reddit is available
-          if (data.available === false || data.posts.length === 0) {
-            console.warn('Reddit is not available, switching to tech-news');
+          if (redditStories.length === 0) {
+            console.warn('Reddit is not available');
             setAvailableSources(prev => prev.filter(s => s !== 'reddit'));
-            setCategory('tech-news');
+            setCategory('hacker-news');
             return;
           }
           
           // Reddit is available, ensure it's in available sources
           setAvailableSources(prev => [...new Set([...prev, 'reddit'])]);
-          
-          const { fetchRedditStories } = await import('@/utils/redditApi');
-          const redditStories = await fetchRedditStories(50);
-          
+
           // Ensure absolutely unique IDs for Reddit stories
           const uniqueStories = ensureUniqueIds(redditStories);
           
@@ -359,63 +360,11 @@ function HomeInner() {
           console.error('Failed to fetch Reddit stories:', error);
           setAvailableSources(prev => prev.filter(s => s !== 'reddit'));
           setStories([]); // Set empty array on error
-          // Switch to tech-news if Reddit fails
-          setCategory('tech-news');
+          // Switch to hacker-news if Reddit fails
+          setCategory('hacker-news');
         }
-      } else if (category === 'tech-news') {
-        // Fetch from alternative tech sources (GitHub, Dev.to, Lobste.rs)
-        try {
-          const response = await fetch('/api/aggregate?sources=github,devto&include_reddit=false&limit=50');
-          const data = await response.json();
-          
-          // Update available sources based on response
-          const newAvailableSources = ['hacker-news', 'tech-news'];
-          if (data.sources && Object.keys(data.sources).length > 0) {
-            const workingSources = Object.keys(data.sources).filter(source => 
-              data.sources[source].available !== false && data.sources[source].success
-            );
-            if (workingSources.length > 0) {
-              setAvailableSources(prev => [...new Set([...prev, ...newAvailableSources])]);
-            }
-          }
-          
-          if (data.posts && data.posts.length > 0) {
-            // Convert to our Story format
-            const techStories = data.posts.map((post: {
-              id: string | number;
-              title: string;
-              url?: string;
-              permalink?: string;
-              score?: number;
-              author?: string;
-              time?: number;
-              created_utc?: number;
-              num_comments?: number;
-              descendants?: number;
-              subreddit?: string;
-              source?: string;
-            }) => ({
-              id: typeof post.id === 'string' ? parseInt(post.id) || Math.floor(Math.random() * 1000000) : post.id,
-              title: post.title,
-              url: post.url || post.permalink,
-              score: post.score || 1,
-              by: post.author || 'unknown',
-              time: post.created_utc || Math.floor(Date.now() / 1000),
-              descendants: post.num_comments || 0,
-              subreddit: post.subreddit,
-              source: post.source,
-            }));
-            
-            const uniqueStories = ensureUniqueIds(techStories);
-            setStories(uniqueStories);
-          } else {
-            setStories([]);
-          }
-          setStoryIds([]); // Tech news doesn't use storyIds
-        } catch (error) {
-          console.error('Failed to fetch tech news:', error);
-          setStories([]);
-        }
+
+      
       }
       
       setIsLoading(false);
@@ -455,8 +404,7 @@ function HomeInner() {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">
             {category === 'hacker-news' ? 'Hacker News' : 
-             category === 'reddit' ? 'Reddit' :
-             category === 'tech-news' ? 'Tech News' : 'News'}
+             category === 'reddit' ? 'Reddit' : 'News'}
           </h1>
           
           {/* View Toggle - only render after view mode is loaded */}
@@ -497,22 +445,7 @@ function HomeInner() {
           <div className="flex flex-wrap gap-4 items-center">
             {/* Category Selector */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-2 w-full">
-              <button
-                onClick={() => {
-                  const params = new URLSearchParams(searchParams.toString());
-                  params.set('category', 'tech-news');
-                  params.set('view', viewMode);
-                  router.push(`/?${params.toString()}`);
-                  setCategory('tech-news');
-                }}
-                className={`px-4 py-2 rounded-md font-medium transition-colors ${
-                  category === 'tech-news'
-                    ? 'bg-link-color text-white outline outline-2 outline-link-color'
-                    : 'bg-card-background text-foreground hover:bg-gray-100 dark:hover:bg-gray-800'
-                }`}
-              >
-                💻 Tech News
-              </button>
+
               <button
                 onClick={() => {
                   const params = new URLSearchParams(searchParams.toString());
@@ -625,12 +558,7 @@ function HomeInner() {
           </div>
         )}
         
-        {/* Tech News Info */}
-        {category === 'tech-news' && displayedStories.length > 0 && (
-          <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
-            📚 Aggregated from GitHub Trending and Dev.to - Showing {displayedStories.length} of {stories.length} posts
-          </div>
-        )}
+
       </div>
     </div>
   );
