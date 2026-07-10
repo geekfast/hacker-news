@@ -65,8 +65,7 @@ function SkeletonLoader() {
 
 function StoryItemGrid({ story }: { story: Story }) {
   const { imageUrl, summary, isLoadingImage, isLoadingSummary } = useStoryAssets({
-    title: story.title,
-    url: story.url,
+    story,
   });
 
   console.log('🖼️ StoryItemGrid - story:', story.title, 'imageUrl:', imageUrl, 'isLoadingImage:', isLoadingImage);
@@ -147,8 +146,7 @@ function StoryItemGrid({ story }: { story: Story }) {
 
 function StoryItem({ story }: { story: Story }) {
   const { imageUrl, summary, isLoadingImage, isLoadingSummary } = useStoryAssets({
-    title: story.title,
-    url: story.url,
+    story,
   });
 
   if (isLoadingImage) {

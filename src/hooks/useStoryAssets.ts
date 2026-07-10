@@ -1,8 +1,20 @@
 import { useState, useEffect } from 'react';
 
-interface UseStoryAssetsProps {
+interface Story {
+  id: number;
   title: string;
   url?: string;
+  score: number;
+  by: string;
+  time: number;
+  descendants?: number;
+  subreddit?: string;
+  thumbnail?: string;
+  source?: string;
+}
+
+interface UseStoryAssetsProps {
+  story: Story;
 }
 
 interface UseStoryAssetsReturn {
@@ -29,7 +41,7 @@ function extractSubject(title: string): string {
   return title;
 }
 
-export function useStoryAssets({ title, url }: UseStoryAssetsProps): UseStoryAssetsReturn {
+export function useStoryAssets({ story }: UseStoryAssetsProps): UseStoryAssetsReturn {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [summary, setSummary] = useState<string | null>(null);
   const [isLoadingImage, setIsLoadingImage] = useState(true);
@@ -39,8 +51,18 @@ export function useStoryAssets({ title, url }: UseStoryAssetsProps): UseStoryAss
     let isMounted = true;
     
     async function fetchImage() {
+      // If a valid thumbnail URL is already provided (e.g., from Reddit scraping), use it directly.
+      if (story.thumbnail && story.thumbnail.startsWith('http')) {
+        if (isMounted) {
+          setImageUrl(story.thumbnail);
+          setIsLoadingImage(false);
+        }
+        return; // Skip fetching from Unsplash
+      }
+
+      // Fallback to fetching from our image search API for other sources (like Hacker News)
       try {
-        const subject = extractSubject(title);
+        const subject = extractSubject(story.title);
         const response = await fetch(`/api/search-image?query=${encodeURIComponent(subject)}`);
         
         if (!response.ok) {
@@ -71,37 +93,44 @@ export function useStoryAssets({ title, url }: UseStoryAssetsProps): UseStoryAss
     return () => {
       isMounted = false;
     };
-  }, [title]);
+  }, [story.title, story.thumbnail]);
 
   useEffect(() => {
+    let isMounted = true;
     async function fetchSummary() {
-      if (!url) {
-        setIsLoadingSummary(false);
+      if (!story.url) {
+        if(isMounted) setIsLoadingSummary(false);
         return;
       }
       
       try {
-        const response = await fetch(`/api/summarize?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`);
+        const response = await fetch(`/api/summarize?url=${encodeURIComponent(story.url)}&title=${encodeURIComponent(story.title)}`);
         
         if (!response.ok) {
           console.warn('Summary fetch failed:', response.status);
-          setIsLoadingSummary(false);
+          if(isMounted) setIsLoadingSummary(false);
           return;
         }
         
         const data = await response.json();
-        if (data.summary) {
+        if (isMounted && data.summary) {
           setSummary(data.summary);
         }
       } catch (error) {
         console.error('Error fetching summary:', error);
       } finally {
-        setIsLoadingSummary(false);
+        if (isMounted) {
+          setIsLoadingSummary(false);
+        }
       }
     }
     
     fetchSummary();
-  }, [url, title]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [story.url, story.title]);
 
   return {
     imageUrl,

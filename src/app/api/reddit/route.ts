@@ -1,4 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import * as cheerio from 'cheerio';
+
+export const revalidate = 0;
 
 // Ensure Node.js runtime (AbortSignal.timeout not available on Edge)
 export const runtime = 'nodejs';
@@ -82,6 +85,7 @@ async function getAccessToken(): Promise<string> {
   }
 
   const auth = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
+  const { signal } = getTimeoutSettings(); // Use shared timeout settings
   const response = await fetch('https://www.reddit.com/api/v1/access_token', {
     method: 'POST',
     headers: {
@@ -89,7 +93,8 @@ async function getAccessToken(): Promise<string> {
       'Content-Type': 'application/x-www-form-urlencoded',
       'User-Agent': process.env.REDDIT_USER_AGENT || 'HackerNewsClone/1.0'
     },
-    body: 'grant_type=client_credentials'
+    body: 'grant_type=client_credentials',
+    signal
   });
 
   if (!response.ok) {
@@ -137,6 +142,31 @@ async function fetchWithRetry(url: string, options: RequestInit, retries = 5): P
     }
   }
   throw new Error('Max retries reached');
+}
+
+async function getHighQualityImageUrl(url: string): Promise<string | null> {
+  try {
+    const response = await fetch(url, { signal: AbortSignal.timeout(5000) }); // 5-second timeout
+    if (!response.ok) return null;
+
+    const html = await response.text();
+    const $ = cheerio.load(html);
+
+    // Prioritize Open Graph image, then Twitter Card image
+    const ogImage = $('meta[property="og:image"]').attr('content');
+    if (ogImage) return ogImage;
+
+    const twitterImage = $('meta[name="twitter:image"]').attr('content');
+    if (twitterImage) return twitterImage;
+    
+    const imageSrc = $('link[rel="image_src"]').attr('href');
+    if (imageSrc) return imageSrc;
+
+    return null;
+  } catch (error) {
+    // console.error(`Failed to scrape ${url}:`, error);
+    return null;
+  }
 }
 
 async function fetchSubredditPosts(subreddit: string, limit: number = 3): Promise<RedditPost[]> {
@@ -242,30 +272,35 @@ async function fetchSubredditPosts(subreddit: string, limit: number = 3): Promis
       return [];
     }
 
-    const posts = data.data.children
+    const postsPromises = data.data.children
       .map((child: { data: RedditApiPost }) => child.data)
       .filter((post: RedditApiPost) => 
         !post.stickied && 
         !post.pinned && 
-        !post.is_self && // Filter out self posts
-        post.url // Ensure post has a URL
+        !post.is_self &&
+        post.url && post.url.startsWith('http')
       )
       .slice(0, limit)
-      .map((post: RedditApiPost): RedditPost => ({
-        id: post.id,
-        title: post.title,
-        url: post.url,
-        score: post.score,
-        author: post.author,
-        created: post.created_utc,
-        comments: post.num_comments,
-        subreddit: post.subreddit,
-        thumbnail: post.thumbnail && post.thumbnail.startsWith('http') ? post.thumbnail : undefined,
-        selftext: post.selftext,
-        is_self: post.is_self
-      }));
+      .map(async (post: RedditApiPost): Promise<RedditPost> => {
+        const highQualityImage = await getHighQualityImageUrl(post.url);
+        return {
+          id: post.id,
+          title: post.title,
+          url: post.url,
+          score: post.score,
+          author: post.author,
+          created: post.created_utc,
+          comments: post.num_comments,
+          subreddit: post.subreddit,
+          thumbnail: highQualityImage || (post.thumbnail && post.thumbnail.startsWith('http') ? post.thumbnail : undefined),
+          selftext: post.selftext,
+          is_self: post.is_self
+        };
+      });
 
-    console.log(`✅ Successfully fetched ${posts.length} posts from r/${subreddit}`);
+    const posts = await Promise.all(postsPromises);
+
+    console.log(`✅ Successfully fetched and processed ${posts.length} posts from r/${subreddit}`);
     return posts;
 
   } catch (error: unknown) {

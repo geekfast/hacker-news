@@ -730,5 +730,59 @@
     "timestamp": 1756117563679,
     "title": "The SD Association has an official SD card format utility [Win/OS X/Linux]",
     "urlHash": "c9dba86c31cbae17497a7988d2e61502"
+  },
+  "92dfcd6cd8e3f5e2b2302f643f149756": {
+    "summary": "The study tested the susceptibility of agentic AI browsers—AI systems designed to autonomously browse the web—to phishing and scam websites.  Despite their purported intelligence, these AI browsers repeatedly fell victim to deceptive online tactics, highlighting the vulnerability of autonomous systems to sophisticated scams and the need for improved security measures.  This demonstrates a significant limitation in current AI browser technology and the potential for malicious exploitation.\n",
+    "timestamp": 1756119570360,
+    "title": "We Put Agentic AI Browsers to the Test – They Clicked, They Paid, They Failed",
+    "urlHash": "92dfcd6cd8e3f5e2b2302f643f149756"
+  },
+  "8c24f4de234a526500a1e3e7ed73f5cb": {
+    "summary": "The article discusses how former President Trump halted the construction of a nearly complete wind farm off the coast of Rhode Island in his final days in office. This decision came after concerns were raised about the wind farm's impact on commercial fishing and national security. The move was criticized by environmentalists and supporters of renewable energy.",
+    "timestamp": 1756119693820,
+    "title": "Trump halts construction on nearly complete wind farm off Rhode Island",
+    "urlHash": "8c24f4de234a526500a1e3e7ed73f5cb"
+  },
+  "ea2a82bfad06d7b0526d82489ee84348": {
+    "summary": "YouTube has been secretly using AI to automatically edit videos uploaded to its platform without users' permission. This technology has the potential to manipulate reality by altering facial expressions, removing objects, and even changing the tone of voice in videos. The use of this AI editing tool raises concerns about the implications for misinformation, deepfakes, and the authenticity of content on the platform.",
+    "timestamp": 1756119694418,
+    "title": "YouTube secretly used AI to edit people's videos. The results could bend reality",
+    "urlHash": "ea2a82bfad06d7b0526d82489ee84348"
+  },
+  "94c3eb07ac4b47ba814d02ac18b77742": {
+    "summary": "A Houston-based developer from Eaton Corp. was sentenced to 4 years in prison for activating a network \"kill switch\" after being fired. The man sought revenge by disrupting the company's operations, causing significant financial losses and damage to its reputation. This incident serves as a reminder of the potential consequences of malicious actions in the workplace.",
+    "timestamp": 1756119694947,
+    "title": "Houston-based (Eaton Corp.) developer gets 4 years for activating network “kill switch” to avenge his firing",
+    "urlHash": "94c3eb07ac4b47ba814d02ac18b77742"
+  },
+  "69ad0797917a4be3ac29c3bdfcfdcc15": {
+    "summary": "Coinbase CEO Brian Armstrong revealed that he fired employees who were not utilizing AI tools in their work. Armstrong emphasized the importance of AI technology in the company's operations and decision-making processes. This move highlights the growing significance of AI in the tech industry and the need for employees to adapt to new technologies to remain competitive.",
+    "timestamp": 1756119695106,
+    "title": "Coinbase CEO Revealed He Fired Engineers Who Didn't Use AI Tools",
+    "urlHash": "69ad0797917a4be3ac29c3bdfcfdcc15"
+  },
+  "76fb7e18610d8625a8f1609d3571b0b7": {
+    "summary": "President Trump has appointed Airbnb co-founder Nathan Blecharczyk to lead the revamp of public government websites following Elon Musk's exit. Blecharczyk's experience in technology and user experience will be utilized to improve the functionality and accessibility of government websites for the American public. This decision comes after Musk stepped down from his role in advising the Trump administration on improving federal websites.",
+    "timestamp": 1756119695434,
+    "title": "Trump appoints Airbnb co-founder to revamp public (government) websites",
+    "urlHash": "76fb7e18610d8625a8f1609d3571b0b7"
+  },
+  "0c06d7fb63316b40f7c8fd4fb9962018": {
+    "summary": "The article discusses how top artificial intelligence (AI) models in the medical field can fail when presented with slightly altered medical questions. Researchers found that even small changes in phrasing or wording of questions can lead to significant errors in AI-generated responses. This highlights the importance of refining AI systems to better handle variations in language and context in order to improve their accuracy and reliability in medical settings.",
+    "timestamp": 1756119696448,
+    "title": "Top AI models fail spectacularly when faced with slightly altered medical questions",
+    "urlHash": "0c06d7fb63316b40f7c8fd4fb9962018"
+  },
+  "050103fd3efe60393aee78b28ce77b6e": {
+    "summary": "The article discusses the importance of using Virtual Routing and Forwarding (VRF) to manage embedded networks efficiently instead of resorting to unconventional subnet configurations. VRFs allow for better network isolation, security, and scalability, making it easier to manage and troubleshoot complex embedded systems. By utilizing VRFs, organizations can streamline their network architecture and ensure optimal performance for their embedded devices.",
+    "timestamp": 1756119696487,
+    "title": "Don't pick weird subnets for embedded networks, use VRFs",
+    "urlHash": "050103fd3efe60393aee78b28ce77b6e"
+  },
+  "3ad69db28edceb3ff1a302be75671911": {
+    "summary": "The article argues that Scrum has failed as an experiment due to its lack of clear definition and failure to deliver on its promises of increased productivity and efficiency. It suggests that organizations have become disillusioned with Scrum due to its rigid framework and inability to adapt to changing circumstances, leading to its decline in popularity as a project management methodology.",
+    "timestamp": 1756120004645,
+    "title": "Why Scrum Is a Failed Experiment",
+    "urlHash": "3ad69db28edceb3ff1a302be75671911"
   }
 }

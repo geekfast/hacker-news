@@ -9,7 +9,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 - 📋 **Dual View Modes**: Switch between List view (detailed) and Grid view (visual) with preference persistence
 - 🎨 **Dark Theme**: Beautiful dark theme optimized for reading
 - ⚡ **Performance**: Optimized with caching and skeleton loading states
-- 🎨 **AI-Enhanced Images**: Gemini-powered contextual image generation with Unsplash fallback
+- 🎨 **Smart Images**: Unsplash-powered image search with local caching
 
 ## AI Summarization System
 
@@ -55,11 +55,6 @@ REDDIT_FALLBACK_ENABLED=true  # Enable high-quality mock data when Reddit is ina
 - **Cascade AI Strategy**: Gemini → OpenAI → Template fallback
 - Smart content extraction with intelligent retry logic
 - Comprehensive error handling and caching
-
-### `/api/generate-image`
-- Generate contextual image descriptions using Gemini AI
-- Enhanced search queries for more relevant visual content
-- Seamless fallback to traditional image search
 
 ### `/api/search-image`
 - Search and cache images based on news story titles
@@ -127,8 +122,6 @@ npm run cache:clear   # Clear all cached images
 - ✅ **Faster Loading**: Serve images directly from local storage
 - ✅ **Cost Effective**: Reduce Unsplash API quota usage
 - ✅ **Offline Support**: Images available even when API is down
-
-For detailed information, see [CACHE_SYSTEM.md](CACHE_SYSTEM.md)
 
 ## Learn More
 
