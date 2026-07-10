@@ -1,39 +1,11 @@
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
-import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useStoryAssets } from '@/hooks/useStoryAssets';
 import FallbackImage from '@/components/FallbackImage';
 
 type Category = 'hacker-news' | 'reddit' | 'tech-news';
-
-// Helper function to ensure unique IDs
-function ensureUniqueIds(stories: Story[]): Story[] {
-  const seenIds = new Set<number>();
-  return stories.map((story, index) => {
-    let uniqueId = story.id;
-    
-    // If ID already exists, create a deterministic new one based on title+url hash
-    if (seenIds.has(uniqueId)) {
-      // Simple hash function for consistent ID generation
-      const createHash = (str: string) => {
-        let hash = 0;
-        for (let i = 0; i < str.length; i++) {
-          const char = str.charCodeAt(i);
-          hash = ((hash << 5) - hash) + char;
-          hash = hash | 0; // Convert to 32-bit signed integer
-        }
-        return Math.abs(hash);
-      };
-      
-      uniqueId = createHash(story.title + (story.url || '') + index.toString());
-    }
-    
-    seenIds.add(uniqueId);
-    return { ...story, id: uniqueId };
-  });
-}
 
 interface Story {
   id: number;
@@ -43,176 +15,181 @@ interface Story {
   by: string;
   time: number;
   descendants?: number;
-  subreddit?: string; // For Reddit: subreddit name
-  thumbnail?: string; // For Reddit thumbnails
-  source?: string; // For identifying data source (github, devto, etc.)
+  subreddit?: string;
+  thumbnail?: string;
+  source?: string;
 }
 
-function SkeletonLoader() {
+function ensureUniqueIds(stories: Story[]): Story[] {
+  const seenIds = new Set<number>();
+  return stories.map((story, index) => {
+    let uniqueId = story.id;
+    if (seenIds.has(uniqueId)) {
+      const createHash = (str: string) => {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+          const char = str.charCodeAt(i);
+          hash = ((hash << 5) - hash) + char;
+          hash = hash | 0;
+        }
+        return Math.abs(hash);
+      };
+      uniqueId = createHash(story.title + (story.url || '') + index.toString());
+    }
+    seenIds.add(uniqueId);
+    return { ...story, id: uniqueId };
+  });
+}
+
+function timeAgo(unixTime: number): string {
+  const seconds = Math.floor(Date.now() / 1000 - unixTime);
+  if (seconds < 60) return 'just now';
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days}d ago`;
+  const months = Math.floor(days / 30);
+  return `${months}mo ago`;
+}
+
+function SourceBadge({ story }: { story: Story }) {
+  if (story.subreddit) {
+    return (
+      <span className="text-[11px] text-text-secondary">
+        r/{story.subreddit}
+      </span>
+    );
+  }
+  if (story.source) {
+    const label = story.source === 'github' ? 'GitHub' :
+                  story.source === 'devto' ? 'Dev.to' : story.source;
+    return (
+      <span className="text-[11px] text-text-secondary">
+        {label}
+      </span>
+    );
+  }
+  return null;
+}
+
+function GridSkeleton() {
   return (
-    <div className="animate-pulse flex items-start space-x-4 p-4 mb-4 border rounded-lg">
-      <div className="w-24 h-24 bg-gray-300 rounded-md"></div>
-      <div className="flex-1 space-y-4 py-1">
-        <div className="h-4 bg-gray-300 rounded w-3/4"></div>
-        <div className="space-y-2">
-          <div className="h-4 bg-gray-300 rounded"></div>
-          <div className="h-4 bg-gray-300 rounded w-5/6"></div>
-        </div>
+    <div className="bg-card-background border border-card-border rounded-xl overflow-hidden animate-pulse">
+      <div className="h-44 bg-muted" />
+      <div className="p-4 space-y-3">
+        <div className="h-4 bg-muted rounded w-3/4" />
+        <div className="h-3 bg-muted rounded w-1/2" />
+        <div className="h-3 bg-muted rounded w-full" />
+        <div className="h-3 bg-muted rounded w-2/3" />
+      </div>
+    </div>
+  );
+}
+
+function ListSkeleton() {
+  return (
+    <div className="bg-card-background border border-card-border rounded-lg p-3 flex gap-3 animate-pulse">
+      <div className="w-16 h-16 bg-muted rounded-lg flex-shrink-0" />
+      <div className="flex-1 space-y-2 py-0.5">
+        <div className="h-4 bg-muted rounded w-3/4" />
+        <div className="h-3 bg-muted rounded w-1/2" />
+        <div className="h-3 bg-muted rounded w-2/3" />
       </div>
     </div>
   );
 }
 
 function StoryItemGrid({ story }: { story: Story }) {
-  const { imageUrl, summary, isLoadingImage, isLoadingSummary } = useStoryAssets({
-    story,
-  });
-
-  console.log('🖼️ StoryItemGrid - story:', story.title, 'imageUrl:', imageUrl, 'isLoadingImage:', isLoadingImage);
-
-  if (isLoadingImage) {
-    return (
-      <div className="bg-card-background border border-card-border rounded-lg p-4 animate-pulse">
-        <div className="w-full h-48 bg-gray-300 rounded-md mb-4"></div>
-        <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
-        <div className="h-3 bg-gray-300 rounded w-1/2"></div>
-      </div>
-    );
-  }
+  const { imageUrl, summary, isLoadingSummary } = useStoryAssets({ story });
 
   return (
-    <a 
-      href={story.url} 
-      target="_blank" 
-      rel="noopener noreferrer" 
-      className="block bg-card-background border border-card-border rounded-lg p-4 flex flex-col h-full hover:border-link-color transition-colors"
+    <a
+      href={story.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group block bg-card-background border border-card-border rounded-xl overflow-hidden hover:border-link/40 transition-all duration-200"
     >
-      <FallbackImage
-        src={imageUrl || ''}
-        alt={story.title}
-        width={400}
-        height={192}
-        className="w-full h-48 object-cover rounded-md mb-4"
-        fallbackType="grid"
-      />
-      <div className="flex-1 flex flex-col">
-        <h3 className="text-link-color text-lg font-semibold mb-2 line-clamp-2">
+      <div className="h-44 overflow-hidden">
+        <FallbackImage
+          src={imageUrl || ''}
+          alt={story.title}
+          width={400}
+          height={176}
+          className="w-full h-44 object-cover group-hover:scale-[1.02] transition-transform duration-300"
+          fallbackType="grid"
+        />
+      </div>
+      <div className="p-4">
+        <h3 className="text-[15px] font-semibold leading-snug line-clamp-2 text-foreground mb-2">
           {story.title}
         </h3>
-        <div className="flex items-center justify-between mb-3">
-          <p className="text-sm text-text-secondary">
-            by {story.by}
-            {story.subreddit && (
-              <span className="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-xs block mt-1">
-                r/{story.subreddit}
-              </span>
-            )}
-            {story.source && !story.subreddit && (
-              <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded text-xs block mt-1">
-                {story.source === 'github' ? 'GitHub' :
-                 story.source === 'devto' ? 'Dev.to' : story.source}
-              </span>
-            )}
-          </p>
-          <div className="flex flex-col items-end gap-1">
-            {story.descendants && story.descendants > 0 && (
-              <span className="text-xs text-text-secondary">
-                {story.descendants} comments
-              </span>
-            )}
-            <div className="bg-link-color text-white px-2 py-1 rounded-full text-xs font-medium">
-              {story.score} pts
-            </div>
+        <div className="flex items-center gap-1.5 text-xs text-text-secondary mb-2">
+          <SourceBadge story={story} />
+          {story.subreddit || story.source ? (
+            <span className="text-text-secondary/40">·</span>
+          ) : null}
+          <span>{story.by}</span>
+          <span className="text-text-secondary/40">·</span>
+          <span>{timeAgo(story.time)}</span>
+          <span className="text-text-secondary/40">·</span>
+          <span className="text-accent-green font-medium">{story.score}</span>
+        </div>
+        {isLoadingSummary ? (
+          <div className="space-y-1.5">
+            <div className="h-3 bg-muted rounded w-full" />
+            <div className="h-3 bg-muted rounded w-2/3" />
           </div>
-        </div>
-        
-        {/* Summary section - inline style */}
-        <div className="mt-auto">
-          {isLoadingSummary ? (
-            <div className="animate-pulse">
-              <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-full mb-2"></div>
-              <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-2/3"></div>
-            </div>
-          ) : summary ? (
-            <p className="text-sm text-text-secondary line-clamp-3">{summary}</p>
-          ) : (
-            <p className="text-sm text-gray-500 dark:text-gray-400 italic">No summary available</p>
-          )}
-        </div>
+        ) : summary ? (
+          <p className="text-[13px] text-text-secondary line-clamp-2">{summary}</p>
+        ) : null}
       </div>
     </a>
   );
 }
 
 function StoryItem({ story }: { story: Story }) {
-  const { imageUrl, summary, isLoadingImage, isLoadingSummary } = useStoryAssets({
-    story,
-  });
-
-  if (isLoadingImage) {
-    return <SkeletonLoader />;
-  }
+  const { imageUrl, summary, isLoadingSummary } = useStoryAssets({ story });
 
   return (
     <li>
-      <a 
-        href={story.url} 
-        target="_blank" 
-        rel="noopener noreferrer" 
-        className="bg-card-background border border-card-border rounded-lg flex items-start space-x-4 p-4 mb-4 block hover:border-link-color transition-colors"
+      <a
+        href={story.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group block bg-card-background border border-card-border rounded-lg p-3 flex gap-3 hover:border-l-2 hover:border-l-link transition-all duration-200"
       >
-        <FallbackImage
-          src={imageUrl || ''}
-          alt={story.title}
-          width={96}
-          height={96}
-          className="w-24 h-24 object-cover rounded-md flex-shrink-0"
-          fallbackType="list"
-        />
-        <div className="flex-1">
-          <h3 className="text-link-color text-lg font-semibold">
+        <div className="w-16 h-16 flex-shrink-0 overflow-hidden rounded-lg">
+          <FallbackImage
+            src={imageUrl || ''}
+            alt={story.title}
+            width={64}
+            height={64}
+            className="w-16 h-16 object-cover"
+            fallbackType="list"
+          />
+        </div>
+        <div className="flex-1 min-w-0">
+          <h3 className="text-sm font-semibold line-clamp-1 text-foreground mb-1">
             {story.title}
           </h3>
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-sm text-text-secondary">
-              by {story.by}
-              {story.subreddit && (
-                <span className="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-xs">
-                  r/{story.subreddit}
-                </span>
-              )}
-              {story.source && !story.subreddit && (
-                <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded text-xs ml-2">
-                  {story.source === 'github' ? 'GitHub' :
-                   story.source === 'devto' ? 'Dev.to' : story.source}
-                </span>
-              )}
-            </p>
-            <div className="flex items-center gap-2">
-              {story.descendants && story.descendants > 0 && (
-                <span className="text-xs text-text-secondary">
-                  {story.descendants} comments
-                </span>
-              )}
-              <div className="bg-link-color text-white px-2 py-1 rounded-full text-xs font-medium">
-                {story.score} pts
-              </div>
-            </div>
+          <div className="flex items-center gap-1.5 text-xs text-text-secondary mb-1">
+            <SourceBadge story={story} />
+            {story.subreddit || story.source ? (
+              <span className="text-text-secondary/40">·</span>
+            ) : null}
+            <span>{story.by}</span>
+            <span className="text-text-secondary/40">·</span>
+            <span>{timeAgo(story.time)}</span>
+            <span className="text-text-secondary/40">·</span>
+            <span className="text-accent-green font-medium">{story.score}</span>
           </div>
-          
-          {/* Summary section - inline style */}
-          <div className="mt-2">
-            {isLoadingSummary ? (
-              <div className="animate-pulse">
-                <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-full mb-2"></div>
-                <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-3/4"></div>
-              </div>
-            ) : summary ? (
-              <p className="text-sm text-text-secondary">{summary}</p>
-            ) : (
-              <p className="text-sm text-gray-500 dark:text-gray-400 italic">No summary available</p>
-            )}
-          </div>
+          {isLoadingSummary ? (
+            <div className="h-3 bg-muted rounded w-2/3 mt-1" />
+          ) : summary ? (
+            <p className="text-xs text-text-secondary line-clamp-1">{summary}</p>
+          ) : null}
         </div>
       </a>
     </li>
@@ -222,9 +199,7 @@ function StoryItem({ story }: { story: Story }) {
 async function getTopStories(): Promise<number[]> {
   try {
     const response = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
-    if (!response.ok) {
-      throw new Error(`Failed to fetch top stories: ${response.status} ${response.statusText}`);
-    }
+    if (!response.ok) throw new Error(`Failed to fetch: ${response.status}`);
     return response.json();
   } catch (error) {
     console.error('Error fetching top stories:', error);
@@ -235,9 +210,7 @@ async function getTopStories(): Promise<number[]> {
 async function getStory(id: number): Promise<Story | null> {
   try {
     const response = await fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch story ${id}: ${response.status} ${response.statusText}`);
-    }
+    if (!response.ok) throw new Error(`Failed to fetch story ${id}: ${response.status}`);
     return response.json();
   } catch (error) {
     console.error(`Error fetching story ${id}:`, error);
@@ -268,10 +241,9 @@ function HomeInner() {
     (searchParams.get('category') as Category) || 'hacker-news'
   );
   const [availableSources, setAvailableSources] = useState<string[]>(['hacker-news', 'reddit', 'tech-news']);
-  
+
   const ITEMS_PER_PAGE = 12;
 
-  // Load view mode preference from URL or localStorage
   useEffect(() => {
     const urlViewMode = searchParams.get('view') as 'list' | 'grid';
     const savedViewMode = localStorage.getItem('viewMode') as 'list' | 'grid';
@@ -283,102 +255,84 @@ function HomeInner() {
     setIsViewModeLoaded(true);
   }, [searchParams]);
 
-  // Manage displayed stories with lazy loading
   useEffect(() => {
     if (stories.length > 0) {
-      const initialItems = stories.slice(0, ITEMS_PER_PAGE);
-      setDisplayedStories(initialItems);
+      setDisplayedStories(stories.slice(0, ITEMS_PER_PAGE));
       setPage(1);
     }
   }, [stories]);
 
-  // Load more stories function
   const loadMoreStories = () => {
     if (isLoadingMore) return;
-    
     setIsLoadingMore(true);
     const currentLength = displayedStories.length;
     const nextPageItems = stories.slice(currentLength, currentLength + ITEMS_PER_PAGE);
-    
     setTimeout(() => {
       setDisplayedStories(prev => [...prev, ...nextPageItems]);
       setIsLoadingMore(false);
-    }, 500); // Small delay to show loading state
+    }, 500);
   };
 
-  // Save view mode preference and update URL
   const handleViewModeChange = (mode: 'list' | 'grid') => {
     setViewMode(mode);
     localStorage.setItem('viewMode', mode);
     const params = new URLSearchParams(searchParams.toString());
     params.set('view', mode);
     params.set('category', category);
-    // Use replace to avoid polluting browser history
     router.replace(`/?${params.toString()}`);
   };
 
-  // Fetch data based on category
+  const handleCategoryChange = (cat: Category) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('category', cat);
+    params.set('view', viewMode);
+    router.push(`/?${params.toString()}`);
+    setCategory(cat);
+  };
+
   useEffect(() => {
     async function fetchData() {
       setIsLoading(true);
       setStories([]);
       setPage(1);
-      
+
       if (category === 'hacker-news') {
-        // Fetch Hacker News data
         const ids = await getTopStories();
         setStoryIds(ids);
       } else if (category === 'reddit') {
-        // Fetch initial Reddit data
         try {
           const response = await fetch('/api/reddit?limit=50');
           const data = await response.json();
-          
-          // Check if Reddit is available
           if (data.available === false || data.posts.length === 0) {
-            console.warn('Reddit is not available, switching to tech-news');
             setAvailableSources(prev => prev.filter(s => s !== 'reddit'));
             setCategory('tech-news');
             return;
           }
-          
-          // Reddit is available, ensure it's in available sources
           setAvailableSources(prev => [...new Set([...prev, 'reddit'])]);
-          
           const { fetchRedditStories } = await import('@/utils/redditApi');
           const redditStories = await fetchRedditStories(50);
-          
-          // Ensure absolutely unique IDs for Reddit stories
-          const uniqueStories = ensureUniqueIds(redditStories);
-          
-          setStories(uniqueStories);
-          setStoryIds([]); // Reddit doesn't use storyIds
+          setStories(ensureUniqueIds(redditStories));
+          setStoryIds([]);
         } catch (error) {
           console.error('Failed to fetch Reddit stories:', error);
           setAvailableSources(prev => prev.filter(s => s !== 'reddit'));
-          setStories([]); // Set empty array on error
-          // Switch to tech-news if Reddit fails
+          setStories([]);
           setCategory('tech-news');
         }
       } else if (category === 'tech-news') {
-        // Fetch from alternative tech sources (GitHub, Dev.to, Lobste.rs)
         try {
           const response = await fetch('/api/aggregate?sources=github,devto&include_reddit=false&limit=50');
           const data = await response.json();
-          
-          // Update available sources based on response
           const newAvailableSources = ['hacker-news', 'tech-news'];
           if (data.sources && Object.keys(data.sources).length > 0) {
-            const workingSources = Object.keys(data.sources).filter(source => 
+            const workingSources = Object.keys(data.sources).filter((source: string) =>
               data.sources[source].available !== false && data.sources[source].success
             );
             if (workingSources.length > 0) {
               setAvailableSources(prev => [...new Set([...prev, ...newAvailableSources])]);
             }
           }
-          
           if (data.posts && data.posts.length > 0) {
-            // Convert to our Story format
             const techStories = data.posts.map((post: {
               id: string | number;
               title: string;
@@ -403,22 +357,20 @@ function HomeInner() {
               subreddit: post.subreddit,
               source: post.source,
             }));
-            
-            const uniqueStories = ensureUniqueIds(techStories);
-            setStories(uniqueStories);
+            setStories(ensureUniqueIds(techStories));
           } else {
             setStories([]);
           }
-          setStoryIds([]); // Tech news doesn't use storyIds
+          setStoryIds([]);
         } catch (error) {
           console.error('Failed to fetch tech news:', error);
           setStories([]);
         }
       }
-      
+
       setIsLoading(false);
     }
-    
+
     fetchData();
   }, [category]);
 
@@ -427,14 +379,10 @@ function HomeInner() {
       if (category === 'hacker-news' && storyIds.length > 0) {
         setIsLoading(true);
         try {
-          // Fetch first 50 stories for lazy loading
           const idsToFetch = storyIds.slice(0, 50);
           const storyPromises = idsToFetch.map(id => getStory(id));
           const fetchedStories = await Promise.all(storyPromises);
-          
-          // Filter out null stories
-          const validStories = fetchedStories.filter((story): story is Story => story !== null);
-          setStories(validStories);
+          setStories(fetchedStories.filter((story): story is Story => story !== null));
         } catch (error) {
           console.error('Error fetching Hacker News stories:', error);
           setStories([]);
@@ -443,46 +391,61 @@ function HomeInner() {
         }
       }
     }
-    
     fetchHackerNewsStories();
   }, [storyIds, category]);
 
+  const categories: { key: Category; label: string }[] = [
+    { key: 'tech-news', label: 'Tech News' },
+    { key: 'hacker-news', label: 'Hacker News' },
+    ...(availableSources.includes('reddit') ? [{ key: 'reddit' as Category, label: 'Reddit' }] : []),
+  ];
+
   return (
-    <div className="bg-background text-foreground min-h-screen">
-      <div className="container mx-auto p-4">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">
-            {category === 'hacker-news' ? 'Hacker News' : 
-             category === 'reddit' ? 'Reddit' :
-             category === 'tech-news' ? 'Tech News' : 'News'}
-          </h1>
-          
-          {/* View Toggle - only render after view mode is loaded */}
+    <div className="min-h-screen bg-background text-foreground">
+      <div className="max-w-5xl mx-auto px-4">
+        {/* Category Tabs + View Toggle */}
+        <div className="flex items-center justify-between py-4 border-b border-card-border">
+          <nav className="flex gap-6">
+            {categories.map(cat => (
+              <button
+                key={cat.key}
+                onClick={() => handleCategoryChange(cat.key)}
+                className={`text-sm font-medium pb-1 transition-colors ${
+                  category === cat.key
+                    ? 'text-foreground border-b-2 border-link'
+                    : 'text-text-secondary hover:text-foreground'
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </nav>
+
           {isViewModeLoaded && (
-            <div className="flex gap-2">
+            <div className="flex bg-muted rounded-lg p-0.5 gap-0.5">
               <button
                 onClick={() => handleViewModeChange('list')}
-                className={`p-2 rounded-md transition-colors ${
+                className={`p-1.5 rounded-md transition-all duration-200 ${
                   viewMode === 'list'
-                    ? 'outline outline-2 outline-link-color text-link-color bg-transparent'
-                    : 'bg-card-background text-foreground hover:bg-gray-100 dark:hover:bg-gray-800'
+                    ? 'bg-card-background shadow-sm text-foreground'
+                    : 'text-text-secondary hover:text-foreground'
                 }`}
                 title="List View"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
                 </svg>
               </button>
               <button
                 onClick={() => handleViewModeChange('grid')}
-                className={`p-2 rounded-md transition-colors ${
+                className={`p-1.5 rounded-md transition-all duration-200 ${
                   viewMode === 'grid'
-                    ? 'outline outline-2 outline-link-color text-link-color bg-transparent'
-                    : 'bg-card-background text-foreground hover:bg-gray-100 dark:hover:bg-gray-800'
+                    ? 'bg-card-background shadow-sm text-foreground'
+                    : 'text-text-secondary hover:text-foreground'
                 }`}
                 title="Grid View"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                 </svg>
               </button>
@@ -490,143 +453,57 @@ function HomeInner() {
           )}
         </div>
 
-        {/* Category Navigation */}
-        <div className="mb-6">
-          <div className="flex flex-wrap gap-4 items-center">
-            {/* Category Selector */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 w-full">
-              <button
-                onClick={() => {
-                  const params = new URLSearchParams(searchParams.toString());
-                  params.set('category', 'tech-news');
-                  params.set('view', viewMode);
-                  router.push(`/?${params.toString()}`);
-                  setCategory('tech-news');
-                }}
-                className={`px-4 py-2 rounded-md font-medium transition-colors ${
-                  category === 'tech-news'
-                    ? 'bg-link-color text-white outline outline-2 outline-link-color'
-                    : 'bg-card-background text-foreground hover:bg-gray-100 dark:hover:bg-gray-800'
-                }`}
-              >
-                💻 Tech News
-              </button>
-              <button
-                onClick={() => {
-                  const params = new URLSearchParams(searchParams.toString());
-                  params.set('category', 'hacker-news');
-                  params.set('view', viewMode);
-                  router.push(`/?${params.toString()}`);
-                  setCategory('hacker-news');
-                }}
-                className={`px-4 py-2 rounded-md font-medium transition-colors ${
-                  category === 'hacker-news'
-                    ? 'bg-link-color text-white outline outline-2 outline-link-color'
-                    : 'bg-card-background text-foreground hover:bg-gray-100 dark:hover:bg-gray-800'
-                }`}
-              >
-                🔥 Hacker News
-              </button>
-              {availableSources.includes('reddit') && (
-                <button
-                  onClick={() => {
-                    const params = new URLSearchParams(searchParams.toString());
-                    params.set('category', 'reddit');
-                    params.set('view', viewMode);
-                    router.push(`/?${params.toString()}`);
-                    setCategory('reddit');
-                  }}
-                  className={`px-4 py-2 rounded-md font-medium transition-colors ${
-                    category === 'reddit'
-                      ? 'bg-link-color text-white outline outline-2 outline-link-color'
-                      : 'bg-card-background text-foreground hover:bg-gray-100 dark:hover:bg-gray-800'
-                  }`}
-                >
-                  🚀 Reddit
-                </button>
-              )}
+        {/* Content */}
+        <div className="py-6">
+          {isLoading ? (
+            viewMode === 'list' ? (
+              <div className="space-y-3">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <ListSkeleton key={i} />
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <GridSkeleton key={i} />
+                ))}
+              </div>
+            )
+          ) : viewMode === 'list' ? (
+            <div className="space-y-3">
+              {displayedStories.map((story, index) => (
+                <StoryItem key={`${story.id}-${index}`} story={story} />
+              ))}
             </div>
-          </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {displayedStories.map((story, index) => (
+                <StoryItemGrid key={`${story.id}-${index}`} story={story} />
+              ))}
+            </div>
+          )}
         </div>
 
-        {isLoading ? (
-          viewMode === 'list' ? (
-            <ul>
-              {Array.from({ length: ITEMS_PER_PAGE }).map((_, index) => (
-                <SkeletonLoader key={index} />
-              ))}
-            </ul>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Array.from({ length: ITEMS_PER_PAGE }).map((_, index) => (
-                <div key={index} className="bg-card-background border border-card-border rounded-lg p-4 animate-pulse">
-                  <div className="w-full h-48 bg-gray-300 rounded-md mb-4"></div>
-                  <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
-                  <div className="h-3 bg-gray-300 rounded w-1/2"></div>
-                </div>
-              ))}
-            </div>
-          )
-        ) : viewMode === 'list' ? (
-          <ul>
-            {displayedStories.map((story, index) => (
-              <StoryItem key={`${story.id}-${index}`} story={story} />
-            ))}
-          </ul>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {displayedStories.map((story, index) => (
-              <StoryItemGrid key={`${story.id}-${index}`} story={story} />
-            ))}
-          </div>
-        )}
-        
-        {/* Load More Button */}
+        {/* Load More */}
         {!isLoading && displayedStories.length > 0 && displayedStories.length < stories.length && (
-          <div className="flex justify-center mt-6">
+          <div className="flex justify-center pb-12">
             <button
               onClick={loadMoreStories}
               disabled={isLoadingMore}
-              className="bg-link-color hover:bg-blue-600 active:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-link-color focus:ring-offset-2"
+              className="border border-card-border rounded-lg px-6 py-2.5 text-sm font-medium text-text-secondary hover:text-foreground hover:border-foreground/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoadingMore ? (
-                <div className="flex items-center space-x-2">
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  <span>Loading...</span>
-                </div>
+                <span className="flex items-center gap-2">
+                  <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  Loading
+                </span>
               ) : (
-                `Load More Stories (${stories.length - displayedStories.length} remaining)`
+                `Load more (${stories.length - displayedStories.length} remaining)`
               )}
             </button>
-          </div>
-        )}
-        
-        {/* Show loading indicator when loading more */}
-        {isLoadingMore && (
-          <div className="flex justify-center mt-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-              {Array.from({ length: Math.min(ITEMS_PER_PAGE, stories.length - displayedStories.length) }).map((_, index) => (
-                <div key={index} className="bg-card-background border border-card-border rounded-lg p-4 animate-pulse">
-                  <div className="w-full h-48 bg-gray-300 rounded-md mb-4"></div>
-                  <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
-                  <div className="h-3 bg-gray-300 rounded w-1/2"></div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-        
-        {/* Reddit Info */}
-        {category === 'reddit' && displayedStories.length > 0 && (
-          <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
-            Showing {displayedStories.length} of {stories.length} posts across all subreddits, sorted by score
-          </div>
-        )}
-        
-        {/* Tech News Info */}
-        {category === 'tech-news' && displayedStories.length > 0 && (
-          <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
-            📚 Aggregated from GitHub Trending and Dev.to - Showing {displayedStories.length} of {stories.length} posts
           </div>
         )}
       </div>

@@ -1,17 +1,12 @@
-import React from 'react';
+import ThemeToggle from './ThemeToggle';
 
 export default function Header() {
   return (
-    <header className="bg-card-background p-4 flex justify-between items-center border-b border-card-border">
-      <div className="text-2xl font-bold">Hacker News</div>
-      <nav>
-        <a href="#" className="text-link-color hover:underline mr-4">New</a>
-        <a href="#" className="text-link-color hover:underline mr-4">Past</a>
-        <a href="#" className="text-link-color hover:underline mr-4">Comments</a>
-        <a href="#" className="text-link-color hover:underline mr-4">Ask</a>
-        <a href="#" className="text-link-color hover:underline mr-4">Show</a>
-        <a href="#" className="text-link-color hover:underline">Jobs</a>
-      </nav>
+    <header className="sticky top-0 z-50 backdrop-blur-xl bg-background/80 border-b border-card-border">
+      <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
+        <span className="text-sm font-semibold tracking-tight">Hacker News</span>
+        <ThemeToggle />
+      </div>
     </header>
   );
 }
